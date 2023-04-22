@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
     PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
         verificationId: _verificationId!, smsCode: smsCode);
     await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
-    // Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   @override
