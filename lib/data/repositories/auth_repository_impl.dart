@@ -129,10 +129,12 @@ class AuthRepositoryImpl implements AuthRepository {
             .then((userCredential) async {
           if (userCredential.user != null) {
             try {
+              Map<String, dynamic> donorData = donor.toMap();
+              donorData['created_at'] = DateTime.now();
               return await _fireStore
                   .collection('donors')
                   .doc(userCredential.user!.uid)
-                  .set(donor.toMap())
+                  .set(donorData)
                   .then((_) async {
                 Hive.box(dataBoxName).put('user', "1");
                 return const Right(unit);
@@ -143,11 +145,15 @@ class AuthRepositoryImpl implements AuthRepository {
               } else if (fireError.code == 'too-many-request') {
                 return Left(ServerFailure());
               } else {
+                print("fireError.code");
+                print(fireError.code);
                 return Left(UnknownFailure());
               }
             } on ServerException {
               return Left(ServerFailure());
             } catch (e) {
+              print("sign up failed");
+              print(e);
               return Left(UnknownFailure());
             }
           } else {
