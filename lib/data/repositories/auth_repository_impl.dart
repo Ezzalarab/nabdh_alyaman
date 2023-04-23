@@ -1,16 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import '../../../presentation/pages/setting_page.dart';
 import 'package:hive/hive.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../presentation/pages/setting_page.dart';
 import '../../core/error/exceptions.dart';
 import '../../core/error/failures.dart';
 import '../../core/network/network_info.dart';
 import '../../domain/entities/blood_center.dart';
 import '../../domain/entities/donor.dart';
 import '../../domain/repositories/auth_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -19,6 +19,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     required this.networkInfo,
   });
+
   @override
   Future<Either<Failure, UserCredential>> signIn(
       {required String email, required String password}) async {
@@ -116,7 +117,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> signUpDonor({
+  Future<Either<Failure, UserCredential>> signUpDonorAuth({
     required Donor donor,
   }) async {
     if (await networkInfo.isConnected) {
@@ -128,34 +129,7 @@ class AuthRepositoryImpl implements AuthRepository {
         )
             .then((userCredential) async {
           if (userCredential.user != null) {
-            try {
-              Map<String, dynamic> donorData = donor.toMap();
-              donorData['created_at'] = DateTime.now();
-              return await _fireStore
-                  .collection('donors')
-                  .doc(userCredential.user!.uid)
-                  .set(donorData)
-                  .then((_) async {
-                Hive.box(dataBoxName).put('user', "1");
-                return const Right(unit);
-              });
-            } on FirebaseException catch (fireError) {
-              if (fireError.code == 'unknown') {
-                return Left(FirebaseUnknownFailure());
-              } else if (fireError.code == 'too-many-request') {
-                return Left(ServerFailure());
-              } else {
-                print("fireError.code");
-                print(fireError.code);
-                return Left(UnknownFailure());
-              }
-            } on ServerException {
-              return Left(ServerFailure());
-            } catch (e) {
-              print("sign up failed");
-              print(e);
-              return Left(UnknownFailure());
-            }
+            return (Right(userCredential));
           } else {
             return left(WrongDataFailure());
           }
@@ -177,6 +151,49 @@ class AuthRepositoryImpl implements AuthRepository {
       } on ServerException {
         return Left(ServerFailure());
       } catch (e) {
+        return Left(UnknownFailure());
+      }
+    } else {
+      return Left(OffLineFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> signUpDonorData({
+    required Donor donor,
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        if (_firebaseAuth.currentUser == null) {
+          String uid = _firebaseAuth.currentUser!.uid;
+          Map<String, dynamic> donorData = donor.toMap();
+          donorData['created_at'] = DateTime.now();
+          return await _fireStore
+              .collection('donors')
+              .doc(uid)
+              .set(donorData)
+              .then((_) async {
+            Hive.box(dataBoxName).put('user', "1");
+            return const Right(unit);
+          });
+        } else {
+          return left(WrongDataFailure());
+        }
+      } on FirebaseException catch (fireError) {
+        if (fireError.code == 'unknown') {
+          return Left(FirebaseUnknownFailure());
+        } else if (fireError.code == 'too-many-request') {
+          return Left(ServerFailure());
+        } else {
+          print("fireError.code");
+          print(fireError.code);
+          return Left(UnknownFailure());
+        }
+      } on ServerException {
+        return Left(ServerFailure());
+      } catch (e) {
+        print("sign up failed");
+        print(e);
         return Left(UnknownFailure());
       }
     } else {

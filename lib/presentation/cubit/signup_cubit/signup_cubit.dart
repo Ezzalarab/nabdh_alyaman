@@ -1,34 +1,39 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../../../domain/usecases/sign_up_donor_data_uc.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/entities/blood_center.dart';
-import '../../../domain/usecases/sign_up_center_usecase.dart';
-import '../../../domain/usecases/sign_up_donor_usecase.dart';
 import '../../../domain/entities/donor.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../domain/usecases/sign_up_center_usecase.dart';
+import '../../../domain/usecases/sign_up_donor_auth_uc.dart';
 
 part 'signup_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit({
-    required this.signUpDonorUseCase,
+    required this.signUpDonorAuthUseCase,
+    required this.signUpDonorDataUseCase,
     required this.signUpCenterUseCase,
   }) : super(SignUpInitial(canSignUpWithPhone: false));
+
   FirebaseAuth fireAuth = FirebaseAuth.instance;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
   User? currentUser;
-  final SignUpDonorUseCase signUpDonorUseCase;
+  final SignUpDonorAuthUseCase signUpDonorAuthUseCase;
+  final SignUpDonorDataUseCase signUpDonorDataUseCase;
   final SignUpCenterUseCase signUpCenterUseCase;
+  bool canSignUpWithPhone = false;
 
   Future<void> checkCanSignUpWithPhone() async {
     emit(SignUpLoading());
     DateTime dateTime = DateTime.now();
     String today = "${dateTime.year}-${dateTime.month}-20";
-    bool canSignUpWithPhone = true;
+    bool areUsers40Today = true;
     await FirebaseFirestore.instance
         .collection("users_per_day")
         .doc(today)
@@ -45,7 +50,7 @@ class SignUpCubit extends Cubit<SignUpState> {
             "users_count": usersCount + 1,
           });
         } else {
-          canSignUpWithPhone = false;
+          areUsers40Today = false;
         }
       } else {
         await FirebaseFirestore.instance
@@ -56,24 +61,42 @@ class SignUpCubit extends Cubit<SignUpState> {
         });
       }
     });
-    print(canSignUpWithPhone);
-    emit(SignUpInitial(canSignUpWithPhone: canSignUpWithPhone));
+    print(areUsers40Today);
+    canSignUpWithPhone = areUsers40Today;
+    emit(SignUpInitial(canSignUpWithPhone: areUsers40Today));
   }
 
-  Future<void> signUpDonor({
+  Future<void> signUpAuthDonor({
     required Donor donor,
   }) async {
     emit(SignUpLoading());
     try {
       donor.token = await getToken();
-      await signUpDonorUseCase(donor: donor).then((value) {
+      await signUpDonorDataUseCase(donor: donor).then((value) {
         value.fold(
             (failure) =>
-                emit(SignUpFailure(error: _getFailureMessage(failure))),
-            (userCredential) => emit(SignUpSuccess()));
+                emit(SignUpAuthFailure(error: _getFailureMessage(failure))),
+            (userCredential) => emit(SignUpAuthSuccess()));
       });
     } catch (e) {
-      emit(SignUpFailure(error: e.toString()));
+      emit(SignUpAuthFailure(error: e.toString()));
+    }
+  }
+
+  Future<void> signUpDataDonor({
+    required Donor donor,
+  }) async {
+    emit(SignUpLoading());
+    try {
+      donor.token = await getToken();
+      await signUpDonorAuthUseCase(donor: donor).then((value) {
+        value.fold(
+            (failure) =>
+                emit(SignUpDataFailure(error: _getFailureMessage(failure))),
+            (_) => emit(SignUpDataSuccess()));
+      });
+    } catch (e) {
+      emit(SignUpDataFailure(error: e.toString()));
     }
   }
 

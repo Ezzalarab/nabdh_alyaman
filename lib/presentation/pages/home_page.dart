@@ -1,6 +1,18 @@
 import 'dart:async';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hive/hive.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../../dependency_injection.dart' as di;
 import '../../core/app_constants.dart';
 import '../../core/utils.dart';
 import '../../domain/entities/donor.dart';
@@ -17,27 +29,11 @@ import '../../presentation/resources/values_manager.dart';
 import '../../presentation/widgets/forms/my_button.dart';
 import '../../presentation/widgets/forms/my_text_form_field.dart';
 import '../../presentation/widgets/home/home_carousel/home_carousel.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
-import 'setting_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hive/hive.dart';
-
 import '../widgets/home/home_about.dart';
 import '../widgets/home/home_drawer/home_drawer.dart';
-import '../../../../dependency_injection.dart' as di;
-//-------------
-
-import 'package:http/http.dart' as http;
-
-//---------------------
 import '../widgets/home/home_welcome.dart';
 import 'introduction_page.dart';
+import 'setting_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -55,7 +51,7 @@ class _HomePageState extends State<HomePage> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   late Position position;
-//--------------------------
+
   int _counter = 0;
 
   Timer? _timer;

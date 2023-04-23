@@ -15,7 +15,11 @@ abstract class AuthRepository {
     required String email,
   });
 
-  Future<Either<Failure, Unit>> signUpDonor({
+  Future<Either<Failure, UserCredential>> signUpDonorAuth({
+    required Donor donor,
+  });
+
+  Future<Either<Failure, Unit>> signUpDonorData({
     required Donor donor,
   });
 

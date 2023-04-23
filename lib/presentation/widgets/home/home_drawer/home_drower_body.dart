@@ -38,6 +38,7 @@ class HomeDrawerBody extends StatelessWidget {
                   );
                 },
               ),
+
               HomeDrawerMenuItem(
                 title: AppStrings.homeDrawerSignUp,
                 icon: Icons.person_add_outlined,
@@ -117,6 +118,7 @@ class HomeDrawerBody extends StatelessWidget {
                 onTap: () => Share.share(
                     'https://play.google.com/store/apps/details?id=d.threedevils.devicey'),
               ),
+
               HomeDrawerMenuItem(
                 title: AppStrings.homeDrawerAboutApp,
                 icon: Icons.info_outline,

@@ -76,10 +76,28 @@ class _SignUpPageState extends State<SignUpPage> {
         lon: lon,
         lat: lat,
       );
-      BlocProvider.of<SignUpCubit>(context).signUpDonor(
+      BlocProvider.of<SignUpCubit>(context).signUpAuthDonor(
         donor: newDonor,
       );
     }
+  }
+
+  Future<void> _signUpData() async {
+    Donor newDonor = Donor(
+      email: emailController.text,
+      password: passwordController.text,
+      name: "",
+      phone: phoneController.text,
+      bloodType: "",
+      state: "",
+      district: "",
+      neighborhood: "",
+      lon: "",
+      lat: "",
+    );
+    BlocProvider.of<SignUpCubit>(context).signUpDataDonor(
+      donor: newDonor,
+    );
   }
 
   checkGps() async {
@@ -169,6 +187,8 @@ class _SignUpPageState extends State<SignUpPage> {
           }
         },
         builder: (context, state) {
+          print("canSignUpWithPhone************");
+          print(BlocProvider.of<SignUpCubit>(context).canSignUpWithPhone);
           return ModalProgressHUD(
             inAsyncCall: (state is SignUpLoading),
             child: my_stepper.Stepper(
@@ -329,47 +349,36 @@ class _SignUpPageState extends State<SignUpPage> {
                     .copyWith(color: ColorManager.lightSecondary),
               ),
               const SizedBox(height: AppSize.s40),
-              BlocBuilder<SignUpCubit, SignUpState>(
-                builder: (context, state) {
-                  if (state is SignUpInitial) {
-                    if (state.canSignUpWithPhone) {
-                      return const Center(
-                        child: Text("can"),
-                      );
-                    } else {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: AppMargin.m20),
-                        child: MyTextFormField(
-                          hint: AppStrings.signUpEmailHint,
-                          controller: emailController,
-                          blurrBorderColor: ColorManager.lightGrey,
-                          focusBorderColor: ColorManager.lightSecondary,
-                          fillColor: ColorManager.white,
-                          validator: _emailValidator,
-                          icon: const Icon(Icons.email),
-                          keyBoardType: TextInputType.emailAddress,
-                        ),
-                      );
-                    }
-                  } else {
-                    return Container(
-                      margin:
-                          const EdgeInsets.symmetric(horizontal: AppMargin.m20),
-                      child: MyTextFormField(
-                        hint: AppStrings.signUpEmailHint,
-                        controller: emailController,
-                        blurrBorderColor: ColorManager.lightGrey,
-                        focusBorderColor: ColorManager.lightSecondary,
-                        fillColor: ColorManager.white,
-                        validator: _emailValidator,
-                        icon: const Icon(Icons.email),
-                        keyBoardType: TextInputType.emailAddress,
-                      ),
-                    );
-                  }
-                },
-              ),
+              if (BlocProvider.of<SignUpCubit>(context).canSignUpWithPhone)
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: AppMargin.m20,
+                  ),
+                  child: MyTextFormField(
+                    hint: AppStrings.signUpPhoneHint,
+                    controller: phoneController,
+                    blurrBorderColor: ColorManager.lightGrey,
+                    focusBorderColor: ColorManager.lightSecondary,
+                    fillColor: ColorManager.white,
+                    validator: _phoneNumberValidator,
+                    icon: const Icon(Icons.phone_android),
+                    keyBoardType: TextInputType.number,
+                  ),
+                )
+              else
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
+                  child: MyTextFormField(
+                    hint: AppStrings.signUpEmailHint,
+                    controller: emailController,
+                    blurrBorderColor: ColorManager.lightGrey,
+                    focusBorderColor: ColorManager.lightSecondary,
+                    fillColor: ColorManager.white,
+                    validator: _emailValidator,
+                    icon: const Icon(Icons.email),
+                    keyBoardType: TextInputType.emailAddress,
+                  ),
+                ),
               const SizedBox(height: signUpSpaceBetweenFields),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -426,20 +435,28 @@ class _SignUpPageState extends State<SignUpPage> {
                   icon: const Icon(Icons.person),
                 ),
               ),
-              const SizedBox(height: signUpSpaceBetweenFields),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
-                child: MyTextFormField(
-                  hint: AppStrings.signUpPhoneHint,
-                  controller: phoneController,
-                  blurrBorderColor: ColorManager.lightGrey,
-                  focusBorderColor: ColorManager.lightSecondary,
-                  fillColor: ColorManager.white,
-                  validator: _phoneNumberValidator,
-                  icon: const Icon(Icons.phone_android),
-                  keyBoardType: TextInputType.number,
+              if (BlocProvider.of<SignUpCubit>(context).canSignUpWithPhone)
+                const SizedBox()
+              else
+                const SizedBox(height: signUpSpaceBetweenFields),
+              if (BlocProvider.of<SignUpCubit>(context).canSignUpWithPhone)
+                const SizedBox()
+              else
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: AppMargin.m20,
+                  ),
+                  child: MyTextFormField(
+                    hint: AppStrings.signUpPhoneHint,
+                    controller: phoneController,
+                    blurrBorderColor: ColorManager.lightGrey,
+                    focusBorderColor: ColorManager.lightSecondary,
+                    fillColor: ColorManager.white,
+                    validator: _phoneNumberValidator,
+                    icon: const Icon(Icons.phone_android),
+                    keyBoardType: TextInputType.number,
+                  ),
                 ),
-              ),
               const SizedBox(height: signUpSpaceBetweenFields),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
@@ -615,6 +632,10 @@ class _SignUpPageState extends State<SignUpPage> {
   //   );
   // }
 
+  void _onStepTapped(int index) {
+    _validateForm(stepIndex: index);
+  }
+
   void _validateForm({int? stepIndex}) async {
     FormState? formData = currentFormState();
     if (_activeStepIndex == 1) checkGps();
@@ -625,16 +646,15 @@ class _SignUpPageState extends State<SignUpPage> {
       if (formData!.validate()) {
         formData.save();
         if (stepIndex == null) {
+          if (_activeStepIndex == 0) {
+            _signUpData();
+          }
           setState(() => _activeStepIndex++);
         } else {
           setState(() => _activeStepIndex = stepIndex);
         }
       }
     }
-  }
-
-  void _onStepTapped(int index) {
-    _validateForm(stepIndex: index);
   }
 
   void _onStepCancel() {

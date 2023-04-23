@@ -13,6 +13,20 @@ class SignUpInitial extends SignUpState {
 
 class SignUpLoading extends SignUpState {}
 
+class SignUpAuthSuccess extends SignUpState {}
+
+class SignUpAuthFailure extends SignUpState {
+  final String error;
+  SignUpAuthFailure({required this.error});
+}
+
+class SignUpDataSuccess extends SignUpState {}
+
+class SignUpDataFailure extends SignUpState {
+  final String error;
+  SignUpDataFailure({required this.error});
+}
+
 class SignUpSuccess extends SignUpState {}
 
 class SignUpFailure extends SignUpState {
