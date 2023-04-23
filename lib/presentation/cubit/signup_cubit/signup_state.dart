@@ -2,15 +2,20 @@
 part of 'signup_cubit.dart';
 
 @immutable
-abstract class SignupState {}
+abstract class SignUpState {}
 
-class SignupInitial extends SignupState {}
+class SignUpInitial extends SignUpState {
+  final bool canSignUpWithPhone;
+  SignUpInitial({
+    required this.canSignUpWithPhone,
+  });
+}
 
-class SignupLoading extends SignupState {}
+class SignUpLoading extends SignUpState {}
 
-class SignUpSuccess extends SignupState {}
+class SignUpSuccess extends SignUpState {}
 
-class SignUpFailure extends SignupState {
+class SignUpFailure extends SignUpState {
   final String error;
   SignUpFailure({required this.error});
 }

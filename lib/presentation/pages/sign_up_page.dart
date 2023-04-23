@@ -158,7 +158,7 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
         title: const Text(AppStrings.signUpAppBarTitle),
       ),
-      body: BlocConsumer<SignUpCubit, SignupState>(
+      body: BlocConsumer<SignUpCubit, SignUpState>(
         listener: (context, state) {
           if (state is SignUpSuccess) {
             Utils.showSuccessSnackBar(
@@ -170,7 +170,7 @@ class _SignUpPageState extends State<SignUpPage> {
         },
         builder: (context, state) {
           return ModalProgressHUD(
-            inAsyncCall: (state is SignupLoading),
+            inAsyncCall: (state is SignUpLoading),
             child: my_stepper.Stepper(
               svgPictureAsset: ImageAssets.bloodDrop,
               iconColor: Theme.of(context).primaryColor,
@@ -329,18 +329,46 @@ class _SignUpPageState extends State<SignUpPage> {
                     .copyWith(color: ColorManager.lightSecondary),
               ),
               const SizedBox(height: AppSize.s40),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
-                child: MyTextFormField(
-                  hint: AppStrings.signUpEmailHint,
-                  controller: emailController,
-                  blurrBorderColor: ColorManager.lightGrey,
-                  focusBorderColor: ColorManager.lightSecondary,
-                  fillColor: ColorManager.white,
-                  validator: _emailValidator,
-                  icon: const Icon(Icons.email),
-                  keyBoardType: TextInputType.emailAddress,
-                ),
+              BlocBuilder<SignUpCubit, SignUpState>(
+                builder: (context, state) {
+                  if (state is SignUpInitial) {
+                    if (state.canSignUpWithPhone) {
+                      return const Center(
+                        child: Text("can"),
+                      );
+                    } else {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: AppMargin.m20),
+                        child: MyTextFormField(
+                          hint: AppStrings.signUpEmailHint,
+                          controller: emailController,
+                          blurrBorderColor: ColorManager.lightGrey,
+                          focusBorderColor: ColorManager.lightSecondary,
+                          fillColor: ColorManager.white,
+                          validator: _emailValidator,
+                          icon: const Icon(Icons.email),
+                          keyBoardType: TextInputType.emailAddress,
+                        ),
+                      );
+                    }
+                  } else {
+                    return Container(
+                      margin:
+                          const EdgeInsets.symmetric(horizontal: AppMargin.m20),
+                      child: MyTextFormField(
+                        hint: AppStrings.signUpEmailHint,
+                        controller: emailController,
+                        blurrBorderColor: ColorManager.lightGrey,
+                        focusBorderColor: ColorManager.lightSecondary,
+                        fillColor: ColorManager.white,
+                        validator: _emailValidator,
+                        icon: const Icon(Icons.email),
+                        keyBoardType: TextInputType.emailAddress,
+                      ),
+                    );
+                  }
+                },
               ),
               const SizedBox(height: signUpSpaceBetweenFields),
               Container(

@@ -165,7 +165,7 @@ class _SignUpCenterState extends State<SignUpCenter> {
         body: MediaQuery(
           data:
               MediaQuery.of(context).copyWith(textScaleFactor: textScaleFactor),
-          child: BlocConsumer<SignUpCubit, SignupState>(
+          child: BlocConsumer<SignUpCubit, SignUpState>(
               listener: (context, state) {
             if (state is SignUpSuccess) {
               Utils.showSuccessSnackBar(
@@ -178,7 +178,7 @@ class _SignUpCenterState extends State<SignUpCenter> {
             }
           }, builder: (context, state) {
             return ModalProgressHUD(
-              inAsyncCall: (state is SignupLoading),
+              inAsyncCall: (state is SignUpLoading),
               child: my_stepper.Stepper(
                 svgPictureAsset: "assets/images/blood_drop.svg",
                 iconColor: Theme.of(context).primaryColor,

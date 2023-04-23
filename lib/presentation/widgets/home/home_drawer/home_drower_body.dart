@@ -1,16 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
+import 'package:nabdh_alyaman/presentation/cubit/signup_cubit/signup_cubit.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../../core/utils.dart';
 import '../../../../dependency_injection.dart' as di;
-import '../../../cubit/profile_cubit/profile_cubit.dart';
 import '../../../pages/about_page.dart';
-import '../../../pages/edit_main_center_data.dart';
-import '../../../pages/profile_center.dart';
-import '../../../pages/setting_page.dart';
 import '../../../pages/sign_in_page.dart';
 import '../../../pages/sign_up_page.dart';
 import '../../../resources/strings_manager.dart';
@@ -49,6 +43,8 @@ class HomeDrawerBody extends StatelessWidget {
                 icon: Icons.person_add_outlined,
                 onTap: () {
                   di.initSignUp();
+                  BlocProvider.of<SignUpCubit>(context, listen: false)
+                      .checkCanSignUpWithPhone();
                   Navigator.of(context).pop();
                   Navigator.push(
                     context,

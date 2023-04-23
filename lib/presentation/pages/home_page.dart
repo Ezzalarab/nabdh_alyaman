@@ -324,40 +324,7 @@ class _HomePageState extends State<HomePage> {
             ),
             drawer: const HomeDrower(),
             floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                fetchOtp();
-                // DateTime dateTime = DateTime.now();
-                // String today = "${dateTime.year}-${dateTime.month}-20";
-                // bool canSignWithPhone = true;
-                // await FirebaseFirestore.instance
-                //     .collection("users_per_day")
-                //     .doc(today)
-                //     .get()
-                //     .then((value) async {
-                //   if (value.exists) {
-                //     int usersCount = await value.get("users_count");
-                //     print(usersCount);
-                //     if (usersCount < 40) {
-                //       await FirebaseFirestore.instance
-                //           .collection("users_per_day")
-                //           .doc(today)
-                //           .set({
-                //         "users_count": usersCount + 1,
-                //       });
-                //     } else {
-                //       canSignWithPhone = false;
-                //     }
-                //   } else {
-                //     await FirebaseFirestore.instance
-                //         .collection("users_per_day")
-                //         .doc(today)
-                //         .set({
-                //       "users_count": 1,
-                //     });
-                //   }
-                // });
-                // print(canSignWithPhone);
-              },
+              onPressed: () async {},
             ),
           );
   }

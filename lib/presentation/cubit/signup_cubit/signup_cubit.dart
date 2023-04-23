@@ -13,21 +13,57 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 part 'signup_state.dart';
 
-class SignUpCubit extends Cubit<SignupState> {
+class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit({
     required this.signUpDonorUseCase,
     required this.signUpCenterUseCase,
-  }) : super(SignupInitial());
+  }) : super(SignUpInitial(canSignUpWithPhone: false));
   FirebaseAuth fireAuth = FirebaseAuth.instance;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
   User? currentUser;
   final SignUpDonorUseCase signUpDonorUseCase;
   final SignUpCenterUseCase signUpCenterUseCase;
 
+  Future<void> checkCanSignUpWithPhone() async {
+    emit(SignUpLoading());
+    DateTime dateTime = DateTime.now();
+    String today = "${dateTime.year}-${dateTime.month}-20";
+    bool canSignUpWithPhone = true;
+    await FirebaseFirestore.instance
+        .collection("users_per_day")
+        .doc(today)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        int usersCount = await value.get("users_count");
+        print(usersCount);
+        if (usersCount < 40) {
+          await FirebaseFirestore.instance
+              .collection("users_per_day")
+              .doc(today)
+              .set({
+            "users_count": usersCount + 1,
+          });
+        } else {
+          canSignUpWithPhone = false;
+        }
+      } else {
+        await FirebaseFirestore.instance
+            .collection("users_per_day")
+            .doc(today)
+            .set({
+          "users_count": 1,
+        });
+      }
+    });
+    print(canSignUpWithPhone);
+    emit(SignUpInitial(canSignUpWithPhone: canSignUpWithPhone));
+  }
+
   Future<void> signUpDonor({
     required Donor donor,
   }) async {
-    emit(SignupLoading());
+    emit(SignUpLoading());
     try {
       donor.token = await getToken();
       await signUpDonorUseCase(donor: donor).then((value) {
@@ -44,7 +80,7 @@ class SignUpCubit extends Cubit<SignupState> {
   Future<void> signUpCenter({
     required BloodCenter center,
   }) async {
-    emit(SignupLoading());
+    emit(SignUpLoading());
     try {
       center.token = await getToken();
       await signUpCenterUseCase(center: center).then((value) {
