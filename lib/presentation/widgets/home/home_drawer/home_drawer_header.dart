@@ -44,7 +44,7 @@ class HomeDrawerHeader extends StatelessWidget {
                 children: [
                   Text(
                     (currentUser != null)
-                        ? currentUser.email!
+                        ? currentUser.email ?? currentUser.phoneNumber!
                         : AppStrings.homeDrawerHeaderAppName,
                     style: const TextStyle(
                         color: ColorManager.white,

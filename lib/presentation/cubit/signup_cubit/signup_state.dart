@@ -20,6 +20,11 @@ class SignUpAuthFailure extends SignUpState {
   SignUpAuthFailure({required this.error});
 }
 
+class SignUpAuthVerifying extends SignUpState {
+  final String code;
+  SignUpAuthVerifying({required this.code});
+}
+
 class SignUpDataSuccess extends SignUpState {}
 
 class SignUpDataFailure extends SignUpState {

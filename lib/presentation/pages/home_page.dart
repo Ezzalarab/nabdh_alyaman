@@ -146,60 +146,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> fetchOtp() async {
-    print("start phone verification ==-==-==-=-=-=");
-    await FirebaseAuth.instance
-        .verifyPhoneNumber(
-      phoneNumber: "+967${_phone!}",
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        print("_phone");
-        print(_phone);
-        // setState(() => _saving = false);
-      },
-      verificationFailed: (FirebaseException e) {
-        print("verificationFailed");
-        print(e);
-        // setState(() => _saving = false);
-      },
-      codeSent: (String verificationId, int? resendToken) async {
-        _verificationId = verificationId;
-        print("verificationId");
-        print(verificationId);
-        AwesomeDialog(
-            context: context,
-            body: Column(
-              children: [
-                MyTextFormField(
-                  onChange: (value) => smsCode = value,
-                ),
-                MyButton(
-                    title: "title",
-                    onPressed: () {
-                      verify(smsCode!);
-                    })
-              ],
-            )).show();
-        // Navigator.of(context).pushReplacementNamed(VerifyPhonePage.routeName,
-        // arguments: _verificationId);
-        // setState(() => _saving = false);
-        // await openDialog();
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    )
-        .catchError((e) {
-      print("firebase error -------------");
-      print(e);
-    });
-  }
-
-  Future<void> verify(String smsCode) async {
-    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-        verificationId: _verificationId!, smsCode: smsCode);
-    await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
-    Navigator.of(context).pop();
-  }
-
   @override
   Widget build(BuildContext context) {
     bool firstTimeState = Hive.box(dataBoxName).get('introduction') ?? true;
@@ -320,7 +266,9 @@ class _HomePageState extends State<HomePage> {
             ),
             drawer: const HomeDrower(),
             floatingActionButton: FloatingActionButton(
-              onPressed: () async {},
+              onPressed: () async {
+                _firebaseAuth.signOut();
+              },
             ),
           );
   }

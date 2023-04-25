@@ -1,9 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:nabdh_alyaman/presentation/widgets/forms/my_button.dart';
+import 'package:nabdh_alyaman/presentation/widgets/forms/my_text_form_field.dart';
 
 import '../../../domain/usecases/sign_up_donor_data_uc.dart';
 import '../../../core/error/failures.dart';
@@ -17,7 +21,7 @@ part 'signup_state.dart';
 class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit({
     required this.signUpDonorAuthUseCase,
-    required this.signUpDonorDataUseCase,
+    required this.saveDonorDataUC,
     required this.signUpCenterUseCase,
   }) : super(SignUpInitial(canSignUpWithPhone: false));
 
@@ -25,7 +29,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
   User? currentUser;
   final SignUpDonorAuthUseCase signUpDonorAuthUseCase;
-  final SignUpDonorDataUseCase signUpDonorDataUseCase;
+  final SignUpDonorDataUseCase saveDonorDataUC;
   final SignUpCenterUseCase signUpCenterUseCase;
   bool canSignUpWithPhone = false;
 
@@ -68,11 +72,78 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   Future<void> signUpAuthDonor({
     required Donor donor,
+    required BuildContext context,
+  }) async {
+    if (canSignUpWithPhone) {
+      signUpDonorWithPhone(donor: donor, context: context);
+    } else {
+      signUpDonorWithEmail(donor: donor);
+    }
+  }
+
+  Future<void> signUpDonorWithPhone(
+      {required Donor donor, required BuildContext context}) async {
+    await fetchOtp(context: context, phone: donor.phone);
+  }
+
+  Future<void> fetchOtp(
+      {required BuildContext context, required String phone}) async {
+    String? smsCode;
+    print("start phone verification ==-==-==-=-=-=");
+    await FirebaseAuth.instance
+        .verifyPhoneNumber(
+      phoneNumber: "+967$phone",
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await FirebaseAuth.instance.signInWithCredential(credential);
+        print("_phone");
+        print(phone);
+      },
+      verificationFailed: (FirebaseException e) {
+        print("verificationFailed");
+        print(e);
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        print("verificationId");
+        print(verificationId);
+        AwesomeDialog(
+            context: context,
+            body: Column(
+              children: [
+                MyTextFormField(
+                  onChange: (value) => smsCode = value,
+                ),
+                MyButton(
+                    title: "verify",
+                    onPressed: () async {
+                      PhoneAuthCredential phoneAuthCredential =
+                          PhoneAuthProvider.credential(
+                        verificationId: verificationId,
+                        smsCode: smsCode!,
+                      );
+                      await FirebaseAuth.instance
+                          .signInWithCredential(phoneAuthCredential);
+                      Navigator.of(context).pop();
+                    })
+              ],
+            )).show();
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    )
+        .catchError((e) {
+      print("firebase error -------------");
+      print(e);
+    });
+  }
+
+  Future<void> verify(String smsCode) async {}
+
+  Future<void> signUpDonorWithEmail({
+    required Donor donor,
   }) async {
     emit(SignUpLoading());
     try {
       donor.token = await getToken();
-      await signUpDonorDataUseCase(donor: donor).then((value) {
+      await saveDonorDataUC(donor: donor).then((value) {
         value.fold(
             (failure) =>
                 emit(SignUpAuthFailure(error: _getFailureMessage(failure))),
@@ -83,13 +154,13 @@ class SignUpCubit extends Cubit<SignUpState> {
     }
   }
 
-  Future<void> signUpDataDonor({
+  Future<void> saveDonorData({
     required Donor donor,
   }) async {
     emit(SignUpLoading());
     try {
       donor.token = await getToken();
-      await signUpDonorAuthUseCase(donor: donor).then((value) {
+      await saveDonorDataUC(donor: donor).then((value) {
         value.fold(
             (failure) =>
                 emit(SignUpDataFailure(error: _getFailureMessage(failure))),

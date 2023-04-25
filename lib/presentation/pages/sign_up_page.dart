@@ -76,7 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
         lon: lon,
         lat: lat,
       );
-      BlocProvider.of<SignUpCubit>(context).signUpAuthDonor(
+      BlocProvider.of<SignUpCubit>(context).saveDonorData(
         donor: newDonor,
       );
     }
@@ -95,8 +95,9 @@ class _SignUpPageState extends State<SignUpPage> {
       lon: "",
       lat: "",
     );
-    BlocProvider.of<SignUpCubit>(context).signUpDataDonor(
+    BlocProvider.of<SignUpCubit>(context).signUpAuthDonor(
       donor: newDonor,
+      context: context,
     );
   }
 
@@ -178,7 +179,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: BlocConsumer<SignUpCubit, SignUpState>(
         listener: (context, state) {
-          if (state is SignUpSuccess) {
+          if (state is SignUpAuthVerifying) {
+          } else if (state is SignUpSuccess) {
             Utils.showSuccessSnackBar(
                 context: context, msg: AppStrings.signUpSuccessMessage);
             Navigator.of(context).pushReplacementNamed(HomePage.routeName);
@@ -246,7 +248,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       icon: const Padding(
                         padding: EdgeInsets.only(left: 10.0),
                         child: Icon(
-                          Icons.arrow_back_rounded,
+                          Icons.arrow_back_ios,
                           color: ColorManager.primary,
                           size: AppSize.s24,
                         ),
@@ -280,7 +282,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           icon: const Padding(
                             padding: EdgeInsets.only(right: 10.0),
                             child: Icon(
-                              Icons.arrow_forward_rounded,
+                              Icons.arrow_forward_ios,
                               color: ColorManager.white,
                               size: AppSize.s24,
                             ),

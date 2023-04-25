@@ -106,6 +106,6 @@ initSignUp() {
     sl.registerFactory(() => SignUpCubit(
         signUpDonorAuthUseCase: sl(),
         signUpCenterUseCase: sl(),
-        signUpDonorDataUseCase: sl()));
+        saveDonorDataUC: sl()));
   }
 }
