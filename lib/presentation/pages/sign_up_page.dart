@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:awesome_dialog/awesome_dialog.dart';
+
 import '../../presentation/resources/font_manager.dart';
 import '../../presentation/widgets/forms/my_button.dart';
 import 'package:csc_picker/csc_picker.dart';
@@ -55,6 +57,7 @@ class _SignUpPageState extends State<SignUpPage> {
   bool isPasswordHidden = true;
   bool isFirstStep() => _activeStepIndex == 0;
   bool isLastStep() => _activeStepIndex == stepList().length - 1;
+  String? smsCode;
 
   // To Get Location Point
   final location = loc.Location();
@@ -82,7 +85,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  Future<void> _signUpData() async {
+  Future<void> _signUpAuth() async {
     Donor newDonor = Donor(
       email: emailController.text,
       password: passwordController.text,
@@ -97,8 +100,28 @@ class _SignUpPageState extends State<SignUpPage> {
     );
     BlocProvider.of<SignUpCubit>(context).signUpAuthDonor(
       donor: newDonor,
-      context: context,
+      onVerificationSent: buildVerificationDialog(context),
     );
+  }
+
+  Function buildVerificationDialog(BuildContext context) {
+    return () => AwesomeDialog(
+          context: context,
+          body: Column(
+            children: [
+              MyTextFormField(
+                onChange: (value) => smsCode = value,
+              ),
+              MyButton(
+                title: "تأكيد الرقم",
+                onPressed: () => BlocProvider.of<SignUpCubit>(context).verify(
+                  context: context,
+                  smsCode: smsCode!,
+                ),
+              ),
+            ],
+          ),
+        ).show();
   }
 
   checkGps() async {
@@ -649,7 +672,7 @@ class _SignUpPageState extends State<SignUpPage> {
         formData.save();
         if (stepIndex == null) {
           if (_activeStepIndex == 0) {
-            _signUpData();
+            _signUpAuth();
           }
           setState(() => _activeStepIndex++);
         } else {

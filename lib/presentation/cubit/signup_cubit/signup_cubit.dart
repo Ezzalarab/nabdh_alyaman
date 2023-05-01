@@ -1,13 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:nabdh_alyaman/presentation/widgets/forms/my_button.dart';
-import 'package:nabdh_alyaman/presentation/widgets/forms/my_text_form_field.dart';
 
 import '../../../domain/usecases/sign_up_donor_data_uc.dart';
 import '../../../core/error/failures.dart';
@@ -32,11 +29,12 @@ class SignUpCubit extends Cubit<SignUpState> {
   final SignUpDonorDataUseCase saveDonorDataUC;
   final SignUpCenterUseCase signUpCenterUseCase;
   bool canSignUpWithPhone = false;
+  String? _verificationId;
 
   Future<void> checkCanSignUpWithPhone() async {
     emit(SignUpLoading());
     DateTime dateTime = DateTime.now();
-    String today = "${dateTime.year}-${dateTime.month}-20";
+    String today = "${dateTime.year}-${dateTime.month}-${dateTime.day}";
     bool areUsers40Today = true;
     await FirebaseFirestore.instance
         .collection("users_per_day")
@@ -72,24 +70,34 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   Future<void> signUpAuthDonor({
     required Donor donor,
-    required BuildContext context,
+    required Function onVerificationSent,
   }) async {
     if (canSignUpWithPhone) {
-      signUpDonorWithPhone(donor: donor, context: context);
+      signUpDonorWithPhone(
+        donor: donor,
+        onVerificationSent: onVerificationSent,
+      );
     } else {
       signUpDonorWithEmail(donor: donor);
     }
   }
 
-  Future<void> signUpDonorWithPhone(
-      {required Donor donor, required BuildContext context}) async {
-    await fetchOtp(context: context, phone: donor.phone);
+  Future<void> signUpDonorWithPhone({
+    required Donor donor,
+    required Function onVerificationSent,
+  }) async {
+    await fetchOtp(
+      phone: donor.phone,
+      onVerificationSent: onVerificationSent,
+    );
   }
 
-  Future<void> fetchOtp(
-      {required BuildContext context, required String phone}) async {
-    String? smsCode;
+  Future<void> fetchOtp({
+    required String phone,
+    required Function onVerificationSent,
+  }) async {
     print("start phone verification ==-==-==-=-=-=");
+    emit(SignUpLoading());
     await FirebaseAuth.instance
         .verifyPhoneNumber(
       phoneNumber: "+967$phone",
@@ -103,29 +111,11 @@ class SignUpCubit extends Cubit<SignUpState> {
         print(e);
       },
       codeSent: (String verificationId, int? resendToken) async {
+        emit(SignUpInitial(canSignUpWithPhone: canSignUpWithPhone));
         print("verificationId");
         print(verificationId);
-        AwesomeDialog(
-            context: context,
-            body: Column(
-              children: [
-                MyTextFormField(
-                  onChange: (value) => smsCode = value,
-                ),
-                MyButton(
-                    title: "verify",
-                    onPressed: () async {
-                      PhoneAuthCredential phoneAuthCredential =
-                          PhoneAuthProvider.credential(
-                        verificationId: verificationId,
-                        smsCode: smsCode!,
-                      );
-                      await FirebaseAuth.instance
-                          .signInWithCredential(phoneAuthCredential);
-                      Navigator.of(context).pop();
-                    })
-              ],
-            )).show();
+        _verificationId = verificationId;
+        onVerificationSent();
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     )
@@ -135,7 +125,17 @@ class SignUpCubit extends Cubit<SignUpState> {
     });
   }
 
-  Future<void> verify(String smsCode) async {}
+  Future<void> verify({
+    required BuildContext context,
+    required String smsCode,
+  }) async {
+    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+      verificationId: _verificationId!,
+      smsCode: smsCode,
+    );
+    await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+    Navigator.of(context).pop();
+  }
 
   Future<void> signUpDonorWithEmail({
     required Donor donor,
