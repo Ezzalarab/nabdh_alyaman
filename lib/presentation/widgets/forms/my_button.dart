@@ -17,7 +17,7 @@ class MyButton extends StatelessWidget {
     this.minWidth = 200,
     this.titleStyle = const TextStyle(
       fontSize: FontSize.s14,
-      color: ColorManager.black,
+      color: ColorManager.white,
       fontFamily: FontConstants.fontFamily,
     ),
   });

@@ -106,20 +106,40 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Function buildVerificationDialog(BuildContext context) {
     return () => AwesomeDialog(
+          headerAnimationLoop: false,
+          dialogType: DialogType.noHeader,
           context: context,
-          body: Column(
-            children: [
-              MyTextFormField(
-                onChange: (value) => smsCode = value,
-              ),
-              MyButton(
-                title: "تأكيد الرقم",
-                onPressed: () => BlocProvider.of<SignUpCubit>(context).verify(
-                  context: context,
-                  smsCode: smsCode!,
+          body: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                const Text(
+                  "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
+                  style: TextStyle(
+                    height: 2,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                MyTextFormField(
+                  onChange: (value) => smsCode = value,
+                  hint: "اكتب رقم التأكيد",
+                  keyBoardType: TextInputType.number,
+                  blurrBorderColor: ColorManager.lightGrey,
+                  focusBorderColor: ColorManager.lightSecondary,
+                  fillColor: ColorManager.white,
+                ),
+                const SizedBox(height: 20),
+                MyButton(
+                  title: "تأكيد",
+                  onPressed: () => BlocProvider.of<SignUpCubit>(context).verify(
+                    context: context,
+                    smsCode: smsCode!,
+                  ),
+                  color: ColorManager.primary,
+                ),
+              ],
+            ),
           ),
         ).show();
   }
