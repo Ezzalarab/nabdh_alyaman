@@ -161,11 +161,11 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, Unit>> signUpDonorData({
     required Donor donor,
+    required String uid,
   }) async {
     if (await networkInfo.isConnected) {
       try {
-        if (_firebaseAuth.currentUser == null) {
-          String uid = _firebaseAuth.currentUser!.uid;
+        if (uid != "") {
           Map<String, dynamic> donorData = donor.toMap();
           donorData['created_at'] = DateTime.now();
           return await _fireStore
@@ -177,6 +177,7 @@ class AuthRepositoryImpl implements AuthRepository {
             return const Right(unit);
           });
         } else {
+          print("no current user");
           return left(WrongDataFailure());
         }
       } on FirebaseException catch (fireError) {

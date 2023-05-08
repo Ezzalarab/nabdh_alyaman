@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:nabdh_alyaman/presentation/cubit/signup_cubit/signup_cubit.dart';
 
 import '../../../../dependency_injection.dart' as di;
 import '../../core/app_constants.dart';
@@ -19,22 +17,20 @@ import '../../core/utils.dart';
 import '../../domain/entities/donor.dart';
 import '../../main.dart';
 import '../../core/update.dart';
-import '../../presentation/cubit/send_notfication/send_notfication_cubit.dart';
 import '../../core/methode/shared_method.dart';
-import '../../presentation/pages/notfication_page.dart';
-import '../../presentation/pages/sign_in_page.dart';
-import '../../presentation/pages/update_loc&show_notfication.dart';
-import '../../presentation/resources/color_manageer.dart';
-import '../../presentation/resources/constatns.dart';
-import '../../presentation/resources/values_manager.dart';
-import '../../presentation/widgets/forms/my_button.dart';
-import '../../presentation/widgets/forms/my_text_form_field.dart';
-import '../../presentation/widgets/home/home_carousel/home_carousel.dart';
+import '../cubit/send_notfication/send_notfication_cubit.dart';
+import '../pages/update_loc&show_notfication.dart';
+import '../resources/color_manageer.dart';
+import '../resources/constatns.dart';
+import '../resources/values_manager.dart';
+import '../widgets/home/home_carousel/home_carousel.dart';
 import '../widgets/home/home_about.dart';
 import '../widgets/home/home_drawer/home_drawer.dart';
 import '../widgets/home/home_welcome.dart';
 import 'introduction_page.dart';
 import 'setting_page.dart';
+import 'notfication_page.dart';
+import 'sign_in_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -268,7 +264,8 @@ class _HomePageState extends State<HomePage> {
             drawer: const HomeDrower(),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                // _firebaseAuth.signOut();
+                print(_firebaseAuth.currentUser?.uid ?? "no user");
+                _firebaseAuth.signOut();
               },
             ),
           );

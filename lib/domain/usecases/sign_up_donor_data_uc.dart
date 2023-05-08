@@ -11,11 +11,11 @@ class SignUpDonorDataUseCase {
     required this.authRepository,
   });
 
-  Future<Either<Failure, Unit>> call({
-    required Donor donor,
-  }) async {
+  Future<Either<Failure, Unit>> call(
+      {required Donor donor, required String uid}) async {
     return await authRepository.signUpDonorData(
       donor: donor,
+      uid: uid,
     );
   }
 }

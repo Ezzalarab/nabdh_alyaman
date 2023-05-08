@@ -223,17 +223,17 @@ class _SignUpPageState extends State<SignUpPage> {
       body: BlocConsumer<SignUpCubit, SignUpState>(
         listener: (context, state) {
           if (state is SignUpAuthVerifying) {
-          } else if (state is SignUpSuccess) {
+          } else if (state is SignUpDataSuccess) {
             Utils.showSuccessSnackBar(
                 context: context, msg: AppStrings.signUpSuccessMessage);
             Navigator.of(context).pushReplacementNamed(HomePage.routeName);
           } else if (state is SignUpFailure) {
             Utils.showFalureSnackBar(context: context, msg: state.error);
+          } else if (state is SignUpDataFailure) {
+            Utils.showFalureSnackBar(context: context, msg: state.error);
           }
         },
         builder: (context, state) {
-          print("canSignUpWithPhone************");
-          print(BlocProvider.of<SignUpCubit>(context).canSignUpWithPhone);
           return ModalProgressHUD(
             inAsyncCall: (state is SignUpLoading),
             child: my_stepper.Stepper(

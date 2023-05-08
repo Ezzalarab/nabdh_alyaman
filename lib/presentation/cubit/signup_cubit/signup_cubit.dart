@@ -30,6 +30,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   final SignUpCenterUseCase signUpCenterUseCase;
   bool canSignUpWithPhone = false;
   String? _verificationId;
+  late UserCredential _currentUserCredential;
 
   Future<void> checkCanSignUpWithPhone() async {
     emit(SignUpLoading());
@@ -129,12 +130,20 @@ class SignUpCubit extends Cubit<SignUpState> {
     required BuildContext context,
     required String smsCode,
   }) async {
+    emit(SignUpLoading());
+    Navigator.of(context).pop();
     PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
       verificationId: _verificationId!,
       smsCode: smsCode,
     );
-    await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
-    Navigator.of(context).pop();
+    await FirebaseAuth.instance
+        .signInWithCredential(phoneAuthCredential)
+        .then((userCredential) {
+      print("userCredential.user!.uid");
+      print(userCredential.user!.uid);
+      _currentUserCredential = userCredential;
+    });
+    emit(SignUpInitial(canSignUpWithPhone: canSignUpWithPhone));
   }
 
   Future<void> signUpDonorWithEmail({
@@ -143,7 +152,9 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(SignUpLoading());
     try {
       donor.token = await getToken();
-      await saveDonorDataUC(donor: donor).then((value) {
+      await saveDonorDataUC(
+              donor: donor, uid: _currentUserCredential.user?.uid ?? "")
+          .then((value) {
         value.fold(
             (failure) =>
                 emit(SignUpAuthFailure(error: _getFailureMessage(failure))),
@@ -160,7 +171,9 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(SignUpLoading());
     try {
       donor.token = await getToken();
-      await saveDonorDataUC(donor: donor).then((value) {
+      await saveDonorDataUC(
+              donor: donor, uid: _currentUserCredential.user?.uid ?? "")
+          .then((value) {
         value.fold(
             (failure) =>
                 emit(SignUpDataFailure(error: _getFailureMessage(failure))),

@@ -21,6 +21,7 @@ abstract class AuthRepository {
 
   Future<Either<Failure, Unit>> signUpDonorData({
     required Donor donor,
+    required String uid,
   });
 
   Future<Either<Failure, Unit>> signUpCenter({
