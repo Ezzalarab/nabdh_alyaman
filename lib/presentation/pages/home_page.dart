@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:nabdh_alyaman/core/extensions/extension.dart';
 
 import '../../../../dependency_injection.dart' as di;
 import '../../core/app_constants.dart';
@@ -264,7 +265,6 @@ class _HomePageState extends State<HomePage> {
             drawer: const HomeDrower(),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                print(_firebaseAuth.currentUser?.uid ?? "no user");
                 _firebaseAuth.signOut();
               },
             ),

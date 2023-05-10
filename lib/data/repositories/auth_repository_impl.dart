@@ -1,8 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:html';
+
 import 'package:hive/hive.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nabdh_alyaman/core/extensions/extension.dart';
 
 import '../../../presentation/pages/setting_page.dart';
 import '../../core/error/exceptions.dart';
@@ -22,11 +25,21 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, UserCredential>> signIn(
+      {required String emailOrPhone, required String password}) async {
+    // if (emailOrPhone.isValidPhone) {
+    //   String phone = emailOrPhone;
+    //   return await signInWithPhone(phone: phone, password: password);
+    // } else {
+      String email = emailOrPhone;
+    return await signInWithEmail(email: email, password: password);
+    // }
+  }
+
+  Future<Either<Failure, UserCredential>> signInWithEmail(
       {required String email, required String password}) async {
     if (await networkInfo.isConnected) {
       try {
-        print("1111111111111111111111111111");
-
+        print("email & password");
         print(email);
         print(password);
         return await _firebaseAuth
@@ -35,18 +48,17 @@ class AuthRepositoryImpl implements AuthRepository {
           password: password,
         )
             .then((userCredential) async {
-          print("222222222222222222222222222222");
           if (userCredential.user != null) {
             await saveUserTypeLocal(userCredential);
-            print("333333333333333333333");
             return Right(userCredential);
           } else {
-            print("44444444444444444444444444");
+            _firebaseAuth.signInWithPhoneNumber(email);
+            print("no user");
             return Left(UnknownFailure());
           }
         });
       } on FirebaseException catch (fireError) {
-        print("5555555555555555555");
+        print("fireError.code");
         print(fireError.code);
         if (fireError.code == 'user-not-found') {
           return Left(WrongDataFailure());

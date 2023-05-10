@@ -6,7 +6,7 @@ import '../entities/blood_center.dart';
 import '../entities/donor.dart';
 
 abstract class AuthRepository {
-  Future<Either<Failure, UserCredential>> signIn({
+  Future<Either<Failure, UserCredential>> signInWithEmail({
     required String email,
     required String password,
   });

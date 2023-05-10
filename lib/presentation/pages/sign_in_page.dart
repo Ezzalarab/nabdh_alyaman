@@ -295,31 +295,31 @@ class _SignInPageState extends State<SignInPage> {
   }
 }
 
-                                // forget password onTap 
-                                // if (_formStateEmail.currentState!.validate()) {
-                                // _formStateEmail.currentState!.save();
-                                //   if (email!.isValidPhone) {
-                                //     BlocProvider.of<SingInCubit>(context)
-                                //         .isPhoneRegisterd(
-                                //             phone: email!, type: "forget");
-                                //   }
+// forget password onTap 
+// if (_formStateEmail.currentState!.validate()) {
+// _formStateEmail.currentState!.save();
+//   if (email!.isValidPhone) {
+//     BlocProvider.of<SingInCubit>(context)
+//         .isPhoneRegisterd(
+//             phone: email!, type: "forget");
+//   }
 
-                                // signin button onPress
-                                  // if (_formState.currentState!.validate() &&
-                                  //     _formStateEmail.currentState!
-                                  //         .validate()) {
-                                  //   _formState.currentState!.save();
-                                  //   _formStateEmail.currentState!.save();
-                                  //   if (email!.isValidPhone) {
-                                  //     BlocProvider.of<SingInCubit>(context)
-                                  //         .isPhoneRegisterd(
-                                  //             phone: email!,
-                                  //             type: "signin",
-                                  //             password: password!);
-                                  //   } else {
-                                  //     BlocProvider.of<SingInCubit>(context)
-                                  //         .signIn(
-                                  //             email: email!,
-                                  //             password: password!);
-                                  //   }
-                                  // }
+// signin button onPress
+  // if (_formState.currentState!.validate() &&
+  //     _formStateEmail.currentState!
+  //         .validate()) {
+  //   _formState.currentState!.save();
+  //   _formStateEmail.currentState!.save();
+  //   if (email!.isValidPhone) {
+  //     BlocProvider.of<SingInCubit>(context)
+  //         .isPhoneRegisterd(
+  //             phone: email!,
+  //             type: "signin",
+  //             password: password!);
+  //   } else {
+  //     BlocProvider.of<SingInCubit>(context)
+  //         .signIn(
+  //             email: email!,
+  //             password: password!);
+  //   }
+  // }
