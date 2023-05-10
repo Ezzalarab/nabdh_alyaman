@@ -60,7 +60,6 @@ class IntroductionPage extends StatelessWidget {
           onChange: (value) {},
           onSkip: () {
             // You can also override onSkip callback
-            print("++++++++++++++++++++++++");
             print(box.get('introduction'));
             box.put('introduction', false);
             Navigator.of(context).pushReplacement(

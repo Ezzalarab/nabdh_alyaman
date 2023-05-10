@@ -56,7 +56,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('A bg message just showed up :  ${message.messageId}');
   await SharedMethod().getLocation();
-  print("33333333333333333333333333333");
   // position = await Geolocator.getCurrentPosition(
   //         desiredAccuracy: LocationAccuracy.high)
   //     .then((value) {
@@ -98,7 +97,6 @@ void initialisendNotfications() async {
 
 Future<void> backgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print("++++++++++++++++++++++++++++++++++++++++++++++++++0000");
 
   print(";;;;;;;;;;;;;;;;;;;;");
   // await SharedMethod().checkGps();

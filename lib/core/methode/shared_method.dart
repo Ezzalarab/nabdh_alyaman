@@ -20,50 +20,37 @@ class SharedMethod {
   var location = loc.Location();
 
   checkGps() async {
-    print("=================1==================");
     servicestatus = await location.serviceEnabled();
-    print("-----------------------------");
     print(servicestatus);
     if (servicestatus) {
-      print("=================2==================");
       permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        print("=================3==================");
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          print("=================4==================");
           if (kDebugMode) {
-            print("=================5==================");
             print('Location permissions are denied');
           }
         } else if (permission == LocationPermission.deniedForever) {
-          print("=================6==================");
           if (kDebugMode) {
-            print("=================7==================");
             print("'Location permissions are permanently denied");
           }
         } else {
-          print("=================8==================");
           haspermission = true;
         }
       } else {
-        print("=================9==================");
         haspermission = true;
       }
       if (haspermission) {
-        print("=================10==================");
         return await getLocation();
       }
     } else {
       if (!await location.serviceEnabled()) {
         await location.requestService();
         await checkGps();
-        // print("111111111111111111111111111");
 
         // print(servicestatus);
       } else {}
 
-      print("=================11==================");
       if (kDebugMode) {
         print("GPS Service is not enabled, turn on GPS location");
       }
@@ -75,7 +62,6 @@ class SharedMethod {
     bool done = false;
     position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    print("=================12==================");
     if (kDebugMode) {
       print(position.longitude); //Output: 80.24599079
       print(position.latitude); //Output: 29.6593457
@@ -97,8 +83,6 @@ class SharedMethod {
 
       long = position.longitude.toString();
       lat = position.latitude.toString();
-
-      print("=================13==================");
     });
     return done;
   }

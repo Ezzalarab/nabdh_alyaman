@@ -147,45 +147,35 @@ class _SignUpPageState extends State<SignUpPage> {
   checkGps() async {
     bool haspermission = false;
     LocationPermission permission;
-    print("111111111111111111111111111");
     if (await location.serviceEnabled()) {
       permission = await Geolocator.checkPermission();
-      print("22222222222222222222222222222");
 
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
-        print("3333333333333333333333333333333333");
 
         if (permission == LocationPermission.denied) {
           if (kDebugMode) {
             print('Location permissions are denied');
-            print("44444444444444444444444444");
           }
         } else if (permission == LocationPermission.deniedForever) {
           if (kDebugMode) {
             print("'Location permissions are permanently denied");
-            print("55555555555555555555555555555555");
           }
         } else {
           haspermission = true;
-          print("6666666666666666666666666666666666666666");
         }
       } else {
         haspermission = true;
-        print("777777777777777777777777777777777777777");
       }
       if (haspermission) {
         await getLocation();
-        print("888888888888888888888888888888888888");
       }
     } else {
       if (!await location.serviceEnabled()) {
         await location.requestService();
-        print("9999999999999999999999999999999999");
       }
       if (kDebugMode) {
         print("GPS Service is not enabled, turn on GPS location");
-        print("10101010100101010101");
       }
     }
   }
@@ -197,7 +187,6 @@ class _SignUpPageState extends State<SignUpPage> {
       print(currentPosition.longitude);
       print(currentPosition.latitude);
     }
-    print("++++++++lat");
     lon = currentPosition.longitude.toString();
     lat = currentPosition.latitude.toString();
   }

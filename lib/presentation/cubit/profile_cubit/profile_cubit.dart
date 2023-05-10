@@ -77,7 +77,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       //     getDataToProfilePage();
       //   });
       // } else {
-      //   print("1111111111111111111111111");
       //   emit(ProfileFailure(
       //       error: "لم يتم حفظ البيانات تاكد من الاتصال بالانترنت"));
       // }
@@ -119,7 +118,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       //   });
 
       // } else {
-      //   print("1111111111111111111111111");
       //   emit(ProfileFailure(
       //       error: "لم يتم حفظ البيانات تاكد من الاتصال بالانترنت"));
       // }
@@ -131,7 +129,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> getProfileCenterData() async {
     try {
-      print("++++++++++++++++++++++++++++++");
       emit(ProfileLoadingBeforFetch());
       await profileUseCase.callCenterData().then((bloodCenterOrFailur) {
         bloodCenterOrFailur.fold(
@@ -175,7 +172,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         getProfileCenterData();
       });
 
-      // print("++++++++++++++++++++++++++++++");
       // emit(ProfileLoading());
       // User? currentUser = _auth.currentUser;
       // if (currentUser != null) {
@@ -233,7 +229,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       //   });
 
       // } else {
-      //   print("1111111111111111111111111");
       //   emit(ProfileFailure(
       //       error: "لم يتم حفظ البيانات تاكد من الاتصال بالانترنت"));
       // }

@@ -1,48 +1,39 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import '../../main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart' as info;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../main.dart';
+
 class Updating {
   bool flagUpdata = false, errorFlage = true;
   String? oldVersion, newVersion, errorMessage, errorDegree;
+
   Future getVersion() async {
     info.PackageInfo? packageInfo = await info.PackageInfo.fromPlatform();
     version = packageInfo.version;
-
     oldVersion = version.toString();
-    print("++++++++++++++++++++++++++++++++2");
     try {
-      print("++++++++++++++++++++++++++++++++3");
       FirebaseFirestore.instance
           .collection("updating")
           .snapshots()
           .listen((event) {
-        print("++++++++++++++++++++++++++++++++4");
-        print("old");
-        print(oldVersion);
-        print(event.docs.isNotEmpty);
         // print(event.docs.first);
         if (event.docs.isNotEmpty) {
           newVersion = event.docs[0].data()['new_version'];
           errorMessage = event.docs[0].data()['message'];
           errorDegree = event.docs[0].data()['waring_degree'];
-
+          print("check update");
           print("old");
           print(oldVersion);
           print("new");
           print(newVersion);
-
           if (errorDegree == "1") {
             errorFlage = false;
-            print("++++++++++++++++++++++++++++++++5");
           } else if (errorDegree == "0") {
             errorFlage = true;
-            print("++++++++++++++++++++++++++++++++6");
           }
-
           if (newVersion == oldVersion) {
             flagUpdata = false;
           } else {
@@ -52,7 +43,6 @@ class Updating {
       });
     } catch (e) {
       print(e);
-      print("-------------++");
     }
   }
 

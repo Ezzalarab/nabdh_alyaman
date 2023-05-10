@@ -178,13 +178,11 @@ class ProfileReopsitoryImpl implements ProfileRepository {
     if (await networkInfo.isConnected) {
       try {
         if (currentUser != null) {
-          print("-------------++++++++++++++");
           return await _fireStore
               .collection('centers')
               .doc(currentUser.currentUser!.uid.toString())
               .get()
               .then((value) async {
-            print(";;;;;;;;;;;;;;;;;;;;;;;;;");
             print(value.id);
             bloodCenter = BloodCenter.fromMap(value.data()!);
             print(bloodCenter!.name);

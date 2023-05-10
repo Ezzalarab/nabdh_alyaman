@@ -31,7 +31,6 @@ class HomeDrawerCenterBody extends StatelessWidget {
             title: AppStrings.homeDrawerUpdateBloodBank,
             icon: Icons.sync,
             onTap: () {
-              print("++++++++++++++++++0");
               if (FirebaseAuth.instance.currentUser != null) {
                 print("+0000");
                 Navigator.of(context).pop();
@@ -61,7 +60,6 @@ class HomeDrawerCenterBody extends StatelessWidget {
             title: AppStrings.homeDrawerEditProfileCenter,
             icon: Icons.sync,
             onTap: () {
-              print("++++++++++++++++++0");
               if (FirebaseAuth.instance.currentUser != null) {
                 print("+0000");
                 BlocProvider.of<ProfileCubit>(context).getProfileCenterData();

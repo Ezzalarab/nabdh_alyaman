@@ -1,11 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:html';
-
 import 'package:hive/hive.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nabdh_alyaman/core/extensions/extension.dart';
 
 import '../../../presentation/pages/setting_page.dart';
 import '../../core/error/exceptions.dart';
@@ -30,7 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
     //   String phone = emailOrPhone;
     //   return await signInWithPhone(phone: phone, password: password);
     // } else {
-      String email = emailOrPhone;
+    String email = emailOrPhone;
     return await signInWithEmail(email: email, password: password);
     // }
   }

@@ -22,9 +22,6 @@ class CompareHiveAndFireStore {
           donor = Donor.fromMap(value.data()!);
 
           if (Hive.box(dataBoxName) != null) {
-            if (kDebugMode) {
-              print("22222222222222222222222222222");
-            }
             if (Hive.box(dataBoxName).get(DonorFields.name) != donor.name &&
                 Hive.box(dataBoxName).get(DonorFields.bloodType) !=
                     donor.bloodType &&
@@ -63,7 +60,6 @@ class CompareHiveAndFireStore {
               });
             }
           } else if (Hive.box(dataBoxName).isNotEmpty) {
-            print("33333333333333333333333");
             Hive.box(dataBoxName).put(DonorFields.name, donor.name);
             Hive.box(dataBoxName).put(DonorFields.bloodType, donor.bloodType);
             Hive.box(dataBoxName).put(DonorFields.isShown, donor.isShown);

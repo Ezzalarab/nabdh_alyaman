@@ -62,7 +62,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    print("++++++++++++++++++++++++++++++++01");
     checkUpdate();
     super.initState();
 
@@ -136,7 +135,6 @@ class _HomePageState extends State<HomePage> {
   //--------------------------------------
   //----------- updating ------- check version
   void checkUpdate() async {
-    print("++++++++++++++++++++++++++++++++1");
     await Updating().getVersion();
     await Future.delayed(const Duration(seconds: 6));
     if (Updating().flagUpdata) {
@@ -202,7 +200,7 @@ class _HomePageState extends State<HomePage> {
               child: BlocConsumer<SendNotficationCubit, SendNotficationState>(
                 listener: (context, state) {
                   if (state is SendNotficationStateSuccess) {
-                    print("Success +++++++++++++++++++++++");
+                    print("Send Notification Success");
                   }
                   if (state is SendNotficationStateFailure) {
                     print("Failure -----------------------");
@@ -210,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 builder: (context, state) {
                   if (state is SendNotficationStateSuccess) {
-                    print("Success ++++++++++++++++++++++00");
+                    print("Send Notification Success");
                   }
                   if (state is SendNotficationStateFailure) {
                     print("Failure ----------------------00");
@@ -265,10 +263,42 @@ class _HomePageState extends State<HomePage> {
             drawer: const HomeDrower(),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                _firebaseAuth.signOut();
+                await signInWithPhoneNumber("+967714296685");
+                // _firebaseAuth.signOut();
               },
             ),
           );
+  }
+
+  Future<void> signInWithPhoneNumber(String phoneNumber) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    // Request verification code for the provided phone number
+    await auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // Automatically sign in the user if verification is completed without user input
+        await auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        // Handle verification failure
+        print(e.message);
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        // Save verification ID and resend token to use later
+        String smsCode = '123456'; // Replace with the code entered by the user
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId,
+          smsCode: smsCode,
+        );
+        // Sign in the user with the verification code
+        await auth
+            .signInWithCredential(credential)
+            .then((value) => print(value.user != null));
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        // Handle timeout for automatic code retrieval
+      },
+    );
   }
 
   Future<bool> pushNotificationsSpecificDevice({
@@ -401,7 +431,6 @@ class _HomePageState extends State<HomePage> {
             //   ),
             // ),
             //       // di.initApp();
-            //       print("111111111111111111111111");
             //       await BlocProvider.of<SendNotficationCubit>(context)
             //           .sendNotfication(
             //               sendNotficationData: SendNotificationData(
@@ -409,7 +438,6 @@ class _HomePageState extends State<HomePage> {
             //                   title: "حالة حرجة",
             //                   body: "تعال ياحيوان"))
             //           .then((value) {
-            //         print("22222222222222222222222222");
             //       });
             //       // pushNotificationsGroupDevice(
             //       //     title: "حالة حرجة", body: "تعال ياحيوان");

@@ -51,7 +51,6 @@ class _HomeCarouselState extends State<HomeCarousel> {
                 height: 200,
                 onPageChanged: (index, reason) {
                   setState(() {
-                    print("++++++++++++++++++++++");
                     print(index);
                     _current = index;
                   });

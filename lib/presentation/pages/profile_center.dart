@@ -63,7 +63,6 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                   bPlus: state.bloodCenter.bPlus,
                   bMinus: state.bloodCenter.bMinus);
             } else if (state is ProfileFailure) {
-              print("-------------------");
               Utils.showSnackBar(
                 context: context,
                 msg: state.error,
@@ -349,8 +348,8 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
                     keyboardType: TextInputType.number,
                     style: TextStyle(fontSize: 20),
                     onChanged: (value) {
-                      print("--------------------------++++++");
                       int intValue = int.tryParse(value) ?? 0;
+                      print("widget.bloodType");
                       print(widget.bloodType);
                       ProfileCenterData.IncressProfileCenterDataBlodTyeb(
                         widget.bloodType,
@@ -511,7 +510,6 @@ class ProfileCenterData {
   //     case BloodCenterField.aPlus:
   //       {
   //         // checkOperation(op,profileCenterData.aPlus!);
-  //         print("+++++++++++++++++");
   //         print(checkOperation(op, profileCenterData.aPlus!).toString());
   //         return checkOperation(op, profileCenterData.aPlus!);
   //       }
@@ -533,7 +531,6 @@ class ProfileCenterData {
   //       }
   //     case BloodCenterField.oMinus:
   //       {
-  //         print("+++++++++++++++++");
   //         print(checkOperation(op, profileCenterData.oMinus!).toString());
   //         return checkOperation(op, profileCenterData.oMinus!);
   //       }
@@ -549,7 +546,6 @@ class ProfileCenterData {
   // }
 
   // static checkOperation(String bloodType, int value) {
-  //   print("++2222222222222222222222");
   //   print(value);
   //   print(";;;;;;;;;;;;;;;;;");
   //   switch (bloodType) {

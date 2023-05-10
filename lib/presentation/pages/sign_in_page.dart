@@ -93,7 +93,6 @@ class _SignInPageState extends State<SignInPage> {
           child: BlocConsumer<SignInCubit, SignInState>(
             listener: (context, state) async {
               if (state is SignInSuccess) {
-                print("++++++++++++++++++p");
                 // CheckActive.checkActiveUser();
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const HomePage()));

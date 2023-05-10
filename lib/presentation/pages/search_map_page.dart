@@ -349,7 +349,6 @@ class _SearchMapPageState extends State<SearchMapPage> {
   //     });
   //   } else {
   //     if (kDebugMode) {
-  //       print("----------------------------");
   //       print(result.errorMessage);
   //     }
   //   }

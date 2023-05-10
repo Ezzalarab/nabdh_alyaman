@@ -29,14 +29,12 @@ class HomeDrawerDonorBody extends StatelessWidget {
           //   icon: Icons.settings_outlined,
           //   title: "إعدادات",
           //   onTap: () {
-          //     print("++++++++++++++++++");
           //   },
           // ),
           HomeDrawerMenuItem(
             title: AppStrings.homeDrawerSettings,
             icon: Icons.settings_outlined,
             onTap: () {
-              print("++++++++++++++++++0");
               BlocProvider.of<ProfileCubit>(context).getDataToProfilePage();
               if (FirebaseAuth.instance.currentUser != null) {
                 print("+0000");

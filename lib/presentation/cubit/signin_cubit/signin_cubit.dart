@@ -28,7 +28,6 @@ class SignInCubit extends Cubit<SignInState> {
     required String email,
     required String password,
   }) async {
-    print(";;;;;;;;;;++++++++++");
     emit(SignInLoading());
     try {
       await signInUseCase(email: email, password: password)
@@ -36,11 +35,8 @@ class SignInCubit extends Cubit<SignInState> {
         userCredentialOrFailure.fold(
           (failure) => emit(SigninFailure(error: getFailureMessage(failure))),
           (userCredential) async {
-            print("------------------------------0000000000000");
             await updateToken(userCredential.user!.uid);
-            print("------------------------------111111111111111");
             await CheckActive.checkActiveUser();
-            print("+++++++++++++++++++++c");
             emit(SignInSuccess());
           },
         );

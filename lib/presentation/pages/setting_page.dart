@@ -144,7 +144,6 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("------------------------------");
     // print(donors);
     // print(FirebaseAuth.instance.currentUser!.uid);
     permission();
@@ -181,7 +180,6 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      print("+++++++++++++++++++++000000000");
                       _showSelectPhotoOptions(context);
                     },
                     child: DisplayImage(

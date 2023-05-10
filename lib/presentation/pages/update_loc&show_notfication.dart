@@ -38,7 +38,7 @@ class _UpdateLocNotFicationPageState extends State<UpdateLocNotFicationPage> {
     position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high)
         .then((value) {
-      print("++++++++++++++++++++++++++++++555");
+      print("value.latitude");
       print(value.latitude);
       print(value.longitude);
       Fluttertoast.showToast(msg: widget.remoteMessage.body.toString());
@@ -69,7 +69,6 @@ class _UpdateLocNotFicationPageState extends State<UpdateLocNotFicationPage> {
     // final RemoteNotification remoteMessager =
     //     ModalRoute.of(context)?.settings.arguments as RemoteNotification;
 
-    // print("object+++++++++++++++++++");
     // print(widget.remoteMessage!.title);
     // print(FirebaseMessaging.instance.getToken().then(
     //       (value) => print(value),
