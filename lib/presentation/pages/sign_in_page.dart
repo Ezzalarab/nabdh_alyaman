@@ -1,25 +1,24 @@
-import '../../core/check_active.dart';
-import '../../presentation/cubit/profile_cubit/profile_cubit.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:nabdh_alyaman/presentation/cubit/signup_cubit/signup_cubit.dart';
 
+import '../../data/models/dialod_reset_password.dart';
+import '../../core/utils.dart';
+import '../../core/extensions/extension.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
 import '../resources/constatns.dart';
 import '../resources/font_manager.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
-
 import '../widgets/forms/my_button.dart';
-
 import '../cubit/signin_cubit/signin_cubit.dart';
-import '../../data/models/dialod_reset_password.dart';
 import '../pages/home_page.dart';
 import '../pages/sign_up_page.dart';
-import '../../core/utils.dart';
 import '../widgets/forms/my_text_form_field.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -35,9 +34,12 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isPasswordVisible = true;
+  String? smsCode;
 
-  String? emailValidator(value) {
-    if (value != null && EmailValidator.validate(value)) {
+  String? emailOrPhoneValidator(value) {
+    String strValue = value ?? "";
+    bool isPhone = (strValue.isValidPhone || strValue.isValidPhoneWithKeyCode);
+    if (value != null && (EmailValidator.validate(value) || isPhone)) {
       return null;
     } else if (!EmailValidator.validate(value!)) {
       return AppStrings.signInEmailValidatorError;
@@ -69,10 +71,51 @@ class _SignInPageState extends State<SignInPage> {
     if (_emailState.currentState!.validate() &
         _formState.currentState!.validate()) {
       BlocProvider.of<SignInCubit>(context).signIn(
-        email: emailController.text,
+        emailOrPhone: emailController.text,
         password: passwordController.text,
+        onVerificationSent: showVerificationDialog(context),
       );
     }
+  }
+
+  Function showVerificationDialog(BuildContext context) {
+    return () => AwesomeDialog(
+          headerAnimationLoop: false,
+          dialogType: DialogType.noHeader,
+          context: context,
+          body: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                const Text(
+                  "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
+                  style: TextStyle(
+                    height: 2,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                MyTextFormField(
+                  onChange: (value) => smsCode = value,
+                  hint: "اكتب رقم التأكيد",
+                  keyBoardType: TextInputType.number,
+                  blurrBorderColor: ColorManager.lightGrey,
+                  focusBorderColor: ColorManager.lightSecondary,
+                  fillColor: ColorManager.white,
+                ),
+                const SizedBox(height: 20),
+                MyButton(
+                  title: "تأكيد",
+                  onPressed: () => BlocProvider.of<SignUpCubit>(context).verify(
+                    context: context,
+                    smsCode: smsCode!,
+                  ),
+                  color: ColorManager.primary,
+                ),
+              ],
+            ),
+          ),
+        ).show();
   }
 
   _moveToSignUp() {
@@ -96,7 +139,7 @@ class _SignInPageState extends State<SignInPage> {
                 // CheckActive.checkActiveUser();
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const HomePage()));
-              } else if (state is SigninFailure) {
+              } else if (state is SignInFailure) {
                 Utils.showSnackBar(
                   context: context,
                   msg: state.error,
@@ -213,7 +256,7 @@ class _SignInPageState extends State<SignInPage> {
           blurrBorderColor: ColorManager.lightGrey,
           focusBorderColor: ColorManager.secondary,
           fillColor: ColorManager.white,
-          validator: emailValidator,
+          validator: emailOrPhoneValidator,
           keyBoardType: TextInputType.emailAddress,
           icon: const Icon(
             Icons.phone_android,

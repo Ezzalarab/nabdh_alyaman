@@ -11,7 +11,7 @@ class SignInSuccess extends SignInState {}
 
 class SignInSuccessResetPass extends SignInState {}
 
-class SigninFailure extends SignInState {
+class SignInFailure extends SignInState {
   final String error;
-  SigninFailure({required this.error});
+  SignInFailure({required this.error});
 }

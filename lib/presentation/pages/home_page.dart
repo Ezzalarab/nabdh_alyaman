@@ -263,42 +263,10 @@ class _HomePageState extends State<HomePage> {
             drawer: const HomeDrower(),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                await signInWithPhoneNumber("+967714296685");
-                // _firebaseAuth.signOut();
+                _firebaseAuth.signOut();
               },
             ),
           );
-  }
-
-  Future<void> signInWithPhoneNumber(String phoneNumber) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    // Request verification code for the provided phone number
-    await auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        // Automatically sign in the user if verification is completed without user input
-        await auth.signInWithCredential(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        // Handle verification failure
-        print(e.message);
-      },
-      codeSent: (String verificationId, int? resendToken) async {
-        // Save verification ID and resend token to use later
-        String smsCode = '123456'; // Replace with the code entered by the user
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: verificationId,
-          smsCode: smsCode,
-        );
-        // Sign in the user with the verification code
-        await auth
-            .signInWithCredential(credential)
-            .then((value) => print(value.user != null));
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        // Handle timeout for automatic code retrieval
-      },
-    );
   }
 
   Future<bool> pushNotificationsSpecificDevice({
@@ -406,92 +374,93 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-            // floatingActionButton: GestureDetector(
-            //   onTap: () {
-            //     //  ontap = true;
-            //     subtract();
-            //   },
-            //   onLongPress: () {
-            //     ontap = true;
-            //     subtract();
-            //   },
-            //   onLongPressEnd: (_) {
-            //     setState(() {
-            //       ontap = false;
-            //     });
-            //   },
-            //   child: Container(
-            //     width: 50,
-            //     height: 50,
-            //     decoration: BoxDecoration(
-            //       shape: BoxShape.circle,
-            //       color: Colors.red,
-            //     ),
-            //     child: Icon(Icons.remove),
-            //   ),
-            // ),
-            //       // di.initApp();
-            //       await BlocProvider.of<SendNotficationCubit>(context)
-            //           .sendNotfication(
-            //               sendNotficationData: SendNotificationData(
-            //                   listToken: [],
-            //                   title: "حالة حرجة",
-            //                   body: "تعال ياحيوان"))
-            //           .then((value) {
-            //       });
-            //       // pushNotificationsGroupDevice(
-            //       //     title: "حالة حرجة", body: "تعال ياحيوان");
-            //     } catch (e) {
-            //       print(e);
-            //     }
-            //     // BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
-            //     // Navigator.pushNamed(context, ProfileCenterPage.routeName);
-            //     // Get a new write batch
-            //     // final batch = db.batch();
-            //     // for (var donorJson in list) {
-            //     //   var docRef = db.collection("donors").doc();
-            //     //   batch.set(docRef, donorJson);
-            //     // }
-            //     // batch.commit().then((_) {
-            //     //   print("======commit=done======");
-            //     // });
-            //     // Navigator.of(context).pushNamed(SearchPage.routeName);
-            //     // Navigator.push(
-            //     //   context,
-            //     //   MaterialPageRoute<void>(
-            //     //     builder: (BuildContext context) => const SearchMapPage(),
-            //     //   ),
-            //     // );
-            //     // Navigator.of(context).pushNamed(OnBoardingView.routeName);
-            //     // LocationPoint point1 = LocationPoint(
-            //     //       lat: 13.9585003,
-            //     //       lon: 44.1709884,
-            //     //     ),
-            //     //     point2 = LocationPoint(
-            //     //       lat: 13.9556071,
-            //     //       lon: 44.1708585,
-            //     //     );
-            //     // print(getNearbyPoints(
-            //     //   base: point1,
-            //     //   points: [point2],
-            //     //   distanceKm: 0.4,
-            //     // ).length); // 0.3220144142025769
-            //     // // get the current location
-            //     // await LocationManager().getCurrentLocation();
-            //     // // start listen to location updates
-            //     // StreamSubscription<LocationDto> locationSubscription =
-            //     //     LocationManager().locationStream.listen((LocationDto dto) {
-            //     //   print('======================');
-            //     //   print(dto.altitude);
-            //     //   print(dto.longitude);
-            //     // });
-            //     // // cancel listening and stop the location manager
-            //     // locationSubscription.cancel();
-            //     // LocationManager().stop();
-            //   },
-            //   heroTag: "search",
-            //   child: const Icon(Icons.search_rounded),
-            // ),
+
+// floatingActionButton: GestureDetector(
+//   onTap: () {
+//     //  ontap = true;
+//     subtract();
+//   },
+//   onLongPress: () {
+//     ontap = true;
+//     subtract();
+//   },
+//   onLongPressEnd: (_) {
+//     setState(() {
+//       ontap = false;
+//     });
+//   },
+//   child: Container(
+//     width: 50,
+//     height: 50,
+//     decoration: BoxDecoration(
+//       shape: BoxShape.circle,
+//       color: Colors.red,
+//     ),
+//     child: Icon(Icons.remove),
+//   ),
+// ),
+//       // di.initApp();
+//       await BlocProvider.of<SendNotficationCubit>(context)
+//           .sendNotfication(
+//               sendNotficationData: SendNotificationData(
+//                   listToken: [],
+//                   title: "حالة حرجة",
+//                   body: "تعال ياحيوان"))
+//           .then((value) {
+//       });
+//       // pushNotificationsGroupDevice(
+//       //     title: "حالة حرجة", body: "تعال ياحيوان");
+//     } catch (e) {
+//       print(e);
+//     }
+//     // BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
+//     // Navigator.pushNamed(context, ProfileCenterPage.routeName);
+//     // Get a new write batch
+//     // final batch = db.batch();
+//     // for (var donorJson in list) {
+//     //   var docRef = db.collection("donors").doc();
+//     //   batch.set(docRef, donorJson);
+//     // }
+//     // batch.commit().then((_) {
+//     //   print("======commit=done======");
+//     // });
+//     // Navigator.of(context).pushNamed(SearchPage.routeName);
+//     // Navigator.push(
+//     //   context,
+//     //   MaterialPageRoute<void>(
+//     //     builder: (BuildContext context) => const SearchMapPage(),
+//     //   ),
+//     // );
+//     // Navigator.of(context).pushNamed(OnBoardingView.routeName);
+//     // LocationPoint point1 = LocationPoint(
+//     //       lat: 13.9585003,
+//     //       lon: 44.1709884,
+//     //     ),
+//     //     point2 = LocationPoint(
+//     //       lat: 13.9556071,
+//     //       lon: 44.1708585,
+//     //     );
+//     // print(getNearbyPoints(
+//     //   base: point1,
+//     //   points: [point2],
+//     //   distanceKm: 0.4,
+//     // ).length); // 0.3220144142025769
+//     // // get the current location
+//     // await LocationManager().getCurrentLocation();
+//     // // start listen to location updates
+//     // StreamSubscription<LocationDto> locationSubscription =
+//     //     LocationManager().locationStream.listen((LocationDto dto) {
+//     //   print('======================');
+//     //   print(dto.altitude);
+//     //   print(dto.longitude);
+//     // });
+//     // // cancel listening and stop the location manager
+//     // locationSubscription.cancel();
+//     // LocationManager().stop();
+//   },
+//   heroTag: "search",
+//   child: const Icon(Icons.search_rounded),
+// ),
 //   List list = jsonDecode('''[
 //      {
 //         "image": "",

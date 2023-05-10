@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nabdh_alyaman/core/extensions/extension.dart';
 
 import '../../../presentation/pages/setting_page.dart';
 import '../../core/error/exceptions.dart';
@@ -20,17 +21,6 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<Either<Failure, UserCredential>> signIn(
-      {required String emailOrPhone, required String password}) async {
-    // if (emailOrPhone.isValidPhone) {
-    //   String phone = emailOrPhone;
-    //   return await signInWithPhone(phone: phone, password: password);
-    // } else {
-    String email = emailOrPhone;
-    return await signInWithEmail(email: email, password: password);
-    // }
-  }
-
   Future<Either<Failure, UserCredential>> signInWithEmail(
       {required String email, required String password}) async {
     if (await networkInfo.isConnected) {

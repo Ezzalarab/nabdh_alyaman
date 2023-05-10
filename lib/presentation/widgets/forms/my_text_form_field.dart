@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 
 class MyTextFormField extends StatelessWidget {
-  const MyTextFormField(
-      {Key? key,
-      this.hint,
-      this.style,
-      this.icon,
-      this.keyBoardType = TextInputType.text,
-      this.onChange,
-      this.validator,
-      this.onSave,
-      this.focusBorderColor,
-      this.blurrBorderColor,
-      this.fillColor,
-      this.hintStyle = const TextStyle(),
-      this.isPassword = false,
-      this.suffixIcon = true,
-      this.readOnly = false,
-      this.onTap,
-      this.controller,
-      this.initialValue})
-      : super(key: key);
+  const MyTextFormField({
+    Key? key,
+    this.hint,
+    this.style,
+    this.icon,
+    this.keyBoardType = TextInputType.text,
+    this.onChange,
+    this.validator,
+    this.onSave,
+    this.focusBorderColor,
+    this.blurrBorderColor,
+    this.fillColor,
+    this.hintStyle = const TextStyle(),
+    this.isPassword = false,
+    this.suffixIcon = true,
+    this.readOnly = false,
+    this.onTap,
+    this.controller,
+    this.initialValue,
+    this.validationMode = AutovalidateMode.onUserInteraction,
+  }) : super(key: key);
 
   final TextInputType keyBoardType;
   final TextStyle? style;
@@ -36,7 +37,7 @@ class MyTextFormField extends StatelessWidget {
   final bool readOnly;
   final TextEditingController? controller;
   final String? initialValue;
-
+  final AutovalidateMode validationMode;
   final void Function()? onTap;
 
   @override
@@ -47,6 +48,7 @@ class MyTextFormField extends StatelessWidget {
       onTap: onTap,
       onChanged: onChange,
       validator: validator,
+      autovalidateMode: validationMode,
       obscureText: isPassword,
       onSaved: onSave,
       keyboardType: keyBoardType,
