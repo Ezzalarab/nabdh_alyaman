@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../../../core/utils.dart';
 import '../../../domain/usecases/sign_up_donor_data_uc.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/entities/blood_center.dart';
@@ -34,8 +35,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   Future<void> checkCanSignUpWithPhone() async {
     emit(SignUpLoading());
-    DateTime dateTime = DateTime.now();
-    String today = "${dateTime.year}-${dateTime.month}-${dateTime.day}";
+    String today = Utils.getCurrentDate();
     bool areUsers40Today = true;
     await FirebaseFirestore.instance
         .collection("users_per_day")
@@ -152,13 +152,14 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(SignUpLoading());
     try {
       donor.token = await getToken();
-      await saveDonorDataUC(
-              donor: donor, uid: _currentUserCredential.user?.uid ?? "")
-          .then((value) {
+      await signUpDonorAuthUseCase(donor: donor).then((value) {
         value.fold(
             (failure) =>
                 emit(SignUpAuthFailure(error: _getFailureMessage(failure))),
-            (userCredential) => emit(SignUpAuthSuccess()));
+            (userCredential) {
+          _currentUserCredential = userCredential;
+          emit(SignUpAuthSuccess());
+        });
       });
     } catch (e) {
       emit(SignUpAuthFailure(error: e.toString()));

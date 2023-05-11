@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../presentation/resources/color_manageer.dart';
 
@@ -45,5 +46,17 @@ class Utils {
   static String removeCountryKeyFormPhone(String phoneWithCode) {
     int numbersCount = phoneWithCode.length;
     return phoneWithCode.substring(numbersCount - 9, numbersCount);
+  }
+
+  static String getCurrentDate() {
+    // Get the current date
+    final now = DateTime.now();
+
+    // Format the date as "yyyy-MM-dd"
+    final formatter = DateFormat('yyyy-MM-dd');
+    final formattedDate = formatter.format(now);
+
+    // Return the formatted date string
+    return formattedDate;
   }
 }
