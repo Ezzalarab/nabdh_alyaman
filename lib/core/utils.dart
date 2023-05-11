@@ -41,4 +41,9 @@ class Utils {
       ),
     );
   }
+
+  static String removeCountryKeyFormPhone(String phoneWithCode) {
+    int numbersCount = phoneWithCode.length;
+    return phoneWithCode.substring(numbersCount - 9, numbersCount);
+  }
 }

@@ -2,6 +2,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nabdh_alyaman/core/extensions/extension.dart';
+import 'package:nabdh_alyaman/core/utils.dart';
+import 'package:nabdh_alyaman/domain/entities/donor.dart';
 import '../../../core/check_active.dart';
 import '../../../presentation/cubit/profile_cubit/profile_cubit.dart';
 import '../../../presentation/pages/setting_page.dart';
@@ -26,6 +28,7 @@ class SignInCubit extends Cubit<SignInState> {
   final SignInUseCase signInUseCase;
   final ResetPasswordUseCase resetPasswordUseCase;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   late String verifId;
 
   Future<void> signIn({
@@ -75,12 +78,25 @@ class SignInCubit extends Cubit<SignInState> {
     }
   }
 
+  Future<bool> hasData(String phone) async {
+    return await _fireStore
+        .collection(DonorFields.collectionName)
+        .where(DonorFields.phone, isEqualTo: phone)
+        .get()
+        .then((res) => (res.docs.isNotEmpty));
+  }
+
   Future<void> signInWithPhoneNumber({
     required String phone,
     required Function onVerificationSent,
   }) async {
     emit(SignInLoading());
     try {
+      print(Utils.removeCountryKeyFormPhone(phone));
+      if (!await hasData(Utils.removeCountryKeyFormPhone(phone))) {
+        emit(SignInFailure(error: "ليس لديك حساب، قم بإنشاء حساب أولاً"));
+        return;
+      }
       // Request verification code for the provided phone number
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phone,
@@ -96,7 +112,6 @@ class SignInCubit extends Cubit<SignInState> {
         },
         codeSent: (String verificationId, int? resendToken) async {
           verifId = verificationId;
-          verify(smsCode: "123456");
           onVerificationSent();
           emit(SignInInitial());
         },

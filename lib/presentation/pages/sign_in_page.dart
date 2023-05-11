@@ -106,8 +106,9 @@ class _SignInPageState extends State<SignInPage> {
                 const SizedBox(height: 20),
                 MyButton(
                   title: "تأكيد",
-                  onPressed: () => BlocProvider.of<SignUpCubit>(context).verify(
-                    context: context,
+                  onPressed: () =>
+                      BlocProvider.of<SignInCubit>(context, listen: false)
+                          .verify(
                     smsCode: smsCode!,
                   ),
                   color: ColorManager.primary,
