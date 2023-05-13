@@ -72,6 +72,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
               Utils.showSnackBar(
                 context: context,
                 msg: AppStrings.profileSuccesMess,
+                color: ColorManager.success,
               );
               Navigator.pushReplacement(
                 context,

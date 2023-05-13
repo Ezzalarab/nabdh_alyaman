@@ -51,10 +51,10 @@ class AddressMainData extends StatelessWidget {
                           ),
                         ),
                         countrySearchPlaceholder: "الدولة",
-                        stateSearchPlaceholder: "المحافطة",
+                        stateSearchPlaceholder: "المحافظة",
                         citySearchPlaceholder: "المديرية",
                         countryDropdownLabel: "الدولة",
-                        stateDropdownLabel: "المحافطة",
+                        stateDropdownLabel: "المحافظة",
                         cityDropdownLabel: "المديرية",
                         defaultCountry: DefaultCountry.Yemen,
 

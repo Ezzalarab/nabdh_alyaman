@@ -15,6 +15,9 @@ class SearchOptions extends StatelessWidget {
   final GlobalKey<FormState> searchFormState = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    print("initial city and state");
+    print(BlocProvider.of<SearchCubit>(context).selectedState);
+    print(BlocProvider.of<SearchCubit>(context).selectedDistrict);
     return Form(
       key: searchFormState,
       child: SingleChildScrollView(
@@ -50,12 +53,36 @@ class SearchOptions extends StatelessWidget {
                   ),
                 ),
                 countrySearchPlaceholder: "الدولة",
-                stateSearchPlaceholder: "المحافطة",
-                citySearchPlaceholder: "المديرية",
+                stateSearchPlaceholder:
+                    BlocProvider.of<SearchCubit>(context).selectedState == ""
+                        ? "المحافظة"
+                        : BlocProvider.of<SearchCubit>(context).selectedState,
+                citySearchPlaceholder:
+                    BlocProvider.of<SearchCubit>(context).selectedDistrict == ""
+                        ? "المديرية"
+                        : BlocProvider.of<SearchCubit>(context)
+                            .selectedDistrict,
                 countryDropdownLabel: "الدولة",
-                stateDropdownLabel: "المحافطة",
-                cityDropdownLabel: "المديرية",
+                stateDropdownLabel:
+                    BlocProvider.of<SearchCubit>(context).selectedState == ""
+                        ? "المحافظة"
+                        : BlocProvider.of<SearchCubit>(context).selectedState,
+                cityDropdownLabel:
+                    BlocProvider.of<SearchCubit>(context).selectedDistrict == ""
+                        ? "المديرية"
+                        : BlocProvider.of<SearchCubit>(context)
+                            .selectedDistrict,
                 defaultCountry: DefaultCountry.Yemen,
+                currentCountry: "اليمن",
+                currentState:
+                    BlocProvider.of<SearchCubit>(context).selectedState == ""
+                        ? null
+                        : BlocProvider.of<SearchCubit>(context).selectedState,
+                currentCity:
+                    BlocProvider.of<SearchCubit>(context).selectedDistrict == ""
+                        ? null
+                        : BlocProvider.of<SearchCubit>(context)
+                            .selectedDistrict,
                 selectedItemStyle: const TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 16,
@@ -95,7 +122,7 @@ class SearchOptions extends StatelessWidget {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: MyDropdownButtonFormField(
-                hint: "فصيلة دمك",
+                hint: "فصيلة دم المحتاج",
                 value: BlocProvider.of<SearchCubit>(context).selectedBloodType,
                 items: BloodTypes.bloodTypes,
                 blurrBorderColor: eFieldBlurrBorderColor,

@@ -167,6 +167,7 @@ class _SettingPageState extends State<SettingPage> {
             Utils.showSnackBar(
               context: context,
               msg: AppStrings.profileSuccesMess,
+              color: ColorManager.success,
             );
           }
         }, builder: (context, state) {

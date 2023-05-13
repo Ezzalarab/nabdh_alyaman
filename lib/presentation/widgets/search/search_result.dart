@@ -146,45 +146,52 @@ class _SearchResultState extends State<SearchResult>
                             );
                           }),
                           FutureBuilder(
-                            builder: (context, snapshot) => SingleChildScrollView(
-                                child: SizedBox(
-                              height: 400,
-                              child: ListView.builder(
-                                itemCount: state.centers.length,
-                                itemBuilder: (context, index) =>
-                                    buildCenterListTile(
-                                  context,
-                                  state.centers[index],
-                                ),
-                              ),
-                            )
-                                // MyExpansionPanelList.radio(
-                                //   expansionCallback:
-                                //       (int index, bool isExpanded) {
-                                //     setState(() => state
-                                //         .centers[index].isExpanded = !isExpanded);
-                                //   },
-                                //   expandedHeaderPadding: EdgeInsets.zero,
-                                //   elevation: 0,
-                                //   dividerColor: ColorManager.white,
-                                //   children: state.centers
-                                //       .map<ExpansionPanel>((BloodCenter center) {
-                                //     return ExpansionPanelRadio(
-                                //       value: state.centers.indexOf(center),
-                                //       backgroundColor:
-                                //           const Color.fromARGB(0, 0, 0, 0),
-                                //       // canTapOnHeader: true,
-                                //       headerBuilder:
-                                //           (BuildContext ctx, bool isExpanded) {
-                                //         print("center builder");
-                                //         return buildCenterListTile(
-                                //             context, center);
-                                //       },
-                                //       body: const DonerCardBody(),
-                                //     );
-                                //   }).toList(),
-                                // ),
-                                ),
+                            builder: (context, snapshot) => (state
+                                    .centers.isEmpty)
+                                ? const Center(
+                                    child: Text(
+                                      "لا يوجد مراكز طبية تمتلك بهذه المنطقة",
+                                    ),
+                                  )
+                                : SingleChildScrollView(
+                                    child: SizedBox(
+                                    height: 400,
+                                    child: ListView.builder(
+                                      itemCount: state.centers.length,
+                                      itemBuilder: (context, index) =>
+                                          buildCenterListTile(
+                                        context,
+                                        state.centers[index],
+                                      ),
+                                    ),
+                                  )
+                                    // MyExpansionPanelList.radio(
+                                    //   expansionCallback:
+                                    //       (int index, bool isExpanded) {
+                                    //     setState(() => state
+                                    //         .centers[index].isExpanded = !isExpanded);
+                                    //   },
+                                    //   expandedHeaderPadding: EdgeInsets.zero,
+                                    //   elevation: 0,
+                                    //   dividerColor: ColorManager.white,
+                                    //   children: state.centers
+                                    //       .map<ExpansionPanel>((BloodCenter center) {
+                                    //     return ExpansionPanelRadio(
+                                    //       value: state.centers.indexOf(center),
+                                    //       backgroundColor:
+                                    //           const Color.fromARGB(0, 0, 0, 0),
+                                    //       // canTapOnHeader: true,
+                                    //       headerBuilder:
+                                    //           (BuildContext ctx, bool isExpanded) {
+                                    //         print("center builder");
+                                    //         return buildCenterListTile(
+                                    //             context, center);
+                                    //       },
+                                    //       body: const DonerCardBody(),
+                                    //     );
+                                    //   }).toList(),
+                                    // ),
+                                    ),
                           ),
                         ],
                       ),

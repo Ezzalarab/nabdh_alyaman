@@ -1,16 +1,16 @@
+import '../../../domain/entities/donor.dart';
+import '../../../core/utils.dart';
 import '../../resources/strings_manager.dart';
 import '../../resources/values_manager.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/entities/donor.dart';
 import '../../cubit/profile_cubit/profile_cubit.dart';
 import '../../pages/edit_main_data_page.dart';
 import '../../resources/color_manageer.dart';
 import '../../resources/style.dart';
-import '../../../core/utils.dart';
 import '../forms/my_button.dart';
 import '../forms/my_switchlist_tile.dart';
 import '../forms/my_text_form_field.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileBody extends StatefulWidget {
   ProfileBody({
@@ -117,31 +117,32 @@ class _ProfileBodyState extends State<ProfileBody> {
         ),
         const SizedBox(height: AppSize.s24),
         Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppPadding.p30, vertical: AppPadding.p10),
-            child: Column(
-              children: [
-                MyTextFormField(
-                  hint: AppStrings.profileDataBrithday,
-                  hintStyle: Theme.of(context).textTheme.bodyText1!,
-                  suffixIcon: true,
-                  blurrBorderColor: ColorManager.grey,
-                  focusBorderColor: eSecondColor,
-                  icon: const Icon(
-                    Icons.calendar_month,
-                    color: eSecondColor,
-                  ),
-                  readOnly: true,
-                  onTap: () {
-                    showDateTimePicker(context).then((value) {
-                      if (value != "") {
-                        profileLocalData!.date = value;
-                      }
-                    });
-                  },
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.p30, vertical: AppPadding.p10),
+          child: Column(
+            children: [
+              MyTextFormField(
+                hint: AppStrings.profileDataBrithday,
+                hintStyle: Theme.of(context).textTheme.bodyText1!,
+                suffixIcon: true,
+                blurrBorderColor: ColorManager.grey,
+                focusBorderColor: eSecondColor,
+                icon: const Icon(
+                  Icons.calendar_month,
+                  color: eSecondColor,
                 ),
-              ],
-            )),
+                readOnly: true,
+                onTap: () {
+                  showDateTimePicker(context).then((value) {
+                    if (value != "") {
+                      profileLocalData!.date = value;
+                    }
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
         MyButton(
             title: AppStrings.profileButtonSave,
             color: Theme.of(context).primaryColor,
@@ -155,7 +156,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                 Utils.showSnackBar(
                   context: context,
                   msg: AppStrings.profileSuccesMess,
-                  color: ColorManager.error,
+                  color: ColorManager.success,
                 );
               }
             }))
