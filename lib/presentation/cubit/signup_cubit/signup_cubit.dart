@@ -25,8 +25,8 @@ class SignUpCubit extends Cubit<SignUpState> {
     required this.signUpCenterUseCase,
   }) : super(SignUpInitial(canSignUpWithPhone: false));
 
-  FirebaseAuth fireAuth = FirebaseAuth.instance;
-  FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  final FirebaseAuth _fireAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   User? currentUser;
   final SignUpDonorAuthUseCase signUpDonorAuthUseCase;
   final SignUpDonorDataUseCase saveDonorDataUC;
@@ -77,7 +77,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   }) async {
     if (canSignUpWithPhone) {
       signUpDonorWithPhone(
-        donor: donor,
+        phone: donor.phone,
         onVerificationSent: onVerificationSent,
       );
     } else {
@@ -86,26 +86,25 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> signUpDonorWithPhone({
-    required Donor donor,
-    required Function onVerificationSent,
-  }) async {
-    await fetchOtp(
-      phone: donor.phone,
-      onVerificationSent: onVerificationSent,
-    );
-  }
-
-  Future<void> fetchOtp({
     required String phone,
     required Function onVerificationSent,
   }) async {
     print("start phone verification ==-==-==-=-=-=");
     emit(SignUpLoading());
-    await FirebaseAuth.instance
+    // Checking if phone number is registered in other account
+    String phonePreviousUserName = await checkIsPhoneRegistered(phone);
+    if (phonePreviousUserName != "") {
+      emit(SignUpFailure(
+          error:
+              'الرقم مستخدم باسم: $phonePreviousUserName، قم بتسجيل الدخول.'));
+      return;
+    }
+    // Signing with phone
+    await _fireAuth
         .verifyPhoneNumber(
       phoneNumber: "+967$phone",
       verificationCompleted: (PhoneAuthCredential credential) async {
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        await _fireAuth.signInWithCredential(credential);
         print("_phone");
         print(phone);
       },
@@ -128,6 +127,20 @@ class SignUpCubit extends Cubit<SignUpState> {
     });
   }
 
+  Future<String> checkIsPhoneRegistered(String phone) async {
+    return _fireStore
+        .collection(DonorFields.collectionName)
+        .where('phone', isEqualTo: phone)
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) {
+        return "";
+      } else {
+        return value.docs.first.get('name');
+      }
+    });
+  }
+
   Future<void> verify({
     required BuildContext context,
     required String smsCode,
@@ -138,7 +151,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       verificationId: _verificationId!,
       smsCode: smsCode,
     );
-    await FirebaseAuth.instance
+    await _fireAuth
         .signInWithCredential(phoneAuthCredential)
         .then((userCredential) {
       print("userCredential.user!.uid");

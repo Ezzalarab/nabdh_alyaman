@@ -47,6 +47,7 @@ class _HomePageState extends State<HomePage> {
       FlutterLocalNotificationsPlugin();
   final db = FirebaseFirestore.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   late Position position;
 
