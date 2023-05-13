@@ -2,12 +2,12 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nabdh_alyaman/presentation/cubit/signup_cubit/signup_cubit.dart';
 
-import '../../../presentation/pages/search_page.dart';
-import '../../../presentation/resources/color_manageer.dart';
 import '../../../../dependency_injection.dart' as di;
+import '../../resources/color_manageer.dart';
+import '../../pages/search_page.dart';
 import '../../pages/sign_up_page.dart';
+import '../../cubit/signup_cubit/signup_cubit.dart';
 import '../../resources/style.dart';
 import '../forms/my_button.dart';
 import '../forms/my_text_form_field.dart';
@@ -103,9 +103,9 @@ class _HomeWelcomeState extends State<HomeWelcome> {
                         color: Theme.of(context).primaryColor,
                         titleStyle: Theme.of(context).textTheme.titleLarge,
                         onPressed: () {
+                          di.initSignUp();
                           BlocProvider.of<SignUpCubit>(context, listen: false)
                               .checkCanSignUpWithPhone();
-                          di.initSignUp();
                           Navigator.push(
                             context,
                             MaterialPageRoute(

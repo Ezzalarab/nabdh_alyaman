@@ -221,6 +221,9 @@ class _SignUpPageState extends State<SignUpPage> {
           } else if (state is SignUpDataFailure) {
             Utils.showFalureSnackBar(context: context, msg: state.error);
           }
+          // else if (state is SignUpAuthSuccess) {
+          //   setState(() => _activeStepIndex++);
+          // }
         },
         builder: (context, state) {
           return ModalProgressHUD(
@@ -683,7 +686,6 @@ class _SignUpPageState extends State<SignUpPage> {
           if (_activeStepIndex == 0) {
             _signUpAuth();
           }
-          setState(() => _activeStepIndex++);
         } else {
           setState(() => _activeStepIndex = stepIndex);
         }

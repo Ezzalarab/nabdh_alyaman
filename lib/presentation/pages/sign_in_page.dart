@@ -3,11 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:nabdh_alyaman/presentation/cubit/signup_cubit/signup_cubit.dart';
 
+import '../../../../dependency_injection.dart' as di;
 import '../../data/models/dialod_reset_password.dart';
 import '../../core/utils.dart';
 import '../../core/extensions/extension.dart';
+import '../cubit/signup_cubit/signup_cubit.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
 import '../resources/constatns.dart';
@@ -120,6 +121,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   _moveToSignUp() {
+    di.initSignUp();
     BlocProvider.of<SignUpCubit>(context, listen: false)
         .checkCanSignUpWithPhone();
     Navigator.push(
