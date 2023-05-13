@@ -48,18 +48,13 @@ class _HomePageState extends State<HomePage> {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-
   late Position position;
-
   int _counter = 0;
 
-  Timer? _timer;
-
-  final String? _phone = "714296685";
-
-  String? smsCode;
-
-  String? _verificationId;
+  // Timer? _timer;
+  // final String _phone = "714296685";
+  // String? smsCode;
+  // String? _verificationId;
 
   @override
   void initState() {
@@ -136,10 +131,11 @@ class _HomePageState extends State<HomePage> {
   //--------------------------------------
   //----------- updating ------- check version
   void checkUpdate() async {
-    await Updating().getVersion();
+    Updating updateChecker = Updating();
+    await updateChecker.getVersion();
     await Future.delayed(const Duration(seconds: 6));
-    if (Updating().flagUpdata) {
-      await Updating().showAlertUpdating(context);
+    if (updateChecker.flagUpdata) {
+      await updateChecker.showAlertUpdating(context);
     }
   }
 
@@ -216,9 +212,6 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      // SizedBox(
-                      //   height: 4,
-                      // ),
                       const HomeWelcome(),
                       const HomeCarousel(),
                       Container(

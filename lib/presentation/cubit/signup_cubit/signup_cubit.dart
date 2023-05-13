@@ -1,13 +1,12 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
+import 'package:hive/hive.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:nabdh_alyaman/presentation/pages/setting_page.dart';
 
+import '../../../presentation/pages/setting_page.dart';
 import '../../../core/utils.dart';
 import '../../../domain/usecases/sign_up_donor_data_uc.dart';
 import '../../../core/error/failures.dart';

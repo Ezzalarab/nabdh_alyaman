@@ -8,7 +8,7 @@ import '../../main.dart';
 
 class Updating {
   bool flagUpdata = false, errorFlage = true;
-  String? oldVersion, newVersion, errorMessage, errorDegree;
+  String? oldVersion, newVersion, errorMessage, errorDegree, updateLink;
 
   Future getVersion() async {
     info.PackageInfo? packageInfo = await info.PackageInfo.fromPlatform();
@@ -24,6 +24,7 @@ class Updating {
           newVersion = event.docs[0].data()['new_version'];
           errorMessage = event.docs[0].data()['message'];
           errorDegree = event.docs[0].data()['waring_degree'];
+          updateLink = event.docs[0].data()['update_link'];
           print("check update");
           print("old");
           print(oldVersion);
@@ -52,15 +53,13 @@ class Updating {
       dismissOnBackKeyPress: errorFlage,
       dismissOnTouchOutside: errorFlage,
       dialogType: errorFlage ? DialogType.warning : DialogType.error,
-      borderSide: const BorderSide(color: Colors.green, width: 2),
       buttonsBorderRadius: const BorderRadius.all(Radius.circular(2)),
       headerAnimationLoop: false,
       showCloseIcon: errorFlage,
       animType: AnimType.bottomSlide,
-      // title: "يتوفر اصدار حديد",
-      // desc: await errorMessage,
       body: Column(
         children: [
+          const SizedBox(height: 20),
           const Center(
             child: Text(
               "يتوفر اصدار جديد",
@@ -88,7 +87,8 @@ class Updating {
               ),
               child: const Text("تحديث"),
               onPressed: () {
-                launchAppStore();
+                launchAppStore(updateLink ??
+                    "https://play.google.com/store/apps/details?id=com.ezzcode.nabdh_alyaman");
               },
             ),
           ),
@@ -98,11 +98,11 @@ class Updating {
     ).show();
   }
 
-  void launchAppStore() async {
-    var appStoreURL =
-        "https://play.google.com/store/apps/details?id=d.threedevils.devicey";
-    if (await canLaunchUrl(Uri.parse(appStoreURL))) {
-      await launchUrl(Uri.parse(appStoreURL));
+  void launchAppStore(String updateLink) async {
+    // var updateLinke =
+    //     "https://play.google.com/store/apps/details?id=com.ezzcode.nabdh_alyaman";
+    if (await canLaunchUrl(Uri.parse(updateLink))) {
+      await launchUrl(Uri.parse(updateLink));
     }
   }
 }

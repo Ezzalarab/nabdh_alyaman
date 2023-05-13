@@ -66,7 +66,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // });
   // Fluttertoast.showToast(msg: message.notification!.body.toString());
   RemoteNotification? notification = message.notification;
-  AndroidNotification? android = message.notification?.android;
+  // AndroidNotification? android = message.notification?.android;
   flutterLocalNotificationsPlugin.show(
       notification.hashCode,
       notification!.title,
@@ -84,10 +84,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 late Position position;
 //-------------------------------------.
-final AndroidInitializationSettings _androidInitializationSettings =
-    const AndroidInitializationSettings('@mipmap/ic_launcher');
-final DarwinInitializationSettings _darwinInitializationSettings =
-    DarwinInitializationSettings();
+const AndroidInitializationSettings _androidInitializationSettings =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+// final DarwinInitializationSettings _darwinInitializationSettings =
+//     const DarwinInitializationSettings();
 
 void initialisendNotfications() async {
   InitializationSettings initializationSettings =
@@ -97,10 +97,8 @@ void initialisendNotfications() async {
 
 Future<void> backgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
-
-  print(";;;;;;;;;;;;;;;;;;;;");
   // await SharedMethod().checkGps();
-  Future.delayed(Duration(seconds: 2)).then((value) {
+  Future.delayed(const Duration(seconds: 2)).then((value) {
     Fluttertoast.showToast(msg: message.notification!.body.toString());
   });
   await SharedMethod().checkGps();
