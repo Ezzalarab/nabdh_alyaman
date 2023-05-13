@@ -120,7 +120,14 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   _moveToSignUp() {
-    Navigator.of(context).pushReplacementNamed(SignUpPage.routeName);
+    BlocProvider.of<SignUpCubit>(context, listen: false)
+        .checkCanSignUpWithPhone();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const SignUpPage(),
+      ),
+    );
   }
 
   @override

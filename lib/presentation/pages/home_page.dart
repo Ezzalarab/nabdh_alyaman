@@ -194,71 +194,69 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             backgroundColor: ColorManager.white,
-            body: MediaQuery(
-              data: MediaQuery.of(context)
-                  .copyWith(textScaleFactor: textScaleFactor),
-              child: BlocConsumer<SendNotficationCubit, SendNotficationState>(
-                listener: (context, state) {
-                  if (state is SendNotficationStateSuccess) {
-                    print("Send Notification Success");
-                  }
-                  if (state is SendNotficationStateFailure) {
-                    print("Failure -----------------------");
-                  }
-                },
-                builder: (context, state) {
-                  if (state is SendNotficationStateSuccess) {
-                    print("Send Notification Success");
-                  }
-                  if (state is SendNotficationStateFailure) {
-                    print("Failure ----------------------00");
-                  }
-                  return SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // SizedBox(
-                        //   height: 4,
-                        // ),
-                        const HomeWelcome(),
-                        const HomeCarousel(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: AppPadding.p30),
+            body: BlocConsumer<SendNotficationCubit, SendNotficationState>(
+              listener: (context, state) {
+                if (state is SendNotficationStateSuccess) {
+                  print("Send Notification Success");
+                }
+                if (state is SendNotficationStateFailure) {
+                  print("Failure -----------------------");
+                }
+              },
+              builder: (context, state) {
+                if (state is SendNotficationStateSuccess) {
+                  print("Send Notification Success");
+                }
+                if (state is SendNotficationStateFailure) {
+                  print("Failure ----------------------00");
+                }
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // SizedBox(
+                      //   height: 4,
+                      // ),
+                      const HomeWelcome(),
+                      const HomeCarousel(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppPadding.p30,
+                          vertical: AppPadding.p10,
+                        ),
+                        child: Text(
+                          'فوائد التبرع بالدم',
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayLarge!
+                              .copyWith(
+                                  height: 1.5,
+                                  fontSize: 20,
+                                  color: ColorManager.primary),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 10),
+                        child: Align(
+                          alignment: Alignment.centerRight,
                           child: Text(
-                            'نبض',
+                            '''
+            التبرع بالدم هو إجراء طبي يتم فيه نقل الدم من شخص سليم معافى طوعاً إلى شخص مريض محتاج للدم. يستخدم ذلك الدم في عمليات نقل الدم كاملا أو بأحد مكوناته فقط بعد ...''',
                             style: Theme.of(context)
                                 .textTheme
-                                .displayLarge!
-                                .copyWith(
-                                    height: 1.5,
-                                    fontSize: 25,
-                                    color: ColorManager.primary),
+                                .bodyMedium!
+                                .copyWith(height: 1.4),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '''
-            التبرع بالدم هو إجراء طبي يتم فيه نقل الدم من شخص سليم معافى طوعاً إلى شخص مريض محتاج للدم. يستخدم ذلك الدم في عمليات نقل الدم كاملا أو بأحد مكوناته فقط بعد ...''',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(height: 1.4),
-                            ),
-                          ),
-                        ),
-                        const HomeAbout(),
-                        const SizedBox(height: AppSize.s20),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                      ),
+                      const HomeAbout(),
+                      const SizedBox(height: AppSize.s20),
+                    ],
+                  ),
+                );
+              },
             ),
             drawer: const HomeDrower(),
             floatingActionButton: FloatingActionButton(

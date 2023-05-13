@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:nabdh_alyaman/presentation/widgets/home/home_drawer/home_drawer_menu_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../presentation/pages/setting_page.dart';
 import '../../../../presentation/widgets/home/home_drawer/home_drawer_center_body.dart';
@@ -35,6 +38,19 @@ class _HomeDrowerState extends State<HomeDrower> {
                 : userType == "2"
                     ? const HomeDrawerCenterBody()
                     : const HomeDrawerBody(),
+            HomeDrawerMenuItem(
+              title: "الإبلاغ عن مشكلة في التطبيق",
+              icon: Icons.warning_amber_rounded,
+              onTap: () {
+                // TODO get developer phone number from database
+                String devPhone = "+967714296685";
+                String messageHeader =
+                    "إبلاغ عن مشكلة في تطبيق نبض اليمن:\n_____________\n";
+                final url = Uri.parse(
+                    'whatsapp://send?phone=$devPhone&text=$messageHeader');
+                launchUrl(url);
+              },
+            ),
           ],
         ),
       ),
