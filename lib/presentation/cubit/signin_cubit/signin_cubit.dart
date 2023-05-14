@@ -1,18 +1,15 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nabdh_alyaman/core/extensions/extension.dart';
-import 'package:nabdh_alyaman/core/utils.dart';
-import 'package:nabdh_alyaman/domain/entities/donor.dart';
-import '../../../core/check_active.dart';
-import '../../../presentation/cubit/profile_cubit/profile_cubit.dart';
-import '../../../presentation/pages/setting_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 
+import '../../../core/extensions/extension.dart';
+import '../../../core/utils.dart';
+import '../../../domain/entities/donor.dart';
+import '../../../presentation/pages/setting_page.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/usecases/reset_password_use_case.dart';
 import '../../../domain/usecases/sign_in_usecase.dart';
@@ -92,7 +89,6 @@ class SignInCubit extends Cubit<SignInState> {
   }) async {
     emit(SignInLoading());
     try {
-      print(Utils.removeCountryKeyFormPhone(phone));
       if (!await hasData(Utils.removeCountryKeyFormPhone(phone))) {
         emit(SignInFailure(error: "ليس لديك حساب، قم بإنشاء حساب أولاً"));
         return;
@@ -126,22 +122,35 @@ class SignInCubit extends Cubit<SignInState> {
     }
   }
 
-  verify({required String smsCode}) async {
-    // Save verification ID and resend token to use later
-    String smsCode = '123456'; // Replace with the code entered by the user
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: verifId,
-      smsCode: smsCode,
-    );
-    // Sign in the user with the verification code
-    await _firebaseAuth.signInWithCredential(credential).then((value) {
-      print(value.user != null);
-      if (value.user != null) {
-        emit(SignInSuccess());
+  Future<void> verify({required String smsCode}) async {
+    emit(SignInLoading());
+    try {
+      // Save verification ID and resend token to use later
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verifId,
+        smsCode: smsCode,
+      );
+      // Sign in the user with the verification code
+      await _firebaseAuth.signInWithCredential(credential).then((value) {
+        if (value.user != null) {
+          Hive.box(dataBoxName).put('user', "1");
+          emit(SignInSuccess());
+        } else {
+          emit(SignInFailure(error: "verification failed no user"));
+        }
+      });
+    } on FirebaseException catch (fireError) {
+      print("fireError.code");
+      print(fireError.code);
+      if (fireError.code == 'invalid-verification-code') {
+        emit(SignInFailure(error: "رمز التأكيد خطأ، حاول مرة أخرى."));
       } else {
-        emit(SignInFailure(error: "verification failed no user"));
+        emit(SignInFailure(error: fireError.code));
       }
-    });
+    } catch (e) {
+      print(e);
+      emit(SignInFailure(error: e.toString()));
+    }
   }
 
   Future<void> updateToken(String uid) async {

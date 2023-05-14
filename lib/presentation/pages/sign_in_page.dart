@@ -17,9 +17,9 @@ import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 import '../widgets/forms/my_button.dart';
 import '../cubit/signin_cubit/signin_cubit.dart';
-import '../pages/home_page.dart';
-import '../pages/sign_up_page.dart';
 import '../widgets/forms/my_text_form_field.dart';
+import 'home_page.dart';
+import 'sign_up_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -80,41 +80,54 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Function showVerificationDialog(BuildContext context) {
+    final GlobalKey<FormState> _verificationFormState = GlobalKey<FormState>();
     return () => AwesomeDialog(
           headerAnimationLoop: false,
           dialogType: DialogType.noHeader,
           context: context,
           body: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                const Text(
-                  "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
-                  style: TextStyle(
-                    height: 2,
+            child: Form(
+              key: _verificationFormState,
+              child: Column(
+                children: [
+                  const Text(
+                    "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
+                    style: TextStyle(
+                      height: 2,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                MyTextFormField(
-                  onChange: (value) => smsCode = value,
-                  hint: "اكتب رقم التأكيد",
-                  keyBoardType: TextInputType.number,
-                  blurrBorderColor: ColorManager.lightGrey,
-                  focusBorderColor: ColorManager.lightSecondary,
-                  fillColor: ColorManager.white,
-                ),
-                const SizedBox(height: 20),
-                MyButton(
-                  title: "تأكيد",
-                  onPressed: () =>
-                      BlocProvider.of<SignInCubit>(context, listen: false)
-                          .verify(
-                    smsCode: smsCode!,
+                  const SizedBox(height: 20),
+                  MyTextFormField(
+                    onChange: (value) => smsCode = value,
+                    hint: "اكتب رقم التأكيد",
+                    keyBoardType: TextInputType.number,
+                    blurrBorderColor: ColorManager.lightGrey,
+                    focusBorderColor: ColorManager.lightSecondary,
+                    fillColor: ColorManager.white,
+                    autofocus: true,
+                    validator: (value) => (value != null && value.length > 5)
+                        ? null
+                        : "يجب كتابة رمز التأكيد المكون من 6 أرقام",
                   ),
-                  color: ColorManager.primary,
-                ),
-              ],
+                  const SizedBox(height: 20),
+                  MyButton(
+                    title: "تأكيد",
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      if (_verificationFormState.currentState!.validate()) {
+                        BlocProvider.of<SignInCubit>(context, listen: false)
+                            .verify(
+                          smsCode: smsCode!,
+                        );
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    color: ColorManager.primary,
+                  ),
+                ],
+              ),
             ),
           ),
         ).show();

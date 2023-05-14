@@ -17,6 +17,7 @@ class MyTextFormField extends StatelessWidget {
     this.isPassword = false,
     this.suffixIcon = true,
     this.readOnly = false,
+    this.autofocus = false,
     this.onTap,
     this.controller,
     this.initialValue,
@@ -39,6 +40,7 @@ class MyTextFormField extends StatelessWidget {
   final String? initialValue;
   final AutovalidateMode validationMode;
   final void Function()? onTap;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,7 @@ class MyTextFormField extends StatelessWidget {
       textAlign: TextAlign.center,
       readOnly: readOnly,
       style: style,
+      autofocus: autofocus,
       decoration: InputDecoration(
         prefixIcon: suffixIcon
             ? null
