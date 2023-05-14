@@ -105,40 +105,53 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Function buildVerificationDialog(BuildContext context) {
+    final GlobalKey<FormState> _verificationFormState = GlobalKey<FormState>();
     return () => AwesomeDialog(
           headerAnimationLoop: false,
           dialogType: DialogType.noHeader,
           context: context,
           body: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                const Text(
-                  "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
-                  style: TextStyle(
-                    height: 2,
+            child: Form(
+              key: _verificationFormState,
+              child: Column(
+                children: [
+                  const Text(
+                    "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
+                    style: TextStyle(
+                      height: 2,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                MyTextFormField(
-                  onChange: (value) => smsCode = value,
-                  hint: "اكتب رقم التأكيد",
-                  keyBoardType: TextInputType.number,
-                  blurrBorderColor: ColorManager.lightGrey,
-                  focusBorderColor: ColorManager.lightSecondary,
-                  fillColor: ColorManager.white,
-                ),
-                const SizedBox(height: 20),
-                MyButton(
-                  title: "تأكيد",
-                  onPressed: () => BlocProvider.of<SignUpCubit>(context).verify(
-                    context: context,
-                    smsCode: smsCode!,
+                  const SizedBox(height: 20),
+                  MyTextFormField(
+                    onChange: (value) => smsCode = value,
+                    hint: "اكتب رقم التأكيد",
+                    keyBoardType: TextInputType.number,
+                    blurrBorderColor: ColorManager.lightGrey,
+                    focusBorderColor: ColorManager.lightSecondary,
+                    fillColor: ColorManager.white,
+                    autofocus: true,
+                    validator: (value) => (value != null && value.length > 5)
+                        ? null
+                        : "يجب كتابة رمز التأكيد المكون من 6 أرقام",
                   ),
-                  color: ColorManager.primary,
-                ),
-              ],
+                  const SizedBox(height: 20),
+                  MyButton(
+                    title: "تأكيد",
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      if (_verificationFormState.currentState!.validate()) {
+                        BlocProvider.of<SignUpCubit>(context).verify(
+                          context: context,
+                          smsCode: smsCode!,
+                        );
+                      }
+                    },
+                    color: ColorManager.primary,
+                  ),
+                ],
+              ),
             ),
           ),
         ).show();
@@ -207,6 +220,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: ColorManager.grey0,
         title: const Text(AppStrings.signUpAppBarTitle),
       ),
       body: BlocConsumer<SignUpCubit, SignUpState>(
@@ -220,10 +234,9 @@ class _SignUpPageState extends State<SignUpPage> {
             Utils.showFalureSnackBar(context: context, msg: state.error);
           } else if (state is SignUpDataFailure) {
             Utils.showFalureSnackBar(context: context, msg: state.error);
+          } else if (state is SignUpAuthSuccess) {
+            setState(() => _activeStepIndex++);
           }
-          // else if (state is SignUpAuthSuccess) {
-          //   setState(() => _activeStepIndex++);
-          // }
         },
         builder: (context, state) {
           return ModalProgressHUD(

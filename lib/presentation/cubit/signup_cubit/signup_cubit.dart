@@ -144,20 +144,37 @@ class SignUpCubit extends Cubit<SignUpState> {
     required BuildContext context,
     required String smsCode,
   }) async {
-    emit(SignUpLoading());
-    Navigator.of(context).pop();
-    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-      verificationId: _verificationId!,
-      smsCode: smsCode,
-    );
-    await _fireAuth
-        .signInWithCredential(phoneAuthCredential)
-        .then((userCredential) {
-      print("userCredential.user!.uid");
-      print(userCredential.user!.uid);
-      _currentUserCredential = userCredential;
-    });
-    emit(SignUpInitial(canSignUpWithPhone: canSignUpWithPhone));
+    try {
+      emit(SignUpLoading());
+      Navigator.of(context).pop();
+      PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+        verificationId: _verificationId!,
+        smsCode: smsCode,
+      );
+      await _fireAuth
+          .signInWithCredential(phoneAuthCredential)
+          .then((userCredential) {
+        if (userCredential.user != null) {
+          print("userCredential.user!.uid");
+          print(userCredential.user!.uid);
+          _currentUserCredential = userCredential;
+          emit(SignUpAuthSuccess());
+        } else {
+          SignUpAuthFailure(error: "فشل إنشاء الحساب");
+        }
+      });
+    } on FirebaseException catch (fireError) {
+      print("fireError.code");
+      print(fireError.code);
+      if (fireError.code == 'invalid-verification-code') {
+        emit(SignUpFailure(error: "رمز التأكيد خطأ، حاول مرة أخرى."));
+      } else {
+        emit(SignUpFailure(error: fireError.code));
+      }
+    } catch (e) {
+      print(e);
+      emit(SignUpFailure(error: e.toString()));
+    }
   }
 
   Future<void> signUpDonorWithEmail({
