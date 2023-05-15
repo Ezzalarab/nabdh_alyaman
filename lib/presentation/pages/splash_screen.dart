@@ -20,9 +20,8 @@ class SplashScreen extends StatelessWidget {
     CheckActive.checkActiveUser();
 
     return AnimatedSplashScreen(
-        splash: MyLottie(
-          lottie: AppStrings.lottieOnHomePage,
-        ),
+        duration: 1000,
+        splash: const MyLottie(lottie: AppStrings.lottieOnHomePage),
         splashIconSize: 250,
         backgroundColor: ColorManager.white,
         pageTransitionType: PageTransitionType.rightToLeftWithFade,
