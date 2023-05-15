@@ -233,6 +233,8 @@ class _SignUpPageState extends State<SignUpPage> {
             Utils.showFalureSnackBar(context: context, msg: state.error);
           } else if (state is SignUpDataFailure) {
             Utils.showFalureSnackBar(context: context, msg: state.error);
+          } else if (state is SignUpAuthFailure) {
+            Utils.showFalureSnackBar(context: context, msg: state.error);
           } else if (state is SignUpAuthSuccess) {
             setState(() => _activeStepIndex++);
           }

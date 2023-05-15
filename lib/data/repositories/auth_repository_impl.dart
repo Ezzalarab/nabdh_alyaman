@@ -133,6 +133,7 @@ class AuthRepositoryImpl implements AuthRepository {
           }
         });
       } on FirebaseException catch (fireError) {
+        print(fireError.code);
         if (fireError.code == 'invalid-email') {
           return Left(InvalidEmailFailure());
         } else if (fireError.code == 'weak-password') {
@@ -171,7 +172,6 @@ class AuthRepositoryImpl implements AuthRepository {
               .doc(uid)
               .set(donorData)
               .then((_) async {
-            Hive.box(dataBoxName).put('user', "1");
             return const Right(unit);
           });
         } else {

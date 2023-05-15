@@ -169,6 +169,7 @@ class SignUpCubit extends Cubit<SignUpState> {
           print(userCredential.user!.uid);
           _currentUserCredential = userCredential;
           increaseUsersToday();
+          Hive.box(dataBoxName).put('user', "1");
           emit(SignUpAuthSuccess());
         } else {
           SignUpAuthFailure(error: "فشل إنشاء الحساب");
@@ -200,6 +201,7 @@ class SignUpCubit extends Cubit<SignUpState> {
                 emit(SignUpAuthFailure(error: _getFailureMessage(failure))),
             (userCredential) {
           _currentUserCredential = userCredential;
+          Hive.box(dataBoxName).put('user', "1");
           emit(SignUpAuthSuccess());
         });
       });
