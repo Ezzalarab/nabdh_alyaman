@@ -50,6 +50,7 @@ class Donor extends Equatable {
     return <String, dynamic>{
       DonorFields.email: email,
       DonorFields.name: name,
+      DonorFields.password: password,
       DonorFields.phone: phone,
       DonorFields.bloodType: bloodType,
       DonorFields.state: state,
@@ -71,6 +72,7 @@ class Donor extends Equatable {
     return Donor(
       email: map[DonorFields.email].toString(),
       name: map[DonorFields.name].toString(),
+      password: map[DonorFields.password].toString(),
       phone: map[DonorFields.phone].toString(),
       bloodType: map[DonorFields.bloodType].toString(),
       state: map[DonorFields.state].toString(),
@@ -112,12 +114,14 @@ class Donor extends Equatable {
         lat,
         lon,
         status,
+        isExpanded,
       ];
 }
 
 class DonorFields {
   static const String collectionName = 'donors';
   static const String email = 'email';
+  static const String password = 'password';
   static const String name = 'name';
   static const String phone = 'phone';
   static const String bloodType = 'blood_type';

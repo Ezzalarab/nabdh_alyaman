@@ -134,6 +134,7 @@ class SignInCubit extends Cubit<SignInState> {
       await _firebaseAuth.signInWithCredential(credential).then((value) {
         if (value.user != null) {
           Hive.box(dataBoxName).put('user', "1");
+          increaseUsersToday();
           emit(SignInSuccess());
         } else {
           emit(SignInFailure(error: "verification failed no user"));
@@ -151,6 +152,23 @@ class SignInCubit extends Cubit<SignInState> {
       print(e);
       emit(SignInFailure(error: e.toString()));
     }
+  }
+
+  Future<void> increaseUsersToday() async {
+    String today = Utils.getCurrentDate();
+    await _fireStore
+        .collection("users_per_day")
+        .doc(today)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        int usersCount = await value.get("users_count") ?? 0;
+        await _fireStore
+            .collection("users_per_day")
+            .doc(today)
+            .set({"users_count": usersCount + 1});
+      }
+    });
   }
 
   Future<void> updateToken(String uid) async {

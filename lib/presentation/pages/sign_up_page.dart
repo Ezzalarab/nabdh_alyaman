@@ -52,7 +52,6 @@ class _SignUpPageState extends State<SignUpPage> {
       neighborhoodController = TextEditingController();
 
   String? selectedGovernorate, selectedDistrict, bloodType;
-
   int _activeStepIndex = 0;
   bool isPasswordHidden = true;
   bool isFirstStep() => _activeStepIndex == 0;
@@ -698,6 +697,8 @@ class _SignUpPageState extends State<SignUpPage> {
         if (stepIndex == null) {
           if (_activeStepIndex == 0) {
             _signUpAuth();
+          } else {
+            setState(() => _activeStepIndex++);
           }
         } else {
           setState(() => _activeStepIndex = stepIndex);

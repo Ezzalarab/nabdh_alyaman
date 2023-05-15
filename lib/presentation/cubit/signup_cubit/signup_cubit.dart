@@ -38,22 +38,15 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(SignUpLoading());
     String today = Utils.getCurrentDate();
     bool areUsers40Today = true;
-    await FirebaseFirestore.instance
+    await _fireStore
         .collection("users_per_day")
         .doc(today)
         .get()
         .then((value) async {
       if (value.exists) {
-        int usersCount = await value.get("users_count");
+        int usersCount = await value.get("users_count") ?? 0;
         print(usersCount);
-        if (usersCount < 40) {
-          await FirebaseFirestore.instance
-              .collection("users_per_day")
-              .doc(today)
-              .set({
-            "users_count": usersCount + 1,
-          });
-        } else {
+        if (usersCount >= 40) {
           areUsers40Today = false;
         }
       } else {
@@ -68,6 +61,23 @@ class SignUpCubit extends Cubit<SignUpState> {
     print(areUsers40Today);
     canSignUpWithPhone = areUsers40Today;
     emit(SignUpInitial(canSignUpWithPhone: areUsers40Today));
+  }
+
+  Future<void> increaseUsersToday() async {
+    String today = Utils.getCurrentDate();
+    await _fireStore
+        .collection("users_per_day")
+        .doc(today)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        int usersCount = await value.get("users_count") ?? 0;
+        await _fireStore
+            .collection("users_per_day")
+            .doc(today)
+            .set({"users_count": usersCount + 1});
+      }
+    });
   }
 
   Future<void> signUpAuthDonor({
@@ -153,11 +163,12 @@ class SignUpCubit extends Cubit<SignUpState> {
       );
       await _fireAuth
           .signInWithCredential(phoneAuthCredential)
-          .then((userCredential) {
+          .then((userCredential) async {
         if (userCredential.user != null) {
           print("userCredential.user!.uid");
           print(userCredential.user!.uid);
           _currentUserCredential = userCredential;
+          increaseUsersToday();
           emit(SignUpAuthSuccess());
         } else {
           SignUpAuthFailure(error: "فشل إنشاء الحساب");
@@ -229,7 +240,9 @@ class SignUpCubit extends Cubit<SignUpState> {
         value.fold(
             (failure) =>
                 emit(SignUpFailure(error: _getFailureMessage(failure))),
-            (userCredential) => emit(SignUpSuccess()));
+            (userCredential) {
+          emit(SignUpSuccess());
+        });
       });
     } catch (e) {
       emit(SignUpFailure(error: e.toString()));
