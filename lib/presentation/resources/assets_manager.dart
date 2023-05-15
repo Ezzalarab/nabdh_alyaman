@@ -1,6 +1,7 @@
 const String imagePATH = "assets/images";
 
 class ImageAssets {
+  static const String appLogo = "$imagePATH/nabdh outlined.png";
   static const String signInImage = "$imagePATH/login.png";
   static const String bloodHeart = "$imagePATH/blood_heart.png";
   static const String bloodDonationBagHeart =

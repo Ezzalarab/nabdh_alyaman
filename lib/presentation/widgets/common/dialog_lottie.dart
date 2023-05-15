@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
+import 'package:nabdh_alyaman/presentation/resources/assets_manager.dart';
 
 class MyLottie extends StatefulWidget {
-  MyLottie({required this.lottie, super.key}) {
-    // TODO: implement MyLottie
-  }
-  String lottie;
+  const MyLottie({required this.lottie, super.key});
+  final String lottie;
 
   @override
   State<MyLottie> createState() => _MyLottieState();
@@ -28,13 +27,19 @@ class _MyLottieState extends State<MyLottie> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Center(
-      child: Lottie.asset(
-        widget.lottie,
-        repeat: true,
-        reverse: true,
-        animate: true,
-      ),
-    ));
+      child: Center(
+          child: SizedBox(
+        height: 100,
+        width: 100,
+        child: Image.asset(ImageAssets.appLogo),
+      )
+          //  Lottie.asset(
+          //   widget.lottie,
+          //   repeat: true,
+          //   reverse: true,
+          //   animate: true,
+          // ),
+          ),
+    );
   }
 }

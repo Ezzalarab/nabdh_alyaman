@@ -1,9 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:nabdh_alyaman/presentation/resources/assets_manager.dart';
+import '../../../resources/assets_manager.dart';
 
-import '../../../resources/style.dart';
-import 'carousel_arrow.dart';
 import 'carousel_item.dart';
 
 class HomeCarousel extends StatefulWidget {
@@ -46,13 +44,12 @@ class _HomeCarouselState extends State<HomeCarousel> {
                 // disableCenter: true,
                 // padEnds: true,
                 viewportFraction: 0.9,
-                // autoPlay: true,
-                // autoPlayInterval: const Duration(seconds: 3),
+                autoPlay: true,
+                autoPlayInterval: const Duration(seconds: 10),
                 enlargeCenterPage: true,
                 height: 200,
                 onPageChanged: (index, reason) {
                   setState(() {
-                    print(index);
                     _current = index;
                   });
                 },

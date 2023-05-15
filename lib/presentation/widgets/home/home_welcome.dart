@@ -40,27 +40,27 @@ class _HomeWelcomeState extends State<HomeWelcome> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AnimatedTextKit(
-                  // pause: const Duration(milliseconds: 1000),
-                  // // isRepeatingAnimation: true,
-                  // stopPauseOnTap: false,
-                  totalRepeatCount: 2,
-                  animatedTexts: [
-                    TyperAnimatedText(
-                      'ومن أحياها\n فكأنما أحيا الناس جميعاً',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .displayLarge!
-                          .copyWith(height: 1.5),
-                    )
-                  ],
-                  // child: Text(
-                  //   'ومن أحياها\n فكأنما أحيا الناس جميعاً',
-                  //   style: Theme.of(context)
-                  //       .textTheme
-                  //       .displayLarge!
-                  //       .copyWith(height: 1.5),
-                  // ),
+                // AnimatedTextKit(
+                //   pause: const Duration(milliseconds: 10000),
+                //   isRepeatingAnimation: false,
+                //   stopPauseOnTap: false,
+                //   totalRepeatCount: 2,
+                //   animatedTexts: [
+                //     TyperAnimatedText(
+                //       'ومن أحياها\n فكأنما أحيا الناس جميعاً',
+                //       textStyle: Theme.of(context)
+                //           .textTheme
+                //           .displayLarge!
+                //           .copyWith(height: 1.5),
+                //     )
+                //   ],
+                // ),
+                Text(
+                  'ومن أحياها\n فكأنما أحيا الناس جميعاً',
+                  style: Theme.of(context)
+                      .textTheme
+                      .displayLarge!
+                      .copyWith(height: 1.5),
                 ),
                 Container(
                   decoration: BoxDecoration(
