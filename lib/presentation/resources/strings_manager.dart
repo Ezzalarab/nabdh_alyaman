@@ -84,6 +84,7 @@ class AppStrings {
   static const String signUpCreateButton = "إنشاء";
   static const String signUpNextButton = "التالي";
   static const String signUpAsCenterLink = "إنشاء حساب كمركز طبي";
+  static const String signUpGoToSignIn = "لديك حساب بالفعل؟ سجل دخول";
   static const String signUpCenterNameHint = "اسم المركز الطبي";
 
   //----------------------------------------------------------------

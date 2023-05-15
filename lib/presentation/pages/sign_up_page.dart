@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'package:awesome_dialog/awesome_dialog.dart';
 
-import '../../presentation/resources/font_manager.dart';
-import '../../presentation/widgets/forms/my_button.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
@@ -14,11 +12,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart' as loc;
 
 import '../../core/utils.dart';
-import '../cubit/signup_cubit/signup_cubit.dart';
 import '../../domain/entities/blood_types.dart';
 import '../../domain/entities/donor.dart';
-import '../pages/home_page.dart';
-import '../pages/sing_up_center_page.dart';
+import '../cubit/signup_cubit/signup_cubit.dart';
+import '../resources/font_manager.dart';
+import '../widgets/forms/my_button.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
 import '../resources/constatns.dart';
@@ -28,6 +26,9 @@ import '../resources/values_manager.dart';
 import '../widgets/common/my_stepper.dart' as my_stepper;
 import '../widgets/forms/my_dropdown_button_form_field.dart';
 import '../widgets/forms/my_text_form_field.dart';
+import 'sign_in_page.dart';
+import 'home_page.dart';
+import 'sing_up_center_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -342,22 +343,37 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           ),
           isFirstStep()
-              ? Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: _moveToSignUpAsCenter,
-                    child: Text(
-                      AppStrings.signUpAsCenterLink,
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                            color: ColorManager.link,
-                          ),
-                      // style: Theme.of(context)
-                      //     .textTheme
-                      //     .titleMedium!
-                      //     .copyWith(color: ColorManager.link),
+              ? Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: _moveToSignInPage,
+                        child: Text(
+                          AppStrings.signUpGoToSignIn,
+                          style:
+                              Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    color: ColorManager.link,
+                                  ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: _moveToSignUpAsCenter,
+                        child: Text(
+                          AppStrings.signUpAsCenterLink,
+                          style:
+                              Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    color: ColorManager.link,
+                                  ),
+                        ),
+                      ),
+                    ),
+                  ],
                 )
               : const SizedBox(),
         ],
@@ -813,7 +829,19 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _moveToSignUpAsCenter() {
-    Navigator.of(context).pushReplacementNamed(SignUpCenter.routeName);
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const SignUpCenter(),
+      ),
+    );
+  }
+
+  void _moveToSignInPage() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const SignInPage(),
+      ),
+    );
   }
 
   // void _moveToPrivacyPolicyPage() {}
