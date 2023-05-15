@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:nabdh_alyaman/presentation/resources/assets_manager.dart';
 
 import '../../../resources/style.dart';
 import 'carousel_arrow.dart';
@@ -18,9 +19,9 @@ class _HomeCarouselState extends State<HomeCarousel> {
   final CarouselController _controller = CarouselController();
 
   final List<String> imgList = [
-    'assets/images/blutspenden-taschenikone.jpg',
-    'assets/images/world-blood.jpg',
-    'assets/images/give-blood.jpg',
+    ImageAssets.bloodHeart,
+    ImageAssets.bloodDonationBagHeart,
+    ImageAssets.whomeReviveIt,
   ];
 
   int _current = 0;

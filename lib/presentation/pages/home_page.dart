@@ -11,6 +11,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:nabdh_alyaman/core/extensions/extension.dart';
+import 'package:nabdh_alyaman/data/data_sources/local/local_data.dart';
 
 import '../../../../dependency_injection.dart' as di;
 import '../../core/app_constants.dart';
@@ -232,16 +233,25 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 10),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            '''
-            التبرع بالدم هو إجراء طبي يتم فيه نقل الدم من شخص سليم معافى طوعاً إلى شخص مريض محتاج للدم. يستخدم ذلك الدم في عمليات نقل الدم كاملا أو بأحد مكوناته فقط بعد ...''',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(height: 1.4),
+                            horizontal: 30, vertical: 5),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: LocalData.bloodDonationBenefits.length,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 5,
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "-  ${LocalData.bloodDonationBenefits[index]}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(height: 1.4),
+                              ),
+                            ),
                           ),
                         ),
                       ),

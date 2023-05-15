@@ -15,10 +15,6 @@ PageViewModel myPageViewModel(PageViewModelData pageViewModelData) {
         children: [
           Center(
             child: MyLottie(lottie: pageViewModelData.lottei),
-            // Image.asset(
-            //   pageViewModelData.image ?? 'assets/images/4.jpg',
-            //   scale: 1.3,
-            // ),
           ),
           SizedBox(
             height: 20,
@@ -44,9 +40,6 @@ PageViewModel myPageViewModel(PageViewModelData pageViewModelData) {
     ),
     // titleWidget: Text('Title of 1st Page'),
     title: '',
-    // image: Center(
-    //   child: Image.asset('assets/images/4.jpg'),
-    // ),
     decoration: const PageDecoration(
         // contentMargin: EdgeInsets.all(10),
         // imagePadding: EdgeInsets.only(top: 40),

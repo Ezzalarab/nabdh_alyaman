@@ -28,21 +28,18 @@ class IntroductionPage extends StatelessWidget {
             myPageViewModel(
               PageViewModelData(
                   lottei: AppStrings.OnboradingPageLottie1,
-                  // image: 'assets/images/4.jpg',
                   title: '',
                   description: 'ومن أحياها فكأنما أحيا الناس جميعاً'),
             ),
             myPageViewModel(
               PageViewModelData(
                   lottei: AppStrings.OnboradingPageLottie2,
-                  // image: 'assets/images/4.jpg',
                   title: '',
                   description: 'نقطة دم تساوي حياة'),
             ),
             myPageViewModel(
               PageViewModelData(
                   lottei: AppStrings.OnboradingPageLottie3,
-                  // image: 'assets/images/4.jpg',
                   title: '',
                   description: 'كن سبب في حياة انسان '),
             ),
