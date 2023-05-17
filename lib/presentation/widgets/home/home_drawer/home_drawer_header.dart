@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nabdh_alyaman/presentation/resources/assets_manager.dart';
 
 import '../../../../presentation/resources/font_manager.dart';
 import '../../../resources/color_manageer.dart';
@@ -22,36 +23,33 @@ class HomeDrawerHeader extends StatelessWidget {
         onTap: () async {},
         child: Center(
           child: Wrap(
+            direction: Axis.vertical,
             runSpacing: AppSize.s10,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               const SizedBox(width: AppSize.s10),
               Container(
-                height: AppSize.s100,
-                width: AppSize.s100,
+                height: AppSize.s60,
+                width: AppSize.s60,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppRadius.r50),
-                  color: ColorManager.white,
+                  color: ColorManager.primary,
                 ),
-                child: const Center(
-                    child: CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/nabdh square.png"),
-                  radius: 80,
+                child: Center(
+                    child: Image.asset(
+                  ImageAssets.appLogo,
+                  color: ColorManager.white,
                 )),
               ),
-              const SizedBox(width: AppSize.s20),
-              Wrap(
-                children: [
-                  Text(
-                    (currentUser != null)
-                        ? currentUser.email ?? currentUser.phoneNumber!
-                        : AppStrings.homeDrawerHeaderAppName,
-                    style: const TextStyle(
-                        color: ColorManager.white,
-                        fontFamily: FontConstants.fontFamily,
-                        fontSize: 20),
-                  ),
-                ],
+              const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Text(
+                  AppStrings.homeDrawerHeaderAppName,
+                  style: TextStyle(
+                      color: ColorManager.white,
+                      fontFamily: FontConstants.fontFamily,
+                      fontSize: 20),
+                ),
               ),
             ],
           ),

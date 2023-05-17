@@ -44,8 +44,13 @@ class MyDropdownButtonFormField extends StatelessWidget {
           .map(
             (item) => DropdownMenuItem<String>(
               value: item,
-              child: Text(
-                item,
+              child: Center(
+                child: Text(
+                  item,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           )

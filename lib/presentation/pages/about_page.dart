@@ -1,3 +1,5 @@
+import 'package:nabdh_alyaman/presentation/resources/assets_manager.dart';
+
 import '../../presentation/resources/constatns.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +11,7 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("عن التطبيق"),
+        title: const Text("نبض اليمن"),
       ),
       body: MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: textScaleFactor),
@@ -17,11 +19,11 @@ class AboutPage extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(30),
+                padding: const EdgeInsets.all(50),
                 child: Image.asset(
-                  "assets/images/boy.png",
+                  ImageAssets.appLogo,
                   fit: BoxFit.cover,
-                  cacheHeight: 200,
+                  cacheHeight: 100,
                 ),
               ),
               Padding(
@@ -30,7 +32,7 @@ class AboutPage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "بنك الدم اليمني",
+                    "تطبيق نبض اليمن",
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
                 ),
@@ -41,8 +43,11 @@ class AboutPage extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: Text(
                     '''
-      التبرع بالدم هو إجراء طبي يتم فيه نقل الدم من شخص سليم معافى طوعاً إلى شخص مريض محتاج للدم. يستخدم ذلك الدم في عمليات نقل الدم كاملا أو بأحد مكوناته فقط بعد ...''',
-                    style: Theme.of(context).textTheme.bodyLarge,
+  .هو تطبيق خدمي إنساني لتسهيل عملية الحصول على مصدر للدم بحيث يوفر قاعدة بيانات من المتبرعين والمراكز الطبية بحيث تكون عملية البحث سهلة وذو فائدة أكبر مع إمكانية إنشاء حساب للمتبرعين المتطوعين أصحاب النفوس الطيبة.\nتم تقديم هذا التطبيق كمشروع لنيل درجة البكلوريوس في قسم علوم الحاسوب وتقنية المعلومات في جامعة إب عام 2022.\n''',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(height: 1.5),
                   ),
                 ),
               ),
