@@ -395,7 +395,7 @@ class _SignUpCenterState extends State<SignUpCenter> {
                   stateDropdownLabel: "المحافظة",
                   cityDropdownLabel: "المديرية",
                   defaultCountry: DefaultCountry.Yemen,
-                  selectedItemStyle: Theme.of(context).textTheme.headlineLarge,
+                  selectedItemStyle: const TextStyle(),
                   dropdownHeadingStyle: Theme.of(context).textTheme.titleMedium,
                   dropdownItemStyle: Theme.of(context).textTheme.titleMedium,
                   dropdownDialogRadius: AppRadius.r10,

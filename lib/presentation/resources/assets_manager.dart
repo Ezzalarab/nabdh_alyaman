@@ -6,7 +6,7 @@ class ImageAssets {
   static const String bloodHeart = "$imagePATH/blood_heart.png";
   static const String bloodDonationBagHeart =
       "$imagePATH/blood-donation-bag-heart.png";
-  static const String whomeReviveIt = "$imagePATH/whome_revive_it.png";
+  static const String handsDonate = "$imagePATH/hands-donate.jpg";
   static const String onboardingLogo1 = "$imagePATH/onboarding_logo1.svg";
   static const String hollowCirlceIc = "$imagePATH/hollow_cirlce_ic.svg";
   static const String solidCircleIc = "$imagePATH/solid_circle_ic.svg";

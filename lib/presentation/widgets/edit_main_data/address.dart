@@ -58,10 +58,7 @@ class AddressMainData extends StatelessWidget {
                         cityDropdownLabel: "المديرية",
                         defaultCountry: DefaultCountry.Yemen,
 
-                        selectedItemStyle: const TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 16,
-                        ),
+                        selectedItemStyle: const TextStyle(),
                         dropdownHeadingStyle: const TextStyle(
                             color: Colors.black,
                             fontSize: 18,

@@ -19,7 +19,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
   final List<String> imgList = [
     ImageAssets.bloodHeart,
     ImageAssets.bloodDonationBagHeart,
-    ImageAssets.whomeReviveIt,
+    ImageAssets.handsDonate,
   ];
 
   int _current = 0;
