@@ -167,7 +167,6 @@ class _HomePageState extends State<HomePage> {
                           Utils.showSnackBar(
                             context: context,
                             msg: " يتطلب تسجيل الدخول اولا  ",
-                            color: ColorManager.error,
                           );
                           Navigator.push(
                               context,
@@ -179,13 +178,13 @@ class _HomePageState extends State<HomePage> {
                         Icons.notifications,
                       ),
                     ),
-                    const Positioned(
-                      // draw a red marble
-                      top: 8.0,
-                      right: 10.0,
-                      child: Icon(Icons.brightness_1,
-                          size: 8.0, color: Colors.redAccent),
-                    )
+                    // const Positioned(
+                    //   // draw a red marble
+                    //   top: 8.0,
+                    //   right: 10.0,
+                    //   child: Icon(Icons.brightness_1,
+                    //       size: 8.0, color: Colors.redAccent),
+                    // )
                   ],
                 ),
                 const SizedBox(width: 20),

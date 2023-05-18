@@ -75,121 +75,117 @@ class _NotFicationPageState extends State<NotFicationPage> {
         title: const Text("الاشعارات"),
       ),
       backgroundColor: ColorManager.grey1,
-      body: MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaleFactor: textScaleFactor),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: _firebaseFirestore
-              .collection("notifications")
-              .where('donor_id',
-                  isEqualTo: _firebaseAuth.currentUser!.uid.toString())
-              .where('isRead', isEqualTo: "1")
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.blue,
-                ),
-              );
-            }
-            List<GetNotficationData> notfication =
-                snapshot.data!.docs.map((doc) {
-              return GetNotficationData(
-                  title: doc.get("title"),
-                  body: doc.get("body"),
-                  date: doc.get("createdAt"),
-                  isRead: doc.get("isRead"),
-                  donorID: doc.get("donor_id"));
-            }).toList();
-
-            if (notfication.isEmpty) {
-              return const Center(
-                child: Text("لا يوجد اشعارات"),
-              );
-            }
-
-            return AnimationLimiter(
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                padding: EdgeInsets.all(MediaQuery.of(context).size.width / 50),
-                itemCount: notfication.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return AnimationConfiguration.staggeredList(
-                    position: index,
-                    delay: const Duration(milliseconds: 100),
-                    child: SlideAnimation(
-                      duration: const Duration(milliseconds: 2000),
-                      curve: Curves.fastLinearToSlowEaseIn,
-                      horizontalOffset: -20,
-                      verticalOffset: -100,
-                      child: Column(
-                        children: [
-                          // const SizedBox(height: 50),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 160,
-                                  decoration: BoxDecoration(
-                                      color: ColorManager.white,
-                                      borderRadius:
-                                          BorderRadius.circular(AppSize.s20)),
-                                ),
-                                Positioned(
-                                    top: 50,
-                                    right: 10,
-                                    child: Image.asset(
-                                      "assets/images/boy.png",
-                                      height: 80,
-                                      width: 100,
-                                    )),
-                                Positioned(
-                                    top: 20,
-                                    left: 70,
-                                    child: Text(
-                                        "${notfication[index].date.substring(0, 10)}")),
-                                Positioned(
-                                    bottom: 80,
-                                    right: 130,
-                                    child: Text(
-                                      "${notfication[index].title}",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    )),
-                                Positioned(
-                                    bottom: 50,
-                                    right: 130,
-                                    child: Text("${notfication[index].body}")),
-                                Positioned(
-                                    top: 20, right: 60, child: Text("تاريخ ")),
-                                Positioned(
-                                    top: 5,
-                                    left: 0,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        _firebaseFirestore
-                                            .collection("notifications")
-                                            .doc(snapshot.data!.docs[index].id
-                                                .toString())
-                                            .update({'isRead': "0"});
-                                      },
-                                      icon: Icon(Icons.close),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _firebaseFirestore
+            .collection("notifications")
+            .where('donor_id',
+                isEqualTo: _firebaseAuth.currentUser!.uid.toString())
+            .where('isRead', isEqualTo: "1")
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.blue,
               ),
             );
-          },
-        ),
+          }
+          List<GetNotficationData> notfication = snapshot.data!.docs.map((doc) {
+            return GetNotficationData(
+                title: doc.get("title"),
+                body: doc.get("body"),
+                date: doc.get("createdAt"),
+                isRead: doc.get("isRead"),
+                donorID: doc.get("donor_id"));
+          }).toList();
+
+          if (notfication.isEmpty) {
+            return const Center(
+              child: Text("لا يوجد اشعارات"),
+            );
+          }
+
+          return AnimationLimiter(
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width / 50),
+              itemCount: notfication.length,
+              itemBuilder: (BuildContext context, int index) {
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  delay: const Duration(milliseconds: 100),
+                  child: SlideAnimation(
+                    duration: const Duration(milliseconds: 2000),
+                    curve: Curves.fastLinearToSlowEaseIn,
+                    horizontalOffset: -20,
+                    verticalOffset: -100,
+                    child: Column(
+                      children: [
+                        // const SizedBox(height: 50),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: 160,
+                                decoration: BoxDecoration(
+                                    color: ColorManager.white,
+                                    borderRadius:
+                                        BorderRadius.circular(AppSize.s20)),
+                              ),
+                              Positioned(
+                                  top: 50,
+                                  right: 10,
+                                  child: Image.asset(
+                                    "assets/images/boy.png",
+                                    height: 80,
+                                    width: 100,
+                                  )),
+                              Positioned(
+                                  top: 20,
+                                  left: 70,
+                                  child: Text(
+                                      "${notfication[index].date.substring(0, 10)}")),
+                              Positioned(
+                                  bottom: 80,
+                                  right: 130,
+                                  child: Text(
+                                    "${notfication[index].title}",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                              Positioned(
+                                  bottom: 50,
+                                  right: 130,
+                                  child: Text("${notfication[index].body}")),
+                              Positioned(
+                                  top: 20, right: 60, child: Text("تاريخ ")),
+                              Positioned(
+                                  top: 5,
+                                  left: 0,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      _firebaseFirestore
+                                          .collection("notifications")
+                                          .doc(snapshot.data!.docs[index].id
+                                              .toString())
+                                          .update({'isRead': "0"});
+                                    },
+                                    icon: Icon(Icons.close),
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

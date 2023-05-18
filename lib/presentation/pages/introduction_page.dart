@@ -20,81 +20,78 @@ class IntroductionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final box = Hive.box(dataBoxName);
     return Scaffold(
-      body: MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaleFactor: textScaleFactor),
-        child: IntroductionScreen(
-          globalBackgroundColor: ColorManager.white,
-          pages: [
-            myPageViewModel(
-              PageViewModelData(
-                  lottei: AppStrings.OnboradingPageLottie1,
-                  title: '',
-                  description: 'ومن أحياها فكأنما أحيا الناس جميعاً'),
-            ),
-            myPageViewModel(
-              PageViewModelData(
-                  lottei: AppStrings.OnboradingPageLottie2,
-                  title: '',
-                  description: 'نقطة دم تساوي حياة'),
-            ),
-            myPageViewModel(
-              PageViewModelData(
-                  lottei: AppStrings.OnboradingPageLottie3,
-                  title: '',
-                  description: 'كن سبب في حياة انسان '),
-            ),
-          ],
-          onDone: () {
-            box.put('introduction', false);
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return const HomePage();
-                },
-              ),
-            );
-          },
-          onChange: (value) {},
-          onSkip: () {
-            // You can also override onSkip callback
-            print(box.get('introduction'));
-            box.put('introduction', false);
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return const HomePage();
-                },
-              ),
-            );
-          },
-          showSkipButton: true,
-          // showBackButton: true,
-          next: const Icon(
-            Icons.arrow_forward_rounded,
-            color: ColorManager.secondary,
-            size: 32,
+      body: IntroductionScreen(
+        globalBackgroundColor: ColorManager.white,
+        pages: [
+          myPageViewModel(
+            PageViewModelData(
+                lottei: AppStrings.OnboradingPageLottie1,
+                title: '',
+                description: 'ومن أحياها فكأنما أحيا الناس جميعاً'),
           ),
-          skip: const Text(
-            "تخطي",
+          myPageViewModel(
+            PageViewModelData(
+                lottei: AppStrings.OnboradingPageLottie2,
+                title: '',
+                description: 'نقطة دم تساوي حياة'),
+          ),
+          myPageViewModel(
+            PageViewModelData(
+                lottei: AppStrings.OnboradingPageLottie3,
+                title: '',
+                description: 'كن سبب في حياة انسان '),
+          ),
+        ],
+        onDone: () {
+          box.put('introduction', false);
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (BuildContext context) {
+                return const HomePage();
+              },
+            ),
+          );
+        },
+        onChange: (value) {},
+        onSkip: () {
+          // You can also override onSkip callback
+          print(box.get('introduction'));
+          box.put('introduction', false);
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (BuildContext context) {
+                return const HomePage();
+              },
+            ),
+          );
+        },
+        showSkipButton: true,
+        // showBackButton: true,
+        next: const Icon(
+          Icons.arrow_forward_rounded,
+          color: ColorManager.secondary,
+          size: 32,
+        ),
+        skip: const Text(
+          "تخطي",
+          style: TextStyle(
+              fontSize: 22,
+              fontFamily: FontConstants.fontFamily,
+              color: ColorManager.primary),
+        ),
+        done: const Text("انهاء",
             style: TextStyle(
                 fontSize: 22,
                 fontFamily: FontConstants.fontFamily,
-                color: ColorManager.primary),
-          ),
-          done: const Text("انهاء",
-              style: TextStyle(
-                  fontSize: 22,
-                  fontFamily: FontConstants.fontFamily,
-                  color: ColorManager.primary)),
-          dotsDecorator: DotsDecorator(
-              size: const Size.square(10.0),
-              activeSize: const Size(30.0, 10.0),
-              activeColor: ColorManager.primary,
-              color: Colors.black26,
-              spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-              activeShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0))),
-        ),
+                color: ColorManager.primary)),
+        dotsDecorator: DotsDecorator(
+            size: const Size.square(10.0),
+            activeSize: const Size(30.0, 10.0),
+            activeColor: ColorManager.primary,
+            color: Colors.black26,
+            spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+            activeShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0))),
       ),
     );
   }

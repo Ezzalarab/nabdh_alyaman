@@ -149,41 +149,37 @@ class _SignUpCenterState extends State<SignUpCenter> {
           title: const Text('إنشاء حساب مركز طبي'),
           centerTitle: true,
         ),
-        body: MediaQuery(
-          data:
-              MediaQuery.of(context).copyWith(textScaleFactor: textScaleFactor),
-          child: BlocConsumer<SignUpCubit, SignUpState>(
-              listener: (context, state) {
-            if (state is SignUpSuccess) {
-              Utils.showSuccessSnackBar(
-                  context: context, msg: AppStrings.signUpSuccessMessage);
-              BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (_) => const ProfileCenterPage()));
-            } else if (state is SignUpFailure) {
-              Utils.showFalureSnackBar(context: context, msg: state.error);
-            }
-          }, builder: (context, state) {
-            return ModalProgressHUD(
-              inAsyncCall: (state is SignUpLoading),
-              child: my_stepper.Stepper(
-                svgPictureAsset: "assets/images/blood_drop.svg",
-                iconColor: Theme.of(context).primaryColor,
-                elevation: 0,
-                type: my_stepper.StepperType.horizontal,
-                currentStep: _activeStepIndex,
-                steps: stepList(),
-                onStepContinue: _onStepContinue,
-                onStepCancel: _onStepCancel,
-                onStepTapped: _onStepTapped,
-                controlsBuilder: (BuildContext context,
-                    my_stepper.ControlsDetails controls) {
-                  return _buildNavigationButtons(context, controls);
-                },
-              ),
-            );
-          }),
-        ));
+        body:
+            BlocConsumer<SignUpCubit, SignUpState>(listener: (context, state) {
+          if (state is SignUpSuccess) {
+            Utils.showSuccessSnackBar(
+                context: context, msg: AppStrings.signUpSuccessMessage);
+            BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (_) => const ProfileCenterPage()));
+          } else if (state is SignUpFailure) {
+            Utils.showFalureSnackBar(context: context, msg: state.error);
+          }
+        }, builder: (context, state) {
+          return ModalProgressHUD(
+            inAsyncCall: (state is SignUpLoading),
+            child: my_stepper.Stepper(
+              svgPictureAsset: "assets/images/blood_drop.svg",
+              iconColor: Theme.of(context).primaryColor,
+              elevation: 0,
+              type: my_stepper.StepperType.horizontal,
+              currentStep: _activeStepIndex,
+              steps: stepList(),
+              onStepContinue: _onStepContinue,
+              onStepCancel: _onStepCancel,
+              onStepTapped: _onStepTapped,
+              controlsBuilder:
+                  (BuildContext context, my_stepper.ControlsDetails controls) {
+                return _buildNavigationButtons(context, controls);
+              },
+            ),
+          );
+        }));
   }
 
   Container _buildNavigationButtons(

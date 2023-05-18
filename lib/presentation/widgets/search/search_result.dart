@@ -23,6 +23,7 @@ class _SearchResultState extends State<SearchResult>
     with TickerProviderStateMixin {
   bool onDonors = false;
   final UrlLauncherPlatform launcher = UrlLauncherPlatform.instance;
+
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(
@@ -110,7 +111,6 @@ class _SearchResultState extends State<SearchResult>
                                         canTapOnHeader: true,
                                         headerBuilder: (BuildContext ctx,
                                             bool isExpanded) {
-                                          print("donor builder");
                                           return ListTile(
                                             leading: Padding(
                                               padding:
@@ -208,7 +208,7 @@ class _SearchResultState extends State<SearchResult>
                 ),
               );
             } else if (state is SearchLoading) {
-              print("loooooooooooooooding");
+              print("result loading");
               return const SizedBox(
                 height: 400,
                 child: Center(

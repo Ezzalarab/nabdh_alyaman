@@ -152,64 +152,61 @@ class _SettingPageState extends State<SettingPage> {
         title: const Text(AppStrings.profileAppBarTitle),
         elevation: 0,
       ),
-      body: MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaleFactor: textScaleFactor),
-        child: BlocConsumer<ProfileCubit, ProfileState>(
-            listener: (context, state) {
-          if (state is ProfileGetData) {
-          } else if (state is ProfileFailure) {
-            Utils.showSnackBar(
-              context: context,
-              msg: state.error,
-              color: ColorManager.error,
-            );
-          } else if (state is ProfileSuccess) {
-            Utils.showSnackBar(
-              context: context,
-              msg: AppStrings.profileSuccesMess,
-              color: ColorManager.success,
-            );
-          }
-        }, builder: (context, state) {
-          return ModalProgressHUD(
-            inAsyncCall: (state is ProfileLoading),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: AppPadding.p10),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _showSelectPhotoOptions(context);
-                    },
-                    child: DisplayImage(
-                      imagePath: _image ?? ImageAssets.profileImage,
-                      onPressed: () {},
-                    ),
-                  ),
-                  const SizedBox(
-                    height: AppSize.s10,
-                  ),
-                  if (state is ProfileGetData) ProfileBody(donor: state.donors),
-                  if (state is ProfileFailure)
-                    Center(
-                      child: MyLottie(
-                        lottie: AppStrings.lottieOnHomePage,
-                      ),
-                    ),
-
-                  // (state is ProfileGetData)
-                  //     ? ProfileBody(donor: state.donors)
-                  //     : const Center(
-                  //         child: CircularProgressIndicator(),
-                  //       )
-                ],
-              ),
-            ),
+      body:
+          BlocConsumer<ProfileCubit, ProfileState>(listener: (context, state) {
+        if (state is ProfileGetData) {
+        } else if (state is ProfileFailure) {
+          Utils.showSnackBar(
+            context: context,
+            msg: state.error,
+            color: ColorManager.error,
           );
-        }),
-      ),
+        } else if (state is ProfileSuccess) {
+          Utils.showSnackBar(
+            context: context,
+            msg: AppStrings.profileSuccesMess,
+            color: ColorManager.success,
+          );
+        }
+      }, builder: (context, state) {
+        return ModalProgressHUD(
+          inAsyncCall: (state is ProfileLoading),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(bottom: AppPadding.p10),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _showSelectPhotoOptions(context);
+                  },
+                  child: DisplayImage(
+                    imagePath: _image ?? ImageAssets.profileImage,
+                    onPressed: () {},
+                  ),
+                ),
+                const SizedBox(
+                  height: AppSize.s10,
+                ),
+                if (state is ProfileGetData) ProfileBody(donor: state.donors),
+                if (state is ProfileFailure)
+                  Center(
+                    child: MyLottie(
+                      lottie: AppStrings.lottieOnHomePage,
+                    ),
+                  ),
+
+                // (state is ProfileGetData)
+                //     ? ProfileBody(donor: state.donors)
+                //     : const Center(
+                //         child: CircularProgressIndicator(),
+                //       )
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }

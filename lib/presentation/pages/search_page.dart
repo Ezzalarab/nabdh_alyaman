@@ -26,47 +26,32 @@ class SearchPage extends StatelessWidget {
         elevation: 0,
       ),
       // backgroundColor: const Color.fromARGB(255, 250, 250, 250),
-      body: BlocConsumer<MapsCubit, MapsState>(
-        listener: (context, state) {
-          if (state is MapsSuccess) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const SearchMapPage(),
+      body: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 150,
+            child: Container(
+              margin: const EdgeInsets.only(
+                top: 10,
+                left: 10,
+                right: 10,
               ),
-            );
-          }
-        },
-        builder: (context, state) => ModalProgressHUD(
-          inAsyncCall: (state is MapsLoading),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 150,
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    top: 10,
-                    left: 10,
-                    right: 10,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: ColorManager.primary,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                    ),
-                  ),
-                  child: SearchOptions(),
+              decoration: const BoxDecoration(
+                color: ColorManager.primary,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
                 ),
               ),
-              const Expanded(
-                child: SearchResult(),
-              ),
-            ],
+              child: SearchOptions(),
+            ),
           ),
-        ),
+          const Expanded(
+            child: SearchResult(),
+          ),
+        ],
       ),
       floatingActionButton: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
@@ -78,7 +63,14 @@ class SearchPage extends StatelessWidget {
                       stateDonors: state.stateDonors,
                       selectedBloodType: BlocProvider.of<SearchCubit>(context)
                               .selectedBloodType ??
-                          "O-",
+                          "AB+",
+                    );
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SearchMapPage(),
+                      ),
                     );
                   },
                 )

@@ -48,118 +48,115 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
         elevation: 0,
       ),
       backgroundColor: ColorManager.white,
-      body: MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaleFactor: textScaleFactor),
-        child: BlocConsumer<ProfileCubit, ProfileState>(
-          listener: (context, state) {
-            if (state is ProfileGetCenterData) {
-              profileCenterData = ProfileCenterData(
-                  aPlus: state.bloodCenter.aPlus,
-                  aMinus: state.bloodCenter.aMinus,
-                  abPlus: state.bloodCenter.abPlus,
-                  abMinus: state.bloodCenter.abMinus,
-                  oPlus: state.bloodCenter.oPlus,
-                  oMinus: state.bloodCenter.oMinus,
-                  bPlus: state.bloodCenter.bPlus,
-                  bMinus: state.bloodCenter.bMinus);
-            } else if (state is ProfileFailure) {
-              Utils.showSnackBar(
-                context: context,
-                msg: state.error,
-                color: ColorManager.error,
-              );
-            } else if (state is ProfileSuccess) {
-              Utils.showSnackBar(
-                context: context,
-                msg: AppStrings.profileSuccesMess,
-                color: ColorManager.success,
-              );
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const HomePage(),
-                ),
-              );
-            }
-          },
-          builder: (context, state) {
-            if (state is ProfileLoadingBeforFetch) {
-              return MyLottie(
-                lottie: AppStrings.lottieOnHomePage,
-              );
-            }
-            if (state is ProfileLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state is ProfileGetCenterData) {
-              profileCenterData = ProfileCenterData(
-                  aPlus: state.bloodCenter.aPlus,
-                  aMinus: state.bloodCenter.aMinus,
-                  abPlus: state.bloodCenter.abPlus,
-                  abMinus: state.bloodCenter.abMinus,
-                  oPlus: state.bloodCenter.oPlus,
-                  oMinus: state.bloodCenter.oMinus,
-                  bPlus: state.bloodCenter.bPlus,
-                  bMinus: state.bloodCenter.bMinus);
+      body: BlocConsumer<ProfileCubit, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileGetCenterData) {
+            profileCenterData = ProfileCenterData(
+                aPlus: state.bloodCenter.aPlus,
+                aMinus: state.bloodCenter.aMinus,
+                abPlus: state.bloodCenter.abPlus,
+                abMinus: state.bloodCenter.abMinus,
+                oPlus: state.bloodCenter.oPlus,
+                oMinus: state.bloodCenter.oMinus,
+                bPlus: state.bloodCenter.bPlus,
+                bMinus: state.bloodCenter.bMinus);
+          } else if (state is ProfileFailure) {
+            Utils.showSnackBar(
+              context: context,
+              msg: state.error,
+              color: ColorManager.error,
+            );
+          } else if (state is ProfileSuccess) {
+            Utils.showSnackBar(
+              context: context,
+              msg: AppStrings.profileSuccesMess,
+              color: ColorManager.success,
+            );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const HomePage(),
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is ProfileLoadingBeforFetch) {
+            return MyLottie(
+              lottie: AppStrings.lottieOnHomePage,
+            );
+          }
+          if (state is ProfileLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is ProfileGetCenterData) {
+            profileCenterData = ProfileCenterData(
+                aPlus: state.bloodCenter.aPlus,
+                aMinus: state.bloodCenter.aMinus,
+                abPlus: state.bloodCenter.abPlus,
+                abMinus: state.bloodCenter.abMinus,
+                oPlus: state.bloodCenter.oPlus,
+                oMinus: state.bloodCenter.oMinus,
+                bPlus: state.bloodCenter.bPlus,
+                bMinus: state.bloodCenter.bMinus);
 
-              return Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: AppPadding.p20),
-                        child: Text(
-                          AppStrings.profileCenterTitle,
-                          style: Theme.of(context).textTheme.headlineLarge,
-                        ),
+            return Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: AppPadding.p20),
+                      child: Text(
+                        AppStrings.profileCenterTitle,
+                        style: Theme.of(context).textTheme.headlineLarge,
                       ),
-                      const SizedBox(
-                        height: AppSize.s10,
-                      ),
-                      PrfileCenterBloodTypeCard(
-                        bloodType: BloodCenterFields.aPlus,
-                      ),
-                      PrfileCenterBloodTypeCard(
-                        bloodType: BloodCenterFields.aMinus,
-                      ),
-                      PrfileCenterBloodTypeCard(
-                          bloodType: BloodCenterFields.abPlus),
-                      PrfileCenterBloodTypeCard(
-                          bloodType: BloodCenterFields.abMinus),
-                      PrfileCenterBloodTypeCard(
-                          bloodType: BloodCenterFields.bPlus),
-                      PrfileCenterBloodTypeCard(
-                          bloodType: BloodCenterFields.bMinus),
-                      PrfileCenterBloodTypeCard(
-                          bloodType: BloodCenterFields.oPlus),
-                      PrfileCenterBloodTypeCard(
-                          bloodType: BloodCenterFields.oMinus),
-                      const SizedBox(
-                        height: AppSize.s20,
-                      ),
-                      MyButton(
-                        title: AppStrings.profileButtonSave,
-                        titleStyle: Theme.of(context).textTheme.titleLarge,
-                        onPressed: () {
-                          BlocProvider.of<ProfileCubit>(context)
-                              .sendProfileCenterData(profileCenterData!);
-                        },
-                        minWidth: AppSize.s300,
-                        color: ColorManager.secondary,
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: AppSize.s10,
+                    ),
+                    PrfileCenterBloodTypeCard(
+                      bloodType: BloodCenterFields.aPlus,
+                    ),
+                    PrfileCenterBloodTypeCard(
+                      bloodType: BloodCenterFields.aMinus,
+                    ),
+                    PrfileCenterBloodTypeCard(
+                        bloodType: BloodCenterFields.abPlus),
+                    PrfileCenterBloodTypeCard(
+                        bloodType: BloodCenterFields.abMinus),
+                    PrfileCenterBloodTypeCard(
+                        bloodType: BloodCenterFields.bPlus),
+                    PrfileCenterBloodTypeCard(
+                        bloodType: BloodCenterFields.bMinus),
+                    PrfileCenterBloodTypeCard(
+                        bloodType: BloodCenterFields.oPlus),
+                    PrfileCenterBloodTypeCard(
+                        bloodType: BloodCenterFields.oMinus),
+                    const SizedBox(
+                      height: AppSize.s20,
+                    ),
+                    MyButton(
+                      title: AppStrings.profileButtonSave,
+                      titleStyle: Theme.of(context).textTheme.titleLarge,
+                      onPressed: () {
+                        BlocProvider.of<ProfileCubit>(context)
+                            .sendProfileCenterData(profileCenterData!);
+                      },
+                      minWidth: AppSize.s300,
+                      color: ColorManager.secondary,
+                    ),
+                  ],
                 ),
-              );
-            } else {
-              return Center(
-                child: MyLottie(
-                  lottie: AppStrings.lottieOnHomePage,
-                ),
-              );
-            }
-          },
-        ),
+              ),
+            );
+          } else {
+            return Center(
+              child: MyLottie(
+                lottie: AppStrings.lottieOnHomePage,
+              ),
+            );
+          }
+        },
       ),
     );
   }
