@@ -65,7 +65,6 @@ class SearchPage extends StatelessWidget {
                               .selectedBloodType ??
                           "AB+",
                     );
-
                     Navigator.push(
                       context,
                       MaterialPageRoute(

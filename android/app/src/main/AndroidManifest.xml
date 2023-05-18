@@ -8,7 +8,11 @@
    <application
         android:label="nabdh_alyaman"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/launcher_icon" />
+        <meta-data
+             android:name="com.google.android.geo.API_KEY"
+             android:value="AIzaSyCl1B3ibzOgquh5yV9lRRmYd1Yf4uE1Yf8"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

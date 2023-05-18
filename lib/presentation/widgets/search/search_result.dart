@@ -208,7 +208,6 @@ class _SearchResultState extends State<SearchResult>
                 ),
               );
             } else if (state is SearchLoading) {
-              print("result loading");
               return const SizedBox(
                 height: 400,
                 child: Center(
