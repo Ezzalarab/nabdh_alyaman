@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nabdh_alyaman/core/extensions/extension.dart';
+import 'package:nabdh_alyaman/core/encryption.dart';
 
 import '../../../presentation/pages/setting_page.dart';
 import '../../core/error/exceptions.dart';
@@ -11,6 +11,7 @@ import '../../core/network/network_info.dart';
 import '../../domain/entities/blood_center.dart';
 import '../../domain/entities/donor.dart';
 import '../../domain/repositories/auth_repository.dart';
+// import '../../core/encryption.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -167,6 +168,7 @@ class AuthRepositoryImpl implements AuthRepository {
         if (uid != "") {
           Map<String, dynamic> donorData = donor.toMap();
           donorData['created_at'] = DateTime.now();
+          donorData['password'] = Encryption.encode(donorData['password']);
           return await _fireStore
               .collection('donors')
               .doc(uid)
@@ -214,6 +216,9 @@ class AuthRepositoryImpl implements AuthRepository {
             .then((userCredential) async {
           if (userCredential.user != null) {
             try {
+              Map<String, dynamic> centerDate = center.toMap();
+              centerDate['password'] =
+                  Encryption.encode(centerDate['password']);
               return await _fireStore
                   .collection('centers')
                   .doc(userCredential.user!.uid)
