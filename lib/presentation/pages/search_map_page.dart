@@ -82,29 +82,28 @@ class _SearchMapPageState extends State<SearchMapPage> {
             if (state is MapsSuccess) {
               print("map sccess");
               // Send Notification
-              // List<String> nearbyTokens = state.nearbyDonors
-              //     .map((donorPoint) => donorPoint.token)
-              //     .toList();
-              // SendNotificationData notificationMessage = SendNotificationData(
-              //   listToken: nearbyTokens,
-              //   title: "اشعار",
-              //   body:
-              //       "\nهناك مريض يحتاج الى التبرع بالدم الرجاء الضغط على الاشعار لتحديث الموقع \n قد تكون سبب في انقاذ حياة شخص",
-              // );
-              // BlocProvider.of<SendNotficationCubit>(context)
-              //     .sendNotficationUseCase(
-              //         sendNotficationData: notificationMessage);
-              // List<DonorPoint> listPoints = state.nearbyDonors;
-              // final List<Marker> markBrach = _generateMarkers(listPoints);
-              // _marker.addAll(markBrach);
-              // Position position = state.position;
+              List<String> nearbyTokens = state.nearbyDonors
+                  .map((donorPoint) => donorPoint.token)
+                  .toList();
+              SendNotificationData notificationMessage = SendNotificationData(
+                listToken: nearbyTokens,
+                title: "اشعار",
+                body:
+                    "\nهناك مريض يحتاج الى التبرع بالدم الرجاء الضغط على الاشعار لتحديث الموقع \n قد تكون سبب في انقاذ حياة شخص",
+              );
+              BlocProvider.of<SendNotficationCubit>(context)
+                  .sendNotficationUseCase(
+                      sendNotficationData: notificationMessage);
+              List<DonorPoint> listPoints = state.nearbyDonors;
+              final List<Marker> markBrach = _generateMarkers(listPoints);
+              _marker.addAll(markBrach);
+              Position position = state.position;
               return GoogleMap(
-                // markers: Set<Marker>.of(_marker),
+                markers: Set<Marker>.of(_marker),
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
-                    13.9621067, 44.1714833,
-                    // position.latitude,
-                    // position.longitude,
+                    position.latitude,
+                    position.longitude,
                   ),
                   zoom: 13.5,
                 ),
