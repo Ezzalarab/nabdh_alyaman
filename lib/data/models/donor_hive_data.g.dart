@@ -17,15 +17,15 @@ class DonorDataOnHiveAdapter extends TypeAdapter<DonorDataOnHive> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return DonorDataOnHive(
-      isShown: fields[2] as String,
-      isShownPhone: fields[4] as String,
-      isGpsOn: fields[3] as String,
-      name: fields[0] as String,
-      bloodType: fields[1] as String,
-      satae: fields[7] as String,
-      district: fields[6] as String,
-      neighborhood: fields[8] as String,
-      date: fields[5] as String,
+      isShown: fields[2]?.toString() ?? "",
+      isShownPhone: fields[4]?.toString() ?? "",
+      isGpsOn: fields[3]?.toString() ?? "",
+      name: fields[0]?.toString() ?? "",
+      bloodType: fields[1]?.toString() ?? "",
+      satae: fields[7]?.toString() ?? "",
+      district: fields[6]?.toString() ?? "",
+      neighborhood: fields[8]?.toString() ?? "",
+      date: fields[5]?.toString() ?? "",
     );
   }
 

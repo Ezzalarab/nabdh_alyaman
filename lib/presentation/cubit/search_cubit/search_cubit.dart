@@ -89,7 +89,7 @@ class SearchCubit extends Cubit<SearchState> {
                     .toList()
                     .length
                     .toString(),
-                token: await FirebaseMessaging.instance.getToken() ?? "",
+                token: FirebaseMessaging.instance.getToken().toString(),
                 userType: await Hive.box(dataBoxName).get('user') ?? "0",
               ).toMap(),
             )

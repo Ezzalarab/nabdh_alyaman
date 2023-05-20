@@ -59,4 +59,10 @@ class Utils {
     // Return the formatted date string
     return formattedDate;
   }
+
+  static String formatDateTime(DateTime dateTime) =>
+      "${dateTime.year}/${dateTime.month < 10 ? "0${dateTime.month}" : "${dateTime.month}"}/${dateTime.day < 10 ? "0${dateTime.day}" : "${dateTime.day}"} ${dateTime.hour < 13 ? "${dateTime.hour}" : "${(dateTime.hour - 12) < 10 ? "0${dateTime.hour - 12}" : dateTime.hour - 12}"}:${dateTime.minute < 10 ? "${dateTime.minute}" : "${dateTime.minute}"}:${dateTime.second < 10 ? "0${dateTime.second}" : "${dateTime.second}"} ${dateTime.hour < 13 ? "ص" : "م"}";
+
+  static String formatOnlyDate(DateTime dateTime) =>
+      "${dateTime.year}-${dateTime.month < 10 ? "0${dateTime.month}" : dateTime.month}-${dateTime.day < 10 ? "0${dateTime.day}" : dateTime.day}";
 }

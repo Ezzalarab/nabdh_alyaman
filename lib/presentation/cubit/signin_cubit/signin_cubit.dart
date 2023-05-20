@@ -201,6 +201,6 @@ class SignInCubit extends Cubit<SignInState> {
   }
 
   Future<String> getToken() async {
-    return await FirebaseMessaging.instance.getToken() ?? "";
+    return FirebaseMessaging.instance.getToken().toString();
   }
 }

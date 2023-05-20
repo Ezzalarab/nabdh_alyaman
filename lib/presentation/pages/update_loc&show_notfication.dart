@@ -29,16 +29,14 @@ class UpdateLocNotFicationPage extends StatefulWidget {
 
 class _UpdateLocNotFicationPageState extends State<UpdateLocNotFicationPage> {
   late Position position;
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   getLocation() async {
-    print(";;;;;;;;");
     await SharedMethod().checkGps();
     position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high)
         .then((value) {
-      print("value.latitude");
+      print("value.latlon");
       print(value.latitude);
       print(value.longitude);
       Fluttertoast.showToast(msg: widget.remoteMessage.body.toString());
@@ -52,14 +50,13 @@ class _UpdateLocNotFicationPageState extends State<UpdateLocNotFicationPage> {
         DonorFields.lat: position.latitude.toString(),
         DonorFields.lon: position.longitude.toString()
       }).then((value) async {
-        print("okkkkkkkkkkkkkkkkkkkkkkkk");
+        print("location updated");
       });
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getLocation();
   }
@@ -119,14 +116,15 @@ class _UpdateLocNotFicationPageState extends State<UpdateLocNotFicationPage> {
                             Positioned(
                                 top: 20,
                                 left: 70,
-                                child: Text(
-                                    "${widget.dateTime.toString().substring(0, 10)}")),
+                                child: Text(widget.dateTime
+                                    .toString()
+                                    .substring(0, 10))),
                             Positioned(
                                 bottom: 80,
                                 right: 130,
                                 child: Text(
                                   "${widget.remoteMessage.title}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 )),
@@ -134,14 +132,14 @@ class _UpdateLocNotFicationPageState extends State<UpdateLocNotFicationPage> {
                                 bottom: 50,
                                 right: 130,
                                 child: Text("${widget.remoteMessage.body}")),
-                            Positioned(
+                            const Positioned(
                                 top: 20, right: 60, child: Text("تاريخ ")),
                             Positioned(
                                 top: 5,
                                 left: 0,
                                 child: IconButton(
                                   onPressed: () {},
-                                  icon: Icon(Icons.close),
+                                  icon: const Icon(Icons.close),
                                 )),
                           ],
                         ),

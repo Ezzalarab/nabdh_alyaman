@@ -22,8 +22,8 @@ class SendNotificationData {
   factory SendNotificationData.fromMap(Map<String, dynamic> map) {
     return SendNotificationData(
       listToken: List<String>.from((map['listToken'] as List<String>)),
-      title: map['title'] as String,
-      body: map['body'] as String,
+      title: map['title']?.toString() ?? "",
+      body: map['body']?.toString() ?? "",
     );
   }
 

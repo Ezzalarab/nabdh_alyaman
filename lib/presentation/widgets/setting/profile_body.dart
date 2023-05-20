@@ -9,15 +9,16 @@ import '../../resources/style.dart';
 import '../forms/my_button.dart';
 import '../forms/my_switchlist_tile.dart';
 import '../forms/my_text_form_field.dart';
+import '../../../dependency_injection.dart' as di;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileBody extends StatefulWidget {
-  ProfileBody({
+  const ProfileBody({
     Key? key,
     required this.donor,
   }) : super(key: key);
-  Donor? donor;
+  final Donor? donor;
   @override
   State<ProfileBody> createState() => _ProfileBodyState();
 }
@@ -26,8 +27,10 @@ class _ProfileBodyState extends State<ProfileBody> {
   DateTime? newDate;
   String? selectedGender;
   ProfileLocalData? profileLocalData;
+
   Future<String> showDateTimePicker(context) async {
-    final DateTime initDateTime = DateTime.now();
+    final DateTime initDateTime =
+        DateTime.tryParse(profileLocalData!.date ?? "") ?? DateTime.now();
     newDate = await showDatePicker(
       context: context,
       initialDate: initDateTime,
@@ -35,23 +38,14 @@ class _ProfileBodyState extends State<ProfileBody> {
       lastDate: initDateTime,
     ).then((value) => newDate = value);
     if (newDate == null) return AppStrings.profileNullValue;
-    // final pickedDateTime = DateTime(
-    //   newDate.year,
-    //   newDate.month,
-    //   newDate.day,
-    // );
-    // setDateTime(pickedDateTime);
-    // setDateController(formatOnlyDate(pickedDateTime));
-    return newDate.toString();
+    return Utils.formatOnlyDate(newDate!);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.donor == null) {}
     fillProfileLocalData();
-    // BlocProvider.of<ProfileCubit>(context).getDataToProfilePage();
   }
 
   fillProfileLocalData() {
@@ -69,7 +63,7 @@ class _ProfileBodyState extends State<ProfileBody> {
       const SizedBox(
         height: 10,
       ),
-      EditBasicData(),
+      const EditBasicData(),
       valueListenableBuilder(widget.donor!),
     ]));
   }
@@ -123,7 +117,10 @@ class _ProfileBodyState extends State<ProfileBody> {
             children: [
               MyTextFormField(
                 hint: AppStrings.profileDataBrithday,
-                hintStyle: Theme.of(context).textTheme.bodyText1!,
+                initialValue: (profileLocalData?.date == "")
+                    ? null
+                    : profileLocalData?.date,
+                hintStyle: Theme.of(context).textTheme.bodyLarge!,
                 suffixIcon: true,
                 blurrBorderColor: ColorManager.grey,
                 focusBorderColor: eSecondColor,
@@ -143,30 +140,33 @@ class _ProfileBodyState extends State<ProfileBody> {
             ],
           ),
         ),
+        const SizedBox(height: 50),
         MyButton(
-            title: AppStrings.profileButtonSave,
-            color: Theme.of(context).primaryColor,
-            titleStyle: Theme.of(context).textTheme.titleLarge,
-            minWidth: MediaQuery.of(context).size.width * 0.85,
-            onPressed: (() {
-              if (profileLocalData != null) {
-                BlocProvider.of<ProfileCubit>(context)
-                    .sendDataProfileSectionOne(profileLocalData!);
-              } else {
-                Utils.showSnackBar(
-                  context: context,
-                  msg: AppStrings.profileSuccesMess,
-                  color: ColorManager.success,
-                );
-              }
-            }))
+          title: AppStrings.profileButtonSave,
+          color: ColorManager.secondary,
+          titleStyle: Theme.of(context).textTheme.titleLarge,
+          minWidth: MediaQuery.of(context).size.width * 0.85,
+          onPressed: (() {
+            if (profileLocalData != null) {
+              BlocProvider.of<ProfileCubit>(context)
+                  .sendDataProfileSectionOne(profileLocalData!);
+            } else {
+              Utils.showSnackBar(
+                context: context,
+                msg: AppStrings.profileSuccesMess,
+                color: ColorManager.success,
+              );
+            }
+          }),
+        ),
+        const SizedBox(height: 50),
       ],
     );
   }
 }
 
 class EditBasicData extends StatelessWidget {
-  EditBasicData({
+  const EditBasicData({
     Key? key,
   }) : super(key: key);
 
@@ -187,7 +187,6 @@ class EditBasicData extends StatelessWidget {
       onTap: () {
         // di.initProfile();
         BlocProvider.of<ProfileCubit>(context).getDataToProfilePage();
-
         Navigator.of(context).push(MaterialPageRoute<void>(
             builder: (BuildContext context) => EditMainDataPage()));
       },
@@ -206,14 +205,15 @@ class ProfileLocalData {
   String? state;
   String? neighborhood;
 
-  ProfileLocalData(
-      {this.name,
-      this.bloodType,
-      this.district,
-      this.neighborhood,
-      this.state,
-      this.isShown,
-      this.date,
-      this.isGpsOn,
-      this.isShownPhone});
+  ProfileLocalData({
+    this.name,
+    this.bloodType,
+    this.district,
+    this.neighborhood,
+    this.state,
+    this.isShown,
+    this.date,
+    this.isGpsOn,
+    this.isShownPhone,
+  });
 }

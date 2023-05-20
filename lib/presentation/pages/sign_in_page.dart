@@ -38,7 +38,7 @@ class _SignInPageState extends State<SignInPage> {
   String? smsCode;
 
   String? emailOrPhoneValidator(value) {
-    String strValue = value ?? "";
+    String strValue = value?.toString() ?? "";
     bool isPhone = (strValue.isValidPhone || strValue.isValidPhoneWithKeyCode);
     if (value != null && (EmailValidator.validate(value) || isPhone)) {
       return null;

@@ -34,13 +34,13 @@ class SearchLog {
 
   factory SearchLog.fromMap(Map<String, dynamic> map) {
     return SearchLog(
-      state: map[SearchLogFields.state] as String,
-      district: map[SearchLogFields.district] as String,
-      bloodType: map[SearchLogFields.bloodType] as String,
-      date: map[SearchLogFields.date] as String,
-      donorsCount: map[SearchLogFields.donorsCount] as String,
-      token: map[SearchLogFields.token] as String,
-      userType: map[SearchLogFields.userType] as String,
+      state: map[SearchLogFields.state]?.toString() ?? "",
+      district: map[SearchLogFields.district]?.toString() ?? "",
+      bloodType: map[SearchLogFields.bloodType]?.toString() ?? "",
+      date: map[SearchLogFields.date]?.toString() ?? "",
+      donorsCount: map[SearchLogFields.donorsCount]?.toString() ?? "",
+      token: map[SearchLogFields.token]?.toString() ?? "",
+      userType: map[SearchLogFields.userType]?.toString() ?? "",
     );
   }
 

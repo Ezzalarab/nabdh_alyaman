@@ -22,7 +22,7 @@ class MyCheckboxFormField extends FormField<bool> {
               subtitle: state.hasError
                   ? Builder(
                       builder: (BuildContext context) => Text(
-                        state.errorText ?? "",
+                        state.errorText?.toString() ?? "",
                         style: TextStyle(color: Theme.of(context).errorColor),
                       ),
                     )

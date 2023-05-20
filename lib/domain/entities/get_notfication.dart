@@ -27,11 +27,11 @@ class GetNotficationData {
 
   factory GetNotficationData.fromMap(Map<String, dynamic> map) {
     return GetNotficationData(
-      date: map['date'] as String,
-      title: map['title'] as String,
-      body: map['body'] as String,
-      isRead: map['isRead'] as String,
-      donorID: map['donorID'] as String,
+      date: map['date']?.toString() ?? "",
+      title: map['title']?.toString() ?? "",
+      body: map['body']?.toString() ?? "",
+      isRead: map['isRead']?.toString() ?? "",
+      donorID: map['donorID']?.toString() ?? "",
     );
   }
 

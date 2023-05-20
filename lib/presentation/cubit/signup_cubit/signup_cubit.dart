@@ -217,7 +217,8 @@ class SignUpCubit extends Cubit<SignUpState> {
     try {
       donor.token = await getToken();
       await saveDonorDataUC(
-              donor: donor, uid: _currentUserCredential.user?.uid ?? "")
+              donor: donor,
+              uid: _currentUserCredential.user?.uid.toString() ?? "")
           .then((value) {
         value.fold(
             (failure) =>
@@ -252,7 +253,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<String> getToken() async {
-    return await FirebaseMessaging.instance.getToken() ?? "";
+    return FirebaseMessaging.instance.getToken().toString();
   }
 
   String _getFailureMessage(Failure failur) {

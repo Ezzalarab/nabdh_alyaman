@@ -294,7 +294,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<String> token() async {
-    return await FirebaseMessaging.instance.getToken() ?? "";
+    return FirebaseMessaging.instance.getToken().toString();
   }
 
   Future<bool> pushNotificationsGroupDevice({

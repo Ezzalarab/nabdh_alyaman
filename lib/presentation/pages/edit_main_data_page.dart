@@ -19,7 +19,7 @@ import '../widgets/forms/my_text_form_field.dart';
 ProfileLocalData? profileLocalData;
 
 class EditMainDataPage extends StatefulWidget {
-  EditMainDataPage({
+  const EditMainDataPage({
     Key? key,
   }) : super(key: key);
   static const String routeName = "edit_main_data";
@@ -32,9 +32,9 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final GlobalKey<FormState> _formStateBloodType = GlobalKey<FormState>();
   String? bloodType;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -49,13 +49,13 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
           listener: (context, state) {},
           builder: (context, state) {
             if (state is ProfileLoadingBeforFetch) {
-              return MyLottie(
+              return const MyLottie(
                 lottie: AppStrings.lottieOnHomePage,
               );
             }
             if (state is ProfileLoading) {
-              return Center(
-                child: const CircularProgressIndicator(),
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             }
             if (state is ProfileGetData) {
@@ -69,24 +69,20 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                 padding: const EdgeInsets.symmetric(horizontal: AppPadding.p20),
                 child: ListView(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
                           horizontal: AppPadding.p10, vertical: AppPadding.p10),
                       child: Text(
                         AppStrings.editMainDataTextName,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(color: ColorManager.black),
+                        style: TextStyle(color: ColorManager.black),
                       ),
                     ),
                     Form(
                       key: _formState,
                       child: MyTextFormField(
-                        blurrBorderColor: ColorManager.grey1,
-                        focusBorderColor: ColorManager.grey2,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                        fillColor: ColorManager.grey1,
+                        blurrBorderColor: ColorManager.lightGrey,
+                        focusBorderColor: ColorManager.lightSecondary,
+                        fillColor: ColorManager.white,
                         initialValue: (profileLocalData!.name == null)
                             ? null
                             : profileLocalData!.name,
@@ -105,15 +101,12 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                       ),
                     ),
                     const SizedBox(height: AppSize.s14),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
                           horizontal: AppPadding.p10, vertical: AppPadding.p10),
                       child: Text(
                         AppStrings.profileBloodTypeTitle,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(color: ColorManager.black),
+                        style: TextStyle(color: ColorManager.black),
                       ),
                     ),
                     MyDropdownButtonFormField(
@@ -125,35 +118,27 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                             : null;
                       },
                       value: (profileLocalData!.bloodType == null)
-                          // (box.get("blood_type") == null)
                           ? bloodType
                           : profileLocalData!.bloodType,
-                      // : box.get("blood_type"),
-                      hintColor: ColorManager.secondary,
                       items: BloodTypes.bloodTypes,
-                      blurrBorderColor: ColorManager.grey1,
-                      focusBorderColor: ColorManager.grey1,
-                      fillColor: ColorManager.grey1,
+                      blurrBorderColor: ColorManager.lightGrey,
+                      focusBorderColor: ColorManager.lightSecondary,
+                      fillColor: ColorManager.white,
                       icon: const Icon(Icons.bloodtype_outlined),
                       onChange: (value) => setState(() {
                         bloodType = value;
-                        // box.put("blood_type", bloodType);
-
                         setState(() {
                           profileLocalData!.bloodType = bloodType;
                         });
                       }),
                     ),
                     const SizedBox(height: AppSize.s14),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
                           horizontal: AppPadding.p10, vertical: AppPadding.p10),
                       child: Text(
                         AppStrings.profileAdressTitle,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(color: ColorManager.black),
+                        style: TextStyle(color: ColorManager.black),
                       ),
                     ),
                     Column(
@@ -172,23 +157,22 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                                   flagState: CountryFlag.SHOW_IN_DROP_DOWN_ONLY,
                                   dropdownDecoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(
-                                        Radius.circular(AppSize.s10)),
-                                    color: ColorManager.grey1,
+                                        Radius.circular(10)),
+                                    color: ColorManager.white,
                                     border: Border.all(
-                                      color: ColorManager.white,
+                                      color: ColorManager.lightGrey,
                                       width: 1,
                                     ),
                                   ),
                                   dropDownPadding:
                                       const EdgeInsets.all(AppPadding.p12),
-                                  // dropDownMargin: const EdgeInsets.symmetric(vertical: 4),
                                   spaceBetween: AppSize.s14,
                                   disabledDropdownDecoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(
-                                        Radius.circular(AppSize.s10)),
-                                    color: Colors.grey.shade300,
+                                        Radius.circular(10)),
+                                    color: ColorManager.grey1,
                                     border: Border.all(
-                                      color: Colors.grey.shade300,
+                                      color: ColorManager.grey1,
                                       width: 1,
                                     ),
                                   ),
@@ -199,11 +183,6 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                                   stateDropdownLabel: "المحافظة",
                                   cityDropdownLabel: "المديرية",
                                   defaultCountry: DefaultCountry.Yemen,
-
-                                  selectedItemStyle: const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 18,
-                                  ),
                                   dropdownHeadingStyle: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 18,
@@ -223,14 +202,9 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                                           ? null
                                           : profileLocalData!.district,
                                   onStateChanged: (value) {
-                                    // stateName = value;
-                                    print(profileLocalData!.state);
-                                    // box.put("state_name", value);
                                     profileLocalData!.state = value;
                                   },
                                   onCityChanged: (value) {
-                                    // district = value;
-                                    // box.put("district", value);
                                     profileLocalData!.district = value;
                                   },
                                 ),
@@ -248,11 +222,10 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                                             : profileLocalData!.neighborhood),
                                     hint: "المنطقة",
                                     hintStyle: eHintStyle,
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                    blurrBorderColor: ColorManager.grey1,
-                                    focusBorderColor: ColorManager.grey1,
-                                    fillColor: ColorManager.grey1,
+                                    blurrBorderColor: ColorManager.lightGrey,
+                                    focusBorderColor:
+                                        ColorManager.lightSecondary,
+                                    fillColor: ColorManager.white,
                                     suffixIcon: false,
                                     icon:
                                         const Icon(Icons.my_location_outlined),
@@ -279,7 +252,7 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                     const SizedBox(height: AppSize.s30),
                     MyButton(
                         title: AppStrings.profileButtonSave,
-                        color: Theme.of(context).primaryColor,
+                        color: ColorManager.secondary,
                         titleStyle: Theme.of(context).textTheme.titleLarge,
                         onPressed: (() {
                           if (_formState.currentState!.validate() |
@@ -304,7 +277,7 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                 ),
               );
             } else {
-              return Center(
+              return const Center(
                 child: MyLottie(
                   lottie: AppStrings.lottieOnHomePage,
                 ),
