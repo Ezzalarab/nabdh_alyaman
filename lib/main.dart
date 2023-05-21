@@ -107,7 +107,6 @@ Future<void> backgroundMessage(RemoteMessage message) async {
       .then((value) {
     print(position.latitude);
     print(position.longitude);
-    // Fluttertoast.showToast(msg: message.notification!.body.toString());
     return value;
   });
 
@@ -117,12 +116,8 @@ Future<void> backgroundMessage(RemoteMessage message) async {
       .update({
     DonorFields.lat: position.latitude.toString(),
     DonorFields.lon: position.longitude.toString()
-  }).then((value) async {
-    print("okkkkkkkkkkkkkkkkkkkkkkkk");
-  });
-  // flutterLocalNotificationsPlugin.show(0, message.notification!.title, message, notificationDetails)
+  }).then((value) => print("location updated"));
 }
-// final AndroidInitializationSettings
 
 // Future updateLocation(RemoteMessage msg) async {
 //   print("==========onBackground==========");

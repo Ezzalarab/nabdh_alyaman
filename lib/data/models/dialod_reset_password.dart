@@ -6,7 +6,6 @@ import '../../presentation/widgets/forms/my_button.dart';
 
 class DialogResetPassWord {
   static void resetPasswordDialog(BuildContext context) {
-    print("================dialog");
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -20,11 +19,6 @@ class DialogResetPassWord {
             child: MyButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) => const HomePage(),
-                  ),
-                );
               },
               title: AppStrings.resetPasswordDialogOkButton,
               titleStyle: Theme.of(context).textTheme.titleLarge,
@@ -34,6 +28,4 @@ class DialogResetPassWord {
       ),
     );
   }
-
-  static _moveToHomePage(BuildContext context) {}
 }

@@ -1,14 +1,13 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import '../../../domain/entities/search_log.dart';
-import '../../../presentation/pages/setting_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../domain/entities/search_log.dart';
+import '../../../presentation/pages/setting_page.dart';
 import '../../../domain/entities/blood_center.dart';
 import '../../../domain/usecases/search_centers_usecase.dart';
 import '../../../domain/entities/donor.dart';
@@ -48,29 +47,30 @@ class SearchCubit extends Cubit<SearchState> {
                   emit(SearchFailure(error: getFailureMessage(failure))),
               (fetchedStateDonors) async {
             stateDonors = fetchedStateDonors;
+            print("stateDonors.length");
+            print(stateDonors.length);
             donors = fetchedStateDonors
-                .where((donor) => donor.district == selectedDistrict)
+                .where((donor) =>
+                    donor.district == selectedDistrict || donor.district == "")
                 .toList();
-            ;
+            print("donors.length");
+            print(donors.length);
             await searchCentersUseCase(
               state: selectedState,
               district: selectedDistrict,
             ).then((centersOrFailure) {
               centersOrFailure.fold(
-                (failure) =>
-                    emit(SearchFailure(error: getFailureMessage(failure))),
-                (fetchedCenters) {
-                  centers = fetchedCenters;
-                  emit(
-                    SearchSuccess(
-                      donors: donors,
-                      centers: fetchedCenters,
-                      stateDonors: stateDonors,
-                      selectedTabIndex: selectedTabBloodType,
-                    ),
-                  );
-                },
-              );
+                  (failure) =>
+                      emit(SearchFailure(error: getFailureMessage(failure))),
+                  (fetchedCenters) {
+                centers = fetchedCenters;
+                emit(SearchSuccess(
+                  donors: donors,
+                  centers: fetchedCenters,
+                  stateDonors: stateDonors,
+                  selectedTabIndex: selectedTabBloodType,
+                ));
+              });
             });
           });
         });

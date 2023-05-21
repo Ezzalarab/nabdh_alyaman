@@ -26,7 +26,7 @@ class SearchRepositoryImpl implements SearchRepository {
         return await _fireStore
             .collection(DonorFields.collectionName)
             .where(DonorFields.state, isEqualTo: state)
-            .where(DonorFields.district, isEqualTo: district)
+            // .where(DonorFields.district, isEqualTo: district)
             .get()
             .then((fetchedDonors) async {
           if (fetchedDonors.docs.isNotEmpty) {
@@ -61,6 +61,7 @@ class SearchRepositoryImpl implements SearchRepository {
   Future<Either<Failure, List<Donor>>> searchStateDonors({
     required String state,
   }) async {
+    print("result");
     if (await networkInfo.isConnected) {
       List<Donor> stateDonors = <Donor>[];
       try {
@@ -69,6 +70,9 @@ class SearchRepositoryImpl implements SearchRepository {
             .where(DonorFields.state, isEqualTo: state)
             .get()
             .then((value) async {
+          for (var doc in value.docs) {
+            print(doc.data());
+          }
           if (value.docs.isNotEmpty) {
             stateDonors = value.docs
                 .map((donorDoc) => Donor.fromMap(donorDoc.data()))

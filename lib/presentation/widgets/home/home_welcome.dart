@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../dependency_injection.dart' as di;
+import '../../resources/values_manager.dart';
 import '../../resources/color_manageer.dart';
 import '../../pages/search_page.dart';
 import '../../pages/sign_up_page.dart';
@@ -62,6 +63,7 @@ class _HomeWelcomeState extends State<HomeWelcome> {
                       .displayLarge!
                       .copyWith(height: 1.5),
                 ),
+                const SizedBox(height: AppSize.s10),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(20.0)),
@@ -72,31 +74,43 @@ class _HomeWelcomeState extends State<HomeWelcome> {
                           offset: const Offset(0, 2)),
                     ],
                   ),
-                  child: MyTextFormField(
-                    hint: 'البحث عن متبرع',
-                    icon: Icon(
-                      Icons.search_rounded,
-                      color: Theme.of(context).primaryColor,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: AppSize.s10,
+                            color: ColorManager.grey2,
+                            spreadRadius: AppSize.s0_5,
+                          )
+                        ]),
+                    child: MyTextFormField(
+                      hint: 'البحث عن متبرع',
+                      icon: Icon(
+                        Icons.search_rounded,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      suffixIcon: false,
+                      fillColor: ColorManager.white,
+                      blurrBorderColor: eSecondColor.withOpacity(0),
+                      focusBorderColor: eSecondColor.withOpacity(0),
+                      hintStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(color: ColorManager.grey),
+                      readOnly: true,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const SearchPage(),
+                          ),
+                        );
+                      },
                     ),
-                    suffixIcon: false,
-                    fillColor: ColorManager.grey1,
-                    blurrBorderColor: eSecondColor.withOpacity(0),
-                    focusBorderColor: eSecondColor.withOpacity(0),
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: ColorManager.grey),
-                    readOnly: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const SearchPage(),
-                        ),
-                      );
-                    },
                   ),
                 ),
+                const SizedBox(height: AppSize.s10),
                 FirebaseAuth.instance.currentUser == null
                     ? MyButton(
                         title: 'إنشاء حساب متبرع',

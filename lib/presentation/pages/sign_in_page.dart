@@ -61,7 +61,6 @@ class _SignInPageState extends State<SignInPage> {
 
   _sendRestPassword() {
     if (_emailState.currentState!.validate()) {
-      print("==============validate");
       BlocProvider.of<SignInCubit>(context)
           .resetPassword(email: emailController.text);
     }
@@ -167,9 +166,7 @@ class _SignInPageState extends State<SignInPage> {
                 color: ColorManager.error,
               );
             } else if (state is SignInSuccessResetPass) {
-              print("==============success");
               DialogResetPassWord.resetPasswordDialog(context);
-              // MaterialPageRoute(builder: (context) => const HomePage());
             }
           },
           builder: (context, state) {

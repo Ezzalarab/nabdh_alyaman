@@ -32,14 +32,15 @@ class MyDropdownButtonFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       validator: validator,
+      style: style,
+      alignment: Alignment.center,
+      value: value,
       hint: Text(
         hint,
         style: TextStyle(
           color: hintColor,
         ),
       ),
-      style: style,
-      value: value,
       items: items
           .map(
             (item) => DropdownMenuItem<String>(
