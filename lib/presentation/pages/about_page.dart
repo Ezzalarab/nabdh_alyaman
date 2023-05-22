@@ -1,7 +1,6 @@
-import 'package:nabdh_alyaman/presentation/resources/assets_manager.dart';
-
-import '../../presentation/resources/constatns.dart';
 import 'package:flutter/material.dart';
+
+import '../resources/assets_manager.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});

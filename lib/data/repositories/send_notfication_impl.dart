@@ -1,17 +1,14 @@
 import 'dart:convert';
 
-import '../../../core/app_constants.dart';
-import '../../../domain/entities/notfication_data.dart';
-import '../../../presentation/cubit/send_notfication/send_notfication_cubit.dart';
-import '../../../presentation/pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../core/app_constants.dart';
 import '../../../core/error/failures.dart';
 import '../../../core/network/network_info.dart';
+import '../../../domain/entities/notfication_data.dart';
 import '../../../domain/repositories/notfication_repository.dart';
-import '../../../domain/usecases/send_notfication_.dart';
-import 'package:http/http.dart' as http;
 
 class SendNotficationImpl implements SendNotficationRepository {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;

@@ -1,5 +1,6 @@
-import '../../../../presentation/resources/color_manageer.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../presentation/resources/color_manageer.dart';
 
 class CarouselItem extends StatelessWidget {
   const CarouselItem({

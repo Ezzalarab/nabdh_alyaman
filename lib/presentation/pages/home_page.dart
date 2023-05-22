@@ -1,37 +1,35 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:nabdh_alyaman/core/extensions/extension.dart';
-import 'package:nabdh_alyaman/data/data_sources/local/local_data.dart';
 
 import '../../../../dependency_injection.dart' as di;
 import '../../core/app_constants.dart';
+import '../../core/methode/shared_method.dart';
+import '../../core/update.dart';
 import '../../core/utils.dart';
+import '../../data/data_sources/local/local_data.dart';
 import '../../domain/entities/donor.dart';
 import '../../main.dart';
-import '../../core/update.dart';
-import '../../core/methode/shared_method.dart';
 import '../cubit/send_notfication/send_notfication_cubit.dart';
 import '../pages/update_loc&show_notfication.dart';
 import '../resources/color_manageer.dart';
-import '../resources/constatns.dart';
 import '../resources/values_manager.dart';
-import '../widgets/home/home_carousel/home_carousel.dart';
 import '../widgets/home/home_about.dart';
+import '../widgets/home/home_carousel/home_carousel.dart';
 import '../widgets/home/home_drawer/home_drawer.dart';
 import '../widgets/home/home_welcome.dart';
 import 'introduction_page.dart';
-import 'setting_page.dart';
 import 'notfication_page.dart';
+import 'setting_page.dart';
 import 'sign_in_page.dart';
 
 class HomePage extends StatefulWidget {

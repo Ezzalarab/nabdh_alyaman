@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class PageViewModelData {
   final lottei;
   final title;

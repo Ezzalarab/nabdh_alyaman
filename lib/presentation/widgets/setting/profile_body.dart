@@ -1,17 +1,17 @@
-import '../../../domain/entities/donor.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../core/utils.dart';
-import '../../resources/strings_manager.dart';
-import '../../resources/values_manager.dart';
+import '../../../domain/entities/donor.dart';
 import '../../cubit/profile_cubit/profile_cubit.dart';
 import '../../pages/edit_main_data_page.dart';
 import '../../resources/color_manageer.dart';
+import '../../resources/strings_manager.dart';
 import '../../resources/style.dart';
+import '../../resources/values_manager.dart';
 import '../forms/my_button.dart';
 import '../forms/my_switchlist_tile.dart';
 import '../forms/my_text_form_field.dart';
-import '../../../dependency_injection.dart' as di;
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileBody extends StatefulWidget {
   const ProfileBody({

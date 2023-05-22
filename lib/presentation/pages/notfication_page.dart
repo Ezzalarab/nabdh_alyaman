@@ -1,19 +1,16 @@
-import '../../domain/entities/donor.dart';
-import '../../domain/entities/get_notfication.dart';
-import '../../domain/entities/notfication_data.dart';
-import '../../core/methode/shared_method.dart';
-import '../../presentation/resources/color_manageer.dart';
-import '../../presentation/resources/constatns.dart';
-import '../../presentation/resources/values_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+
+import '../../core/methode/shared_method.dart';
+import '../../domain/entities/donor.dart';
+import '../../domain/entities/get_notfication.dart';
+import '../../presentation/resources/color_manageer.dart';
+import '../../presentation/resources/values_manager.dart';
 
 class NotFicationPage extends StatefulWidget {
   NotFicationPage({this.remoteMessage, this.dateTime, super.key});

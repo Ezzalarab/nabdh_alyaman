@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:lottie/lottie.dart';
-import 'package:nabdh_alyaman/presentation/resources/assets_manager.dart';
+
+import '../../resources/assets_manager.dart';
 
 class MyLottie extends StatefulWidget {
   const MyLottie({required this.lottie, super.key});

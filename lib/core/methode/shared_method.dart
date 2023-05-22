@@ -1,12 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter/material.dart';
-import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 import 'package:location/location.dart' as loc;
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 class SharedMethod {
   bool hasCurrentLocation = false;

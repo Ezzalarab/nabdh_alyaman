@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import '../../../resources/assets_manager.dart';
 
+import '../../../resources/assets_manager.dart';
 import 'carousel_item.dart';
 
 class HomeCarousel extends StatefulWidget {

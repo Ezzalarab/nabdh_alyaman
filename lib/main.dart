@@ -1,24 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'domain/entities/donor.dart';
-import 'presentation/cubit/send_notfication/send_notfication_cubit.dart';
 import 'core/methode/shared_method.dart';
-import 'presentation/pages/splash_screen.dart';
-import 'presentation/resources/theme_manager.dart';
 import 'dependency_injection.dart' as di;
+import 'domain/entities/donor.dart';
+import 'presentation/cubit/maps_cubit/maps_cubit.dart';
 import 'presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'presentation/cubit/search_cubit/search_cubit.dart';
-import 'presentation/cubit/maps_cubit/maps_cubit.dart';
+import 'presentation/cubit/send_notfication/send_notfication_cubit.dart';
 import 'presentation/cubit/signin_cubit/signin_cubit.dart';
 import 'presentation/cubit/signup_cubit/signup_cubit.dart';
 import 'presentation/pages/about_page.dart';
@@ -32,13 +30,8 @@ import 'presentation/pages/setting_page.dart';
 import 'presentation/pages/sign_in_page.dart';
 import 'presentation/pages/sign_up_page.dart';
 import 'presentation/pages/sing_up_center_page.dart';
+import 'presentation/pages/splash_screen.dart';
 import 'presentation/resources/theme_manager.dart';
-
-//----------------------------
-//-------------
-
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 
 String? version;
 //---------------------

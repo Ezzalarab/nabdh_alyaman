@@ -1,13 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../../../../dependency_injection.dart' as di;
-import '../../data/models/dialod_reset_password.dart';
-import '../../core/utils.dart';
 import '../../core/extensions/extension.dart';
+import '../../core/utils.dart';
+import '../../data/models/dialod_reset_password.dart';
+import '../cubit/signin_cubit/signin_cubit.dart';
 import '../cubit/signup_cubit/signup_cubit.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
@@ -16,7 +17,6 @@ import '../resources/font_manager.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 import '../widgets/forms/my_button.dart';
-import '../cubit/signin_cubit/signin_cubit.dart';
 import '../widgets/forms/my_text_form_field.dart';
 import 'home_page.dart';
 import 'sign_up_page.dart';

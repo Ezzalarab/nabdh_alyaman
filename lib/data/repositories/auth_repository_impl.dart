@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nabdh_alyaman/core/encryption.dart';
+import '../../core/encryption.dart';
 
 import '../../../presentation/pages/setting_page.dart';
 import '../../core/error/exceptions.dart';

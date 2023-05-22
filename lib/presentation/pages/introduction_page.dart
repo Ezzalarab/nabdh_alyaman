@@ -1,13 +1,11 @@
-import '../../presentation/resources/color_manageer.dart';
-import '../../presentation/resources/constatns.dart';
-import '../../presentation/resources/font_manager.dart';
-import '../../presentation/resources/strings_manager.dart';
-import '../../presentation/widgets/common/dialog_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import '../../domain/entities/page_view_model_data.dart';
+import '../../presentation/resources/color_manageer.dart';
+import '../../presentation/resources/font_manager.dart';
+import '../../presentation/resources/strings_manager.dart';
 import '../widgets/onboarding/page_view_model.dart';
 import 'home_page.dart';
 import 'setting_page.dart';

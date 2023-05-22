@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
+import '../../../domain/entities/page_view_model_data.dart';
 import '../../../presentation/resources/font_manager.dart';
 import '../../../presentation/widgets/common/dialog_lottie.dart';
-import '../../../domain/entities/page_view_model_data.dart';
 
 PageViewModel myPageViewModel(PageViewModelData pageViewModelData) {
   return PageViewModel(

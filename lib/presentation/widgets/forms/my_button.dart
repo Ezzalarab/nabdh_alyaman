@@ -1,5 +1,6 @@
-import '../../../presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
+
+import '../../../presentation/resources/values_manager.dart';
 import '../../resources/color_manageer.dart';
 import '../../resources/font_manager.dart';
 

@@ -1,23 +1,23 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/services.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../domain/entities/donor.dart';
 import '../../core/utils.dart';
+import '../../domain/entities/donor.dart';
 import '../cubit/profile_cubit/profile_cubit.dart';
+import '../resources/color_manageer.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
-import '../resources/color_manageer.dart';
-import '../widgets/setting/select_photo_options_screen.dart';
 import '../widgets/common/dialog_lottie.dart';
 import '../widgets/setting/profile_body.dart';
+import '../widgets/setting/select_photo_options_screen.dart';
 
 // Table name data user in hive database
 const String dataBoxName = "dataProfile";

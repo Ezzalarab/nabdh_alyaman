@@ -1,19 +1,18 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:hive/hive.dart';
-import 'package:flutter/widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
 
-import '../../../presentation/pages/setting_page.dart';
-import '../../../core/utils.dart';
-import '../../../domain/usecases/sign_up_donor_data_uc.dart';
 import '../../../core/error/failures.dart';
+import '../../../core/utils.dart';
 import '../../../domain/entities/blood_center.dart';
 import '../../../domain/entities/donor.dart';
 import '../../../domain/usecases/sign_up_center_usecase.dart';
 import '../../../domain/usecases/sign_up_donor_auth_uc.dart';
+import '../../../domain/usecases/sign_up_donor_data_uc.dart';
+import '../../../presentation/pages/setting_page.dart';
 
 part 'signup_state.dart';
 

@@ -1,19 +1,17 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
-import '../../presentation/pages/home_page.dart';
-import '../../presentation/resources/constatns.dart';
-import '../../presentation/resources/values_manager.dart';
-import '../../presentation/widgets/common/dialog_lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../presentation/cubit/profile_cubit/profile_cubit.dart';
+import '../../core/utils.dart';
 import '../../dependency_injection.dart' as di;
 import '../../domain/entities/blood_center.dart';
+import '../../presentation/cubit/profile_cubit/profile_cubit.dart';
+import '../../presentation/pages/home_page.dart';
 import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/strings_manager.dart';
-import '../../core/utils.dart';
+import '../../presentation/resources/values_manager.dart';
+import '../../presentation/widgets/common/dialog_lottie.dart';
 import '../../presentation/widgets/forms/my_button.dart';
 
 class ProfileCenterPage extends StatefulWidget {

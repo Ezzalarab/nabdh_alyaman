@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nabdh_alyaman/presentation/cubit/signup_cubit/signup_cubit.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../dependency_injection.dart' as di;
+import '../../../cubit/signup_cubit/signup_cubit.dart';
 import '../../../pages/about_page.dart';
 import '../../../pages/sign_in_page.dart';
 import '../../../pages/sign_up_page.dart';

@@ -1,9 +1,7 @@
-import '../../presentation/resources/color_manageer.dart';
-import '../../presentation/resources/constatns.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
+import '../../presentation/resources/color_manageer.dart';
 import '../cubit/maps_cubit/maps_cubit.dart';
 import '../cubit/search_cubit/search_cubit.dart';
 import '../widgets/search/search_options.dart';

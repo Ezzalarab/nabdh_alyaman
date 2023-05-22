@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 import '../../../domain/entities/blood_center.dart';
-import '../../../presentation/resources/color_manageer.dart';
-import '../../../presentation/widgets/search/result_tabs.dart';
 import '../../../domain/entities/blood_types.dart';
 import '../../../domain/entities/donor.dart';
+import '../../../presentation/resources/color_manageer.dart';
+import '../../../presentation/widgets/search/result_tabs.dart';
 import '../../cubit/search_cubit/search_cubit.dart';
 import '../../widgets/search/doner_card_details.dart';
 import '../../widgets/search/my_expansion_panel.dart';
 import 'doner_card_body.dart';
-import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
 class SearchResult extends StatefulWidget {
   const SearchResult({Key? key}) : super(key: key);

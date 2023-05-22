@@ -1,29 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-import 'dart:math' as math;
 
-import 'package:nabdh_alyaman/presentation/resources/color_manageer.dart';
-
-import '../../domain/entities/donor_point.dart';
-import '../../domain/entities/notfication_data.dart';
-import '../../domain/usecases/send_notfication_.dart';
-import '../../presentation/cubit/maps_cubit/maps_cubit.dart';
-import '../../presentation/cubit/send_notfication/send_notfication_cubit.dart';
-import '../../presentation/resources/constatns.dart';
-
-import '../../domain/entities/blood_types.dart';
-import '../../domain/entities/donor.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import '../cubit/search_cubit/search_cubit.dart';
-import 'package:location/location.dart' as loc;
-
-import '../widgets/home/home_drawer/home_drawer.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
+
+import '../../domain/entities/donor_point.dart';
+import '../../domain/entities/notfication_data.dart';
+import '../cubit/maps_cubit/maps_cubit.dart';
+import '../cubit/send_notfication/send_notfication_cubit.dart';
+import '../resources/color_manageer.dart';
 
 class SearchMapPage extends StatefulWidget {
   const SearchMapPage({Key? key}) : super(key: key);

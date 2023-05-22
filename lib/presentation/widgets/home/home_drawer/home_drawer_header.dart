@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nabdh_alyaman/presentation/resources/assets_manager.dart';
 
 import '../../../../presentation/resources/font_manager.dart';
+import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manageer.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/values_manager.dart';

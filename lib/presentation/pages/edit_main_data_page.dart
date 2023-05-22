@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import '../../presentation/resources/constatns.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../core/utils.dart';
 import '../../domain/entities/blood_types.dart';
 import '../../presentation/cubit/profile_cubit/profile_cubit.dart';
