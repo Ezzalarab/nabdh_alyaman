@@ -33,14 +33,17 @@ class GlobalAppData {
   }
 
   factory GlobalAppData.fromMap(Map<String, dynamic> map) {
+    List<String> newInfoList =
+        (map[GlobalAppDataFields.infoList] as List<dynamic>)
+            .map((e) => e.toString())
+            .toList();
     return GlobalAppData(
       appName: map[GlobalAppDataFields.appName] as String,
       aboutApp: map[GlobalAppDataFields.aboutApp] as String,
       homeHeader: map[GlobalAppDataFields.homeHeader] as String,
       infoTitile: map[GlobalAppDataFields.infoTitile] as String,
       reportLink: map[GlobalAppDataFields.reportLink] as String,
-      infoList:
-          List<String>.from(map[GlobalAppDataFields.infoList] as List<String>),
+      infoList: newInfoList,
       homeSlides: List<String>.from(
           map[GlobalAppDataFields.homeSlides] as List<String>),
     );

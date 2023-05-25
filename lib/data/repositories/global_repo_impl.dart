@@ -21,10 +21,12 @@ class GlobalRepoImpl implements GlobalRepo {
         return _fireStore
             .collection(GlobalAppDataFields.collectionName)
             .get()
-            .then((value) async {
-          Map<String, dynamic> dataMap = value.docs.first.data();
+            .then((result) async {
+          Map<String, dynamic> dataMap = result.docs.first.data();
           List<String> homeSliderImagesPaths =
-              dataMap[GlobalAppDataFields.homeSlides];
+              (dataMap[GlobalAppDataFields.homeSlides] as List<dynamic>)
+                  .map((e) => e.toString())
+                  .toList();
           List<String> homeSliderImagesUrls = [];
           Reference sliderImagesRef = _fireStorage
               .ref()

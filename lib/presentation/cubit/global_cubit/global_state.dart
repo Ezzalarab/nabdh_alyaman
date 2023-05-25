@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'global_cubit.dart';
 
 abstract class GlobalState extends Equatable {
@@ -9,6 +10,11 @@ abstract class GlobalState extends Equatable {
 
 class GlobalInitial extends GlobalState {}
 
-class GlobalStateSuccess extends GlobalState {}
+class GlobalStateSuccess extends GlobalState {
+  final GlobalAppData appData;
+  GlobalStateSuccess({
+    required this.appData,
+  });
+}
 
 class GlobalStateFailure extends GlobalState {}

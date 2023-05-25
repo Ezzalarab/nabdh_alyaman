@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:nabdh_alyaman/data/data_sources/local/local_data.dart';
+import 'package:nabdh_alyaman/domain/entities/global_app_data.dart';
 
 import 'data/repositories/global_repo_impl.dart';
 import 'domain/repositories/global_repo.dart';
@@ -76,8 +78,13 @@ Future<void> initApp() async {
   // global data  user case
   gi.registerLazySingleton(() => GetGlobalDataUC(globalRepo: gi()));
 
+  // // global data local
+  // gi.registerLazySingleton(() => LocalData.getInitialAppData());
+
   // global data  cubit
-  gi.registerLazySingleton(() => GlobalCubit(getGlobalDataUC: gi()));
+  gi.registerLazySingleton(() => GlobalCubit(getGlobalDataUC: gi()
+      // , appData: gi()
+      ));
 
   // global data repo
   gi.registerLazySingleton<GlobalRepo>(() => GlobalRepoImpl(networkInfo: gi()));

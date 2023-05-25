@@ -10,6 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 
 import '../../di.dart' as di;
 import '../../core/app_constants.dart';
@@ -217,15 +218,23 @@ class _HomePageState extends State<HomePage> {
                           horizontal: AppPadding.p30,
                           vertical: AppPadding.p10,
                         ),
-                        child: Text(
-                          'فوائد التبرع بالدم',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayLarge!
-                              .copyWith(
-                                  height: 1.5,
-                                  fontSize: 20,
-                                  color: ColorManager.primary),
+                        child: BlocBuilder<GlobalCubit, GlobalState>(
+                          builder: (context, state) {
+                            String infoTitle = 'فوائد التبرع بالدم';
+                            if (state is GlobalStateSuccess) {
+                              infoTitle = state.appData.infoTitile;
+                            }
+                            return Text(
+                              infoTitle,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayLarge!
+                                  .copyWith(
+                                      height: 1.5,
+                                      fontSize: 20,
+                                      color: ColorManager.primary),
+                            );
+                          },
                         ),
                       ),
                       Padding(

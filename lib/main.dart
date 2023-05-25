@@ -9,6 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 
 import 'core/methode/shared_method.dart';
 import 'di.dart' as di;
@@ -161,6 +162,7 @@ void main() async {
   // });
   runApp(MultiBlocProvider(
     providers: [
+      BlocProvider(create: (BuildContext context) => di.gi<GlobalCubit>()),
       BlocProvider(create: (BuildContext context) => di.gi<SignUpCubit>()),
       BlocProvider(create: (BuildContext context) => di.gi<SignInCubit>()),
       BlocProvider(create: (BuildContext context) => di.gi<SearchCubit>()),
