@@ -1,27 +1,31 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
-import '../../../domain/entities/notfication_data.dart';
-import '../../../domain/usecases/send_notfication_.dart';
+import '../../../domain/usecases/get_global_data_uc.dart';
 
 part 'global_state.dart';
 
 class GlobalCubit extends Cubit<GlobalState> {
   GlobalCubit({
-    required this.sendNotficationUseCase,
+    required this.getGlobalDataUC,
   }) : super(GlobalInitial());
-  final SendNotficationUseCase sendNotficationUseCase;
+  final GetGlobalDataUC getGlobalDataUC;
 
-  Future<void> sendNotfication(
-      {required SendNotificationData sendNotficationData}) async {
+  Future<void> getGlobalData() async {
     try {
-      sendNotficationUseCase
-          .call(sendNotficationData: sendNotficationData)
-          .then((sendNotficationOrFailure) {
-        sendNotficationOrFailure.fold((failure) => emit(GlobalStateFailure()),
-            (right) => emit(GlobalStateSuccess()));
+      getGlobalDataUC.call().then((sendNotficationOrFailure) {
+        sendNotficationOrFailure.fold((failure) {
+          emit(GlobalStateFailure());
+        }, (right) {
+          emit(GlobalStateSuccess());
+        });
       });
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 }

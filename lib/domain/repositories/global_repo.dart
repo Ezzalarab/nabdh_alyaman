@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
 
+import '../../domain/entities/global_app_data.dart';
 import '../../../core/error/failures.dart';
-import '../../../domain/entities/notfication_data.dart';
 
-abstract class SendNotficationRepository {
-  Future<Either<Failure, Unit>> senNotficationToGroup(
-      {required SendNotificationData sendNotificationData});
+abstract class GlobalRepo {
+  Future<Either<Failure, GlobalAppData>> getGlobalData();
 }

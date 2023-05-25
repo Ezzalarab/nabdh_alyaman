@@ -1,19 +1,14 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dartz/dartz.dart';
 
+import '../../domain/entities/global_app_data.dart';
+import '../../domain/repositories/global_repo.dart';
 import '../../core/error/failures.dart';
-import '../../domain/entities/notfication_data.dart';
-import '../../domain/repositories/notfication_repository.dart';
 
 class GetGlobalDataUC {
-  final SendNotficationRepository sendNotificationRepository;
-  GetGlobalDataUC({
-    required this.sendNotificationRepository,
-  });
+  final GlobalRepo globalRepo;
+  GetGlobalDataUC({required this.globalRepo});
 
-  Future<Either<Failure, Unit>> call(
-      {required SendNotificationData sendNotficationData}) async {
-    return sendNotificationRepository.senNotficationToGroup(
-        sendNotificationData: sendNotficationData);
+  Future<Either<Failure, GlobalAppData>> call() async {
+    return globalRepo.getGlobalData();
   }
 }
