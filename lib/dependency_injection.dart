@@ -2,19 +2,19 @@ import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import 'core/network/network_info.dart';
-import 'data/repositories/auth_repository_impl.dart';
+import 'data/repositories/auth_repo_impl.dart';
 import 'data/repositories/profile_repository_impl.dart';
-import 'data/repositories/search_repository_impl.dart';
+import 'data/repositories/search_repo_impl.dart';
 import 'data/repositories/send_notfication_impl.dart';
-import 'domain/repositories/auth_repository.dart';
+import 'domain/repositories/auth_repo.dart';
 import 'domain/repositories/notfication_repository.dart';
 import 'domain/repositories/profile_repository.dart';
-import 'domain/repositories/search_repository.dart';
+import 'domain/repositories/search_repo.dart';
 import 'domain/usecases/profile_use_case.dart';
 import 'domain/usecases/reset_password_use_case.dart';
-import 'domain/usecases/search_centers_usecase.dart';
-import 'domain/usecases/search_donors_usecase.dart';
-import 'domain/usecases/search_state_donors_usecase.dart';
+import 'domain/usecases/search_centers_uc.dart';
+import 'domain/usecases/search_donors_uc.dart';
+import 'domain/usecases/search_state_donors_uc.dart';
 import 'domain/usecases/send_notfication_.dart';
 import 'domain/usecases/sign_in_usecase.dart';
 import 'domain/usecases/sign_up_center_usecase.dart';
@@ -30,17 +30,15 @@ final sl = GetIt.instance;
 
 Future<void> initApp() async {
   // Auth Repositories
-  sl.registerLazySingleton<AuthRepository>(
+  sl.registerLazySingleton<AuthRepo>(
       () => AuthRepositoryImpl(networkInfo: sl()));
 
   // Search Repositories
-  sl.registerLazySingleton<SearchRepository>(
-      () => SearchRepositoryImpl(networkInfo: sl()));
+  sl.registerLazySingleton<SearchRepo>(() => SearchRepoImpl(networkInfo: sl()));
   // Search UseCases
-  sl.registerLazySingleton(() => SearchDonorsUseCase(searchRepository: sl()));
-  sl.registerLazySingleton(
-      () => SearchStateDonorsUseCase(searchRepository: sl()));
-  sl.registerLazySingleton(() => SearchCentersUseCase(searchRepository: sl()));
+  sl.registerLazySingleton(() => SearchDonorsUC(searchRepository: sl()));
+  sl.registerLazySingleton(() => SearchStateDonorsUC(searchRepository: sl()));
+  sl.registerLazySingleton(() => SearchCentersUC(searchRepository: sl()));
   // Search Cubit
   sl.registerLazySingleton(() => SearchCubit(
         searchCentersUseCase: sl(),

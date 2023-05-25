@@ -3,10 +3,10 @@ import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
 import '../../domain/entities/blood_center.dart';
-import '../../domain/repositories/auth_repository.dart';
+import '../repositories/auth_repo.dart';
 
 class SignUpCenterUseCase {
-  final AuthRepository authRepository;
+  final AuthRepo authRepository;
   SignUpCenterUseCase({
     required this.authRepository,
   });

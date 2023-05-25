@@ -3,10 +3,10 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../core/error/failures.dart';
-import '../../domain/repositories/auth_repository.dart';
+import '../repositories/auth_repo.dart';
 
 class SignInUseCase {
-  final AuthRepository authRepository;
+  final AuthRepo authRepository;
   SignInUseCase({
     required this.authRepository,
   });

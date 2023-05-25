@@ -6,12 +6,12 @@ import '../../../domain/entities/blood_center.dart';
 import '../../core/error/failures.dart';
 import '../../core/network/network_info.dart';
 import '../../domain/entities/donor.dart';
-import '../../domain/repositories/search_repository.dart';
+import '../../domain/repositories/search_repo.dart';
 
-class SearchRepositoryImpl implements SearchRepository {
+class SearchRepoImpl implements SearchRepo {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final NetworkInfo networkInfo;
-  SearchRepositoryImpl({
+  SearchRepoImpl({
     required this.networkInfo,
   });
 

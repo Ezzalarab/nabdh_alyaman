@@ -10,10 +10,10 @@ import '../../core/error/failures.dart';
 import '../../core/network/network_info.dart';
 import '../../domain/entities/blood_center.dart';
 import '../../domain/entities/donor.dart';
-import '../../domain/repositories/auth_repository.dart';
+import '../../domain/repositories/auth_repo.dart';
 // import '../../core/encryption.dart';
 
-class AuthRepositoryImpl implements AuthRepository {
+class AuthRepositoryImpl implements AuthRepo {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final NetworkInfo networkInfo;

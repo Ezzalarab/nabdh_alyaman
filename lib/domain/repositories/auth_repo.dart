@@ -5,7 +5,7 @@ import '../../core/error/failures.dart';
 import '../entities/blood_center.dart';
 import '../entities/donor.dart';
 
-abstract class AuthRepository {
+abstract class AuthRepo {
   Future<Either<Failure, UserCredential>> signInWithEmail({
     required String email,
     required String password,

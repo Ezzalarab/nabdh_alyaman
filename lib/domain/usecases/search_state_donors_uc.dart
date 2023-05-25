@@ -3,11 +3,11 @@ import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
 import '../../domain/entities/donor.dart';
-import '../../domain/repositories/search_repository.dart';
+import '../repositories/search_repo.dart';
 
-class SearchStateDonorsUseCase {
-  final SearchRepository searchRepository;
-  SearchStateDonorsUseCase({
+class SearchStateDonorsUC {
+  final SearchRepo searchRepository;
+  SearchStateDonorsUC({
     required this.searchRepository,
   });
   Future<Either<Failure, List<Donor>>> call({

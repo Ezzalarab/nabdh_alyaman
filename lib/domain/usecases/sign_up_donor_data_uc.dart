@@ -3,10 +3,10 @@ import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
 import '../../domain/entities/donor.dart';
-import '../../domain/repositories/auth_repository.dart';
+import '../repositories/auth_repo.dart';
 
 class SignUpDonorDataUseCase {
-  final AuthRepository authRepository;
+  final AuthRepo authRepository;
   SignUpDonorDataUseCase({
     required this.authRepository,
   });

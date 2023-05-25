@@ -2,19 +2,19 @@
 import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
-import '../../domain/entities/blood_center.dart';
-import '../../domain/repositories/search_repository.dart';
+import '../../domain/entities/donor.dart';
+import '../repositories/search_repo.dart';
 
-class SearchCentersUseCase {
-  final SearchRepository searchRepository;
-  SearchCentersUseCase({
+class SearchDonorsUC {
+  final SearchRepo searchRepository;
+  SearchDonorsUC({
     required this.searchRepository,
   });
-  Future<Either<Failure, List<BloodCenter>>> call({
+  Future<Either<Failure, List<Donor>>> call({
     required String state,
     required String district,
   }) async {
-    return await searchRepository.searchCenters(
+    return await searchRepository.searchDonors(
       state: state,
       district: district,
     );
