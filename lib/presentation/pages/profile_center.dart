@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/utils.dart';
-import '../../dependency_injection.dart' as di;
+import '../../di.dart' as di;
 import '../../domain/entities/blood_center.dart';
 import '../../presentation/cubit/profile_cubit/profile_cubit.dart';
 import '../../presentation/pages/home_page.dart';

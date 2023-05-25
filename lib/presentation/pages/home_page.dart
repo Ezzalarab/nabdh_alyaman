@@ -11,7 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../dependency_injection.dart' as di;
+import '../../di.dart' as di;
 import '../../core/app_constants.dart';
 import '../../core/methode/shared_method.dart';
 import '../../core/update.dart';

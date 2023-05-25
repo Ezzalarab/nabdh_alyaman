@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../dependency_injection.dart' as di;
+import '../../../di.dart' as di;
 import '../../cubit/signup_cubit/signup_cubit.dart';
 import '../../pages/search_page.dart';
 import '../../pages/sign_up_page.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../../dependency_injection.dart' as di;
+import '../../../../di.dart' as di;
 import '../../../cubit/signup_cubit/signup_cubit.dart';
 import '../../../pages/about_page.dart';
 import '../../../pages/sign_in_page.dart';

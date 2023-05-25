@@ -11,7 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'core/methode/shared_method.dart';
-import 'dependency_injection.dart' as di;
+import 'di.dart' as di;
 import 'domain/entities/donor.dart';
 import 'presentation/cubit/maps_cubit/maps_cubit.dart';
 import 'presentation/cubit/profile_cubit/profile_cubit.dart';
@@ -161,12 +161,12 @@ void main() async {
   // });
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider(create: (BuildContext context) => di.sl<SignUpCubit>()),
-      BlocProvider(create: (BuildContext context) => di.sl<SignInCubit>()),
-      BlocProvider(create: (BuildContext context) => di.sl<SearchCubit>()),
-      BlocProvider(create: (BuildContext context) => di.sl<ProfileCubit>()),
+      BlocProvider(create: (BuildContext context) => di.gi<SignUpCubit>()),
+      BlocProvider(create: (BuildContext context) => di.gi<SignInCubit>()),
+      BlocProvider(create: (BuildContext context) => di.gi<SearchCubit>()),
+      BlocProvider(create: (BuildContext context) => di.gi<ProfileCubit>()),
       BlocProvider(
-          create: (BuildContext context) => di.sl<SendNotficationCubit>()),
+          create: (BuildContext context) => di.gi<SendNotficationCubit>()),
       BlocProvider(create: (BuildContext context) => MapsCubit()),
     ],
     child: const MyApp(),

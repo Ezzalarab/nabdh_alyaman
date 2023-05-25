@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-import '../../../../dependency_injection.dart' as di;
+import '../../di.dart' as di;
 import '../../core/extensions/extension.dart';
 import '../../core/utils.dart';
 import '../../data/models/dialod_reset_password.dart';
