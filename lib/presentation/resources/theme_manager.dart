@@ -56,7 +56,6 @@ ThemeData getApplicationTheme() {
     ),
 
     // elevated button theme
-
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
           textStyle: getRegularStyle(
@@ -69,15 +68,15 @@ ThemeData getApplicationTheme() {
     textTheme: TextTheme(
       displayLarge: getSemiBoldStyle(
         color: ColorManager.darkGrey,
-        fontSize: FontSize.s30,
+        fontSize: FontSize.s26,
       ),
       displaySmall: getRegularStyle(
         color: ColorManager.black,
         fontSize: FontSize.s22,
       ),
-      headlineLarge: getSemiBoldStyle(
-        color: ColorManager.darkGrey,
-        fontSize: FontSize.s16,
+      headlineLarge: getBoldStyle(
+        color: ColorManager.primary,
+        fontSize: FontSize.s20,
       ),
       titleLarge: getSemiBoldStyle(
         color: ColorManager.white,

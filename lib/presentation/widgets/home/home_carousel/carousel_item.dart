@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 
 import '../../../../presentation/resources/color_manageer.dart';
 
@@ -20,17 +22,23 @@ class CarouselItem extends StatelessWidget {
           BoxShadow(
               color: ColorManager.grey2.withOpacity(0.3),
               blurRadius: 10.0,
-              offset: Offset(2, 2)),
+              offset: const Offset(2, 2)),
         ],
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-        child: Container(
-          child: Stack(
-            children: <Widget>[
-              Image.asset(item, fit: BoxFit.fill, width: 900.0),
-            ],
-          ),
+        child: Stack(
+          children: <Widget>[
+            BlocBuilder<GlobalCubit, GlobalState>(
+              builder: (context, state) {
+                if (state is GlobalStateSuccess) {
+                  return Image.network(item, fit: BoxFit.fill, width: 900.0);
+                } else {
+                  return Image.asset(item, fit: BoxFit.fill, width: 900.0);
+                }
+              },
+            ),
+          ],
         ),
       ),
     );

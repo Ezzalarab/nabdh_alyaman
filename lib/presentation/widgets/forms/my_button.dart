@@ -13,8 +13,8 @@ class MyButton extends StatelessWidget {
     this.isPrefexIcon = false,
     this.color = ColorManager.secondary,
     this.contentPadding = const EdgeInsets.all(0.0),
-    this.height = 40,
-    this.raduis = 10,
+    this.height = 50,
+    this.radius = 10,
     this.minWidth = 200,
     this.titleStyle = const TextStyle(
       fontSize: FontSize.s14,
@@ -23,7 +23,7 @@ class MyButton extends StatelessWidget {
     ),
   });
   final Color color;
-  final double height, raduis, minWidth;
+  final double height, radius, minWidth;
   final String title;
   final VoidCallback onPressed;
   final TextStyle? titleStyle;
@@ -35,48 +35,47 @@ class MyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Material(
-        elevation: AppSize.s4,
+      child: MaterialButton(
+        elevation: AppSize.s2,
         color: color,
-        borderRadius: BorderRadius.circular(15),
-        child: MaterialButton(
-          onPressed: onPressed,
-          minWidth: minWidth,
-          height: height,
-          child: Padding(
-            padding: contentPadding,
-            child: icon == null
-                ? Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    style: titleStyle,
-                  )
-                : Flex(
-                    direction: Axis.horizontal,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      isPrefexIcon
-                          ? FittedBox(
-                              fit: BoxFit.contain,
-                              child: icon!,
-                            )
-                          : const SizedBox(),
-                      Flexible(
-                        child: Text(
-                          title,
-                          textAlign: TextAlign.center,
-                          style: titleStyle,
-                        ),
+        onPressed: onPressed,
+        minWidth: minWidth,
+        height: height,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(radius))),
+        child: Padding(
+          padding: contentPadding,
+          child: icon == null
+              ? Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: titleStyle,
+                )
+              : Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    isPrefexIcon
+                        ? FittedBox(
+                            fit: BoxFit.contain,
+                            child: icon!,
+                          )
+                        : const SizedBox(),
+                    Flexible(
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style: titleStyle,
                       ),
-                      isPrefexIcon
-                          ? const SizedBox()
-                          : FittedBox(
-                              fit: BoxFit.contain,
-                              child: icon!,
-                            ),
-                    ],
-                  ),
-          ),
+                    ),
+                    isPrefexIcon
+                        ? const SizedBox()
+                        : FittedBox(
+                            fit: BoxFit.contain,
+                            child: icon!,
+                          ),
+                  ],
+                ),
         ),
       ),
     );

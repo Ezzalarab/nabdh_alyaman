@@ -10,7 +10,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 
 import '../../di.dart' as di;
 import '../../core/app_constants.dart';
@@ -20,7 +19,7 @@ import '../../core/utils.dart';
 import '../../data/data_sources/local/local_data.dart';
 import '../../domain/entities/donor.dart';
 import '../../main.dart';
-import '../cubit/send_notfication/send_notfication_cubit.dart';
+import '../cubit/global_cubit/global_cubit.dart';
 import '../pages/update_loc&show_notfication.dart';
 import '../resources/color_manageer.dart';
 import '../resources/values_manager.dart';
@@ -47,7 +46,6 @@ class _HomePageState extends State<HomePage> {
       FlutterLocalNotificationsPlugin();
   final db = FirebaseFirestore.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   late Position position;
   int _counter = 0;
 
@@ -61,7 +59,6 @@ class _HomePageState extends State<HomePage> {
     checkUpdate();
     super.initState();
 
-    //-------------------------------------------------------
     initialMessageing();
     // pushnot();
 
@@ -85,7 +82,6 @@ class _HomePageState extends State<HomePage> {
       }
 
       RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
       flutterLocalNotificationsPlugin.show(
         notification.hashCode,
         notification!.title,
@@ -94,7 +90,7 @@ class _HomePageState extends State<HomePage> {
           android: AndroidNotificationDetails(
             channel.id,
             channel.name,
-            color: Color.fromARGB(255, 214, 139, 11),
+            color: const Color.fromARGB(255, 214, 139, 11),
             playSound: true,
             icon: '@mipmap/ic_launcher',
           ),
@@ -128,7 +124,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  //--------------------------------------
   //----------- updating ------- check version
   void checkUpdate() async {
     Updating updateChecker = Updating();
@@ -190,60 +185,52 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             backgroundColor: ColorManager.white,
-            body: BlocConsumer<SendNotficationCubit, SendNotficationState>(
-              listener: (context, state) {
-                if (state is SendNotficationStateSuccess) {
-                  print("Send Notification Success");
-                }
-                if (state is SendNotficationStateFailure) {
-                  print("Failure -----------------------");
-                }
-              },
-              builder: (context, state) {
-                if (state is SendNotficationStateSuccess) {
-                  print("Send Notification Success");
-                }
-                if (state is SendNotficationStateFailure) {
-                  print("Failure ----------------------00");
-                }
-                return SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const HomeWelcome(),
-                      const HomeCarousel(),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppPadding.p30,
-                          vertical: AppPadding.p10,
-                        ),
-                        child: BlocBuilder<GlobalCubit, GlobalState>(
-                          builder: (context, state) {
-                            String infoTitle = 'فوائد التبرع بالدم';
-                            if (state is GlobalStateSuccess) {
-                              infoTitle = state.appData.infoTitile;
-                            }
-                            return Text(
-                              infoTitle,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displayLarge!
-                                  .copyWith(
-                                      height: 1.5,
-                                      fontSize: 20,
-                                      color: ColorManager.primary),
-                            );
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 5),
-                        child: ListView.builder(
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const HomeWelcome(),
+                  const HomeCarousel(),
+                  const SizedBox(height: AppSize.s10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppPadding.p30,
+                      vertical: AppPadding.p20,
+                    ),
+                    child: BlocBuilder<GlobalCubit, GlobalState>(
+                      builder: (context, state) {
+                        String infoTitle = 'فوائد التبرع بالدم';
+                        if (state is GlobalStateSuccess) {
+                          infoTitle = state.appData.infoTitile;
+                        }
+                        return Text(
+                          infoTitle,
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayLarge!
+                              .copyWith(
+                                  height: 1.5,
+                                  fontSize: 20,
+                                  color: ColorManager.primary),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                    child: BlocBuilder<GlobalCubit, GlobalState>(
+                      builder: (context, state) {
+                        List<String> homeInfoList =
+                            LocalData.initialAppData.infoList;
+                        if (state is GlobalStateSuccess) {
+                          homeInfoList = state.appData.infoList;
+                        }
+                        return ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: LocalData.bloodDonationBenefits.length,
+                          itemCount: homeInfoList.length,
                           itemBuilder: (context, index) => Padding(
                             padding: const EdgeInsets.symmetric(
                               vertical: 5,
@@ -251,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                "-  ${LocalData.bloodDonationBenefits[index]}",
+                                "-  ${homeInfoList[index]}",
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
@@ -259,17 +246,19 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      const HomeAbout(),
-                      const SizedBox(height: AppSize.s20),
-                    ],
+                        );
+                      },
+                    ),
                   ),
-                );
-              },
+                  const HomeAbout(),
+                  const SizedBox(height: AppSize.s20),
+                ],
+              ),
             ),
             drawer: const HomeDrower(),
             floatingActionButton: FloatingActionButton(
+              backgroundColor: ColorManager.primary,
+              child: const Icon(Icons.search_rounded),
               onPressed: () async {
                 _firebaseAuth.signOut();
               },

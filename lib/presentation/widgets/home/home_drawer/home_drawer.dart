@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:nabdh_alyaman/data/data_sources/local/local_data.dart';
+import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../presentation/pages/setting_page.dart';
@@ -24,9 +27,10 @@ class _HomeDrowerState extends State<HomeDrower> {
     super.initState();
   }
 
+  String reportProblemLink =
+      'whatsapp://send?phone=+967714296685&text=إبلاغ عن مشكلة في تطبيق ${LocalData.initialAppData.appName}\n___________\n';
   @override
   Widget build(BuildContext context) {
-    print(userType);
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -37,17 +41,20 @@ class _HomeDrowerState extends State<HomeDrower> {
                 : userType == "2"
                     ? const HomeDrawerCenterBody()
                     : const HomeDrawerBody(),
-            HomeDrawerMenuItem(
-              title: "الإبلاغ عن مشكلة في التطبيق",
-              icon: Icons.warning_amber_rounded,
-              onTap: () {
-                // TODO get developer phone number from database
-                String devPhone = "+967714296685";
-                String messageHeader =
-                    "إبلاغ عن مشكلة في تطبيق نبض اليمن:\n_____________\n";
-                final url = Uri.parse(
-                    'whatsapp://send?phone=$devPhone&text=$messageHeader');
-                launchUrl(url);
+            BlocBuilder<GlobalCubit, GlobalState>(
+              builder: (context, state) {
+                if (state is GlobalStateSuccess) {
+                  reportProblemLink = state.appData.reportLink;
+                  reportProblemLink = reportProblemLink.replaceAll("\\n", "\n");
+                }
+                return HomeDrawerMenuItem(
+                  title: "الإبلاغ عن مشكلة في التطبيق",
+                  icon: Icons.warning_amber_rounded,
+                  onTap: () {
+                    final url = Uri.parse(reportProblemLink);
+                    launchUrl(url);
+                  },
+                );
               },
             ),
           ],

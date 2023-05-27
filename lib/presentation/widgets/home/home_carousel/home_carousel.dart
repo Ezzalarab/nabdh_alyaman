@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 
 import '../../../resources/assets_manager.dart';
 import 'carousel_item.dart';
@@ -16,7 +18,7 @@ class HomeCarousel extends StatefulWidget {
 class _HomeCarouselState extends State<HomeCarousel> {
   final CarouselController _controller = CarouselController();
 
-  final List<String> imgList = [
+  List<String> imgList = [
     ImageAssets.bloodHeart,
     ImageAssets.bloodDonationBagHeart,
     ImageAssets.handsDonate,
@@ -24,37 +26,43 @@ class _HomeCarouselState extends State<HomeCarousel> {
 
   int _current = 0;
 
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> imageSliders = imgList
+  List<Widget> getImageSliders(List<String> imgList) {
+    return imgList
         .map((item) => CarouselItem(
               item: item,
             ))
         .toList();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Stack(
           children: [
-            CarouselSlider(
-              items: imageSliders,
-              options: CarouselOptions(
-                // padEnds: false,
-                // disableCenter: true,
-                // padEnds: true,
-                viewportFraction: 0.9,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 10),
-                enlargeCenterPage: true,
-                height: 200,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _current = index;
-                  });
-                },
-              ),
-              carouselController: _controller,
+            BlocBuilder<GlobalCubit, GlobalState>(
+              builder: (context, state) {
+                if (state is GlobalStateSuccess) {
+                  imgList = state.appData.homeSlides;
+                }
+                return CarouselSlider(
+                  items: getImageSliders(imgList),
+                  options: CarouselOptions(
+                    viewportFraction: 0.9,
+                    autoPlay: true,
+                    autoPlayInterval: const Duration(seconds: 10),
+                    enlargeCenterPage: true,
+                    height: 200,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _current = index;
+                      });
+                    },
+                  ),
+                  carouselController: _controller,
+                );
+              },
             ),
           ],
         ),
@@ -70,14 +78,9 @@ class _HomeCarouselState extends State<HomeCarousel> {
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color:
-                        // (Theme.of(context).brightness ==
-                        //             Brightness.dark
-                        //         ? Colors.white
-                        //         : Colors.black)
-                        Theme.of(context)
-                            .primaryColor
-                            .withOpacity(_current == entry.key ? 0.8 : 0.3)),
+                    color: Theme.of(context)
+                        .primaryColor
+                        .withOpacity(_current == entry.key ? 0.8 : 0.3)),
               ),
             );
           }).toList(),
