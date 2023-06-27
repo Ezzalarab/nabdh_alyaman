@@ -12,7 +12,7 @@ class GlobalInitial extends GlobalState {}
 
 class GlobalStateSuccess extends GlobalState {
   final GlobalAppData appData;
-  GlobalStateSuccess({
+  const GlobalStateSuccess({
     required this.appData,
   });
 }

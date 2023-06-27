@@ -20,6 +20,7 @@ class CompareHiveAndFireStore {
             .then((value) async {
           donor = Donor.fromMap(value.data()!);
 
+          // ignore: unnecessary_null_comparison
           if (Hive.box(dataBoxName) != null) {
             if (Hive.box(dataBoxName).get(DonorFields.name) != donor.name &&
                 Hive.box(dataBoxName).get(DonorFields.bloodType) !=

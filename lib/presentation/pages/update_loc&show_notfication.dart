@@ -11,6 +11,7 @@ import '../../domain/entities/donor.dart';
 import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/values_manager.dart';
 
+// ignore: must_be_immutable
 class UpdateLocNotFicationPage extends StatefulWidget {
   UpdateLocNotFicationPage(
       {required this.remoteMessage, required this.dateTime, super.key});

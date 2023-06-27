@@ -6,6 +6,7 @@ abstract class SearchState {}
 
 class SearchInitial extends SearchState {}
 
+// ignore: must_be_immutable
 class SearchSuccess extends SearchState {
   final List<Donor> donors;
   final List<BloodCenter> centers;

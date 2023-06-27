@@ -67,7 +67,7 @@ class HomeDrawerCenterBody extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => EditMainCenterDataPage()));
+                        builder: (_) => const EditMainCenterDataPage()));
               } else {
                 print("object");
                 Utils.showSnackBar(

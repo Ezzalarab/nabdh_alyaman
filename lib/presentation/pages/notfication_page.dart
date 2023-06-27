@@ -12,6 +12,7 @@ import '../../domain/entities/get_notfication.dart';
 import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/values_manager.dart';
 
+// ignore: must_be_immutable
 class NotFicationPage extends StatefulWidget {
   NotFicationPage({this.remoteMessage, this.dateTime, super.key});
   RemoteNotification? remoteMessage;
@@ -24,8 +25,8 @@ class NotFicationPage extends StatefulWidget {
 
 class _NotFicationPageState extends State<NotFicationPage> {
   late Position position;
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   getLocation() async {
     await SharedMethod().checkGps();
@@ -143,21 +144,21 @@ class _NotFicationPageState extends State<NotFicationPage> {
                                   top: 20,
                                   left: 70,
                                   child: Text(
-                                      "${notfication[index].date.substring(0, 10)}")),
+                                      notfication[index].date.substring(0, 10))),
                               Positioned(
                                   bottom: 80,
                                   right: 130,
                                   child: Text(
-                                    "${notfication[index].title}",
-                                    style: TextStyle(
+                                    notfication[index].title,
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   )),
                               Positioned(
                                   bottom: 50,
                                   right: 130,
-                                  child: Text("${notfication[index].body}")),
-                              Positioned(
+                                  child: Text(notfication[index].body)),
+                              const Positioned(
                                   top: 20, right: 60, child: Text("تاريخ ")),
                               Positioned(
                                   top: 5,
@@ -170,7 +171,7 @@ class _NotFicationPageState extends State<NotFicationPage> {
                                               .toString())
                                           .update({'isRead': "0"});
                                     },
-                                    icon: Icon(Icons.close),
+                                    icon: const Icon(Icons.close),
                                   )),
                             ],
                           ),

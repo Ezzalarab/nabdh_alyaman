@@ -80,7 +80,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
         },
         builder: (context, state) {
           if (state is ProfileLoadingBeforFetch) {
-            return MyLottie(
+            return const MyLottie(
               lottie: AppStrings.lottieOnHomePage,
             );
           }
@@ -148,7 +148,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
               ),
             );
           } else {
-            return Center(
+            return const Center(
               child: MyLottie(
                 lottie: AppStrings.lottieOnHomePage,
               ),
@@ -162,6 +162,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
 
 ProfileCenterData? profileCenterData;
 
+// ignore: must_be_immutable
 class PrfileCenterBloodTypeCard extends StatefulWidget {
   PrfileCenterBloodTypeCard({Key? key, required this.bloodType})
       : super(key: key);
@@ -174,8 +175,7 @@ class PrfileCenterBloodTypeCard extends StatefulWidget {
 }
 
 class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
-  TextEditingController _controller = TextEditingController();
-  Timer? _timer;
+  final TextEditingController _controller = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -190,7 +190,7 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
   bool ontap = false;
 
   subtract() async {
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     setState(() {
       int repoSetory = ProfileCenterData.getProfileCenterDataBlodTyeb(
           widget.bloodType, profileCenterData!);
@@ -209,7 +209,7 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
   }
 
   addcounter() async {
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     setState(() {
       int repoSetory = ProfileCenterData.getProfileCenterDataBlodTyeb(
@@ -246,8 +246,8 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
                   padding: const EdgeInsets.only(
                       top: AppSize.s16, right: AppSize.s10),
                   child: Text(
-                    "${widget.bloodType}",
-                    style: TextStyle(
+                    widget.bloodType,
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: AppSize.s24,
                         color: ColorManager.primary),
@@ -342,7 +342,7 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
                     readOnly: true,
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                     onChanged: (value) {
                       int intValue = int.tryParse(value) ?? 0;
                       print("widget.bloodType");

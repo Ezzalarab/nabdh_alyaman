@@ -16,12 +16,12 @@ PageViewModel myPageViewModel(PageViewModelData pageViewModelData) {
           Center(
             child: MyLottie(lottie: pageViewModelData.lottei),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text(
             pageViewModelData.title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           const SizedBox(
             height: 10,
@@ -32,7 +32,7 @@ PageViewModel myPageViewModel(PageViewModelData pageViewModelData) {
               pageViewModelData.description,
               textAlign: TextAlign.center,
               style:
-                  TextStyle(fontFamily: FontConstants.fontFamily, fontSize: 22),
+                  const TextStyle(fontFamily: FontConstants.fontFamily, fontSize: 22),
             ),
           )
         ],

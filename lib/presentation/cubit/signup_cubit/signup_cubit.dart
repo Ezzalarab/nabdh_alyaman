@@ -97,42 +97,43 @@ class SignUpCubit extends Cubit<SignUpState> {
     required String phone,
     required Function onVerificationSent,
   }) async {
-    print("start phone verification ==-==-==-=-=-=");
     emit(SignUpLoading());
-    // Checking if phone number is registered in other account
-    String phonePreviousUserName = await checkIsPhoneRegistered(phone);
-    if (phonePreviousUserName != "") {
-      emit(SignUpFailure(
-          error:
-              'الرقم مستخدم باسم: $phonePreviousUserName، قم بتسجيل الدخول.'));
-      return;
-    }
-    // Signing with phone
-    await _fireAuth
-        .verifyPhoneNumber(
-      phoneNumber: "+967$phone",
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await _fireAuth.signInWithCredential(credential);
-        print("_phone");
-        print(phone);
-      },
-      verificationFailed: (FirebaseException e) {
-        print("verificationFailed");
+    try {
+      // Checking if phone number is registered in other account
+      String phonePreviousUserName = await checkIsPhoneRegistered(phone);
+      if (phonePreviousUserName != "") {
+        emit(SignUpFailure(
+            error:
+                'الرقم مستخدم باسم: $phonePreviousUserName، قم بتسجيل الدخول.'));
+        return;
+      }
+      // Signing with phone
+      await _fireAuth
+          .verifyPhoneNumber(
+        phoneNumber: "+967$phone",
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await _fireAuth.signInWithCredential(credential);
+        },
+        verificationFailed: (FirebaseException e) {
+          print("verificationFailed");
+          print(e);
+        },
+        codeSent: (String verificationId, int? resendToken) async {
+          emit(SignUpInitial(canSignUpWithPhone: canSignUpWithPhone));
+          _verificationId = verificationId;
+          onVerificationSent();
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      )
+          .catchError((e) {
+        print("firebase error -------------");
         print(e);
-      },
-      codeSent: (String verificationId, int? resendToken) async {
-        emit(SignUpInitial(canSignUpWithPhone: canSignUpWithPhone));
-        print("verificationId");
-        print(verificationId);
-        _verificationId = verificationId;
-        onVerificationSent();
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    )
-        .catchError((e) {
-      print("firebase error -------------");
+      });
+    } catch (e, s) {
       print(e);
-    });
+      print(s);
+      emit(SignUpFailure(error: e.toString()));
+    }
   }
 
   Future<String> checkIsPhoneRegistered(String phone) async {
@@ -140,11 +141,16 @@ class SignUpCubit extends Cubit<SignUpState> {
         .collection(DonorFields.collectionName)
         .where('phone', isEqualTo: phone)
         .get()
-        .then((value) {
+        .then((value) async {
       if (value.docs.isEmpty) {
         return "";
       } else {
-        return value.docs.first.get('name');
+        if (value.docs.first.data()['neighborhood'] == null ||
+            value.docs.first.data()['neighborhood'] == "") {
+          return "";
+        } else {
+          return value.docs.first.get('name')?.toString() ?? "";
+        }
       }
     });
   }
@@ -215,6 +221,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(SignUpLoading());
     try {
       donor.token = await getToken();
+      await deletePreviousDonor(donor.phone);
       await saveDonorDataUC(
               donor: donor,
               uid: _currentUserCredential.user?.uid.toString() ?? "")
@@ -230,6 +237,18 @@ class SignUpCubit extends Cubit<SignUpState> {
     } catch (e) {
       emit(SignUpDataFailure(error: e.toString()));
     }
+  }
+
+  Future<void> deletePreviousDonor(String phone) async {
+    await _fireStore
+        .collection("donors")
+        .where("phone", isEqualTo: phone)
+        .get()
+        .then((querySnapshot) async {
+      for (var document in querySnapshot.docs) {
+        await document.reference.delete();
+      }
+    });
   }
 
   Future<void> signUpCenter({

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../resources/style.dart';
 
-class DisplayImage extends StatelessWidget {
+// ignore: must_be_immutable
+class DisplayImage extends StatefulWidget {
   dynamic imagePath;
   final VoidCallback onPressed;
 
@@ -13,6 +14,11 @@ class DisplayImage extends StatelessWidget {
     required this.onPressed,
   }) : super(key: key);
 
+  @override
+  State<DisplayImage> createState() => _DisplayImageState();
+}
+
+class _DisplayImageState extends State<DisplayImage> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -31,13 +37,13 @@ class DisplayImage extends StatelessWidget {
     return CircleAvatar(
       radius: 75,
       backgroundColor: color,
-      child: (imagePath is String)
+      child: (widget.imagePath is String)
           ? const CircleAvatar(
               backgroundImage: AssetImage("assets/images/boy.png"),
               radius: 70,
             )
           : CircleAvatar(
-              backgroundImage: FileImage(imagePath),
+              backgroundImage: FileImage(widget.imagePath),
               radius: 70,
             ),
     );

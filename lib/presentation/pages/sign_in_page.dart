@@ -79,7 +79,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Function showVerificationDialog(BuildContext context) {
-    final GlobalKey<FormState> _verificationFormState = GlobalKey<FormState>();
+    final GlobalKey<FormState> verificationFormState = GlobalKey<FormState>();
     return () => AwesomeDialog(
           headerAnimationLoop: false,
           dialogType: DialogType.noHeader,
@@ -87,7 +87,7 @@ class _SignInPageState extends State<SignInPage> {
           body: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Form(
-              key: _verificationFormState,
+              key: verificationFormState,
               child: Column(
                 children: [
                   const Text(
@@ -115,7 +115,7 @@ class _SignInPageState extends State<SignInPage> {
                     title: "تأكيد",
                     onPressed: () {
                       FocusScope.of(context).unfocus();
-                      if (_verificationFormState.currentState!.validate()) {
+                      if (verificationFormState.currentState!.validate()) {
                         BlocProvider.of<SignInCubit>(context, listen: false)
                             .verify(
                           smsCode: smsCode!,
@@ -237,10 +237,10 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Padding _buildHeaderImage() {
-    return Padding(
-      padding: const EdgeInsets.all(AppPadding.p10),
+    return const Padding(
+      padding: EdgeInsets.all(AppPadding.p10),
       child: Stack(
-        children: const [
+        children: [
           SizedBox(
             height: signInImageHight,
             child: CircleAvatar(

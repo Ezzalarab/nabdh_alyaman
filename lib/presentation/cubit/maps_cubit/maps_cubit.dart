@@ -111,6 +111,7 @@ class MapsCubit extends Cubit<MapsState> {
       long = position.longitude.toString();
       lat = position.latitude.toString();
     });
+    print(positionStream);
   }
 
   List<DonorPoint> getDonorPoints({
@@ -185,7 +186,6 @@ class MapsCubit extends Cubit<MapsState> {
     GoogleMapController googleMapController = await _mapcontroller.future;
     location.onLocationChanged.listen(
       (newLoc) {
-        final currentLocation = newLoc;
         googleMapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(

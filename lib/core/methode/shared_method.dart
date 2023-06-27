@@ -81,6 +81,7 @@ class SharedMethod {
       long = position.longitude.toString();
       lat = position.latitude.toString();
     });
+    print(positionStream);
     return done;
   }
 }

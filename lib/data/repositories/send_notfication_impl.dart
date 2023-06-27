@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,7 +10,6 @@ import '../../../domain/entities/notfication_data.dart';
 import '../../../domain/repositories/notfication_repository.dart';
 
 class SendNotficationImpl implements SendNotficationRepository {
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final NetworkInfo networkInfo;
   SendNotficationImpl({
     required this.networkInfo,
@@ -22,7 +20,6 @@ class SendNotficationImpl implements SendNotficationRepository {
       {required SendNotificationData sendNotificationData}) async {
     // TODO: implement senNotficationToGroup
     if (await networkInfo.isConnected) {
-      if (sendNotificationData.listToken != null) {}
       _listToken = [
         "cscSJymiS1m6mEtyK8140J:APA91bEVPefdZNqg5jkLdvpEBYiSKBDDfeOIsnQF-1luu9lEO6_QBOuUbrsOycP4jL3OLvNZdMkZbqELRiPf9XstNPDdrwRtWVLEG28xyDPWna7UDsn_G8rPvzymwmWIANJWky45rFWX",
         "eqeW-N5rRb62f3qsys66jI:APA91bEGHI6wPPEigkgqF3WuSeIQ91CG0LFy-F0MCV61LGknkvSZa9JWyG7Lwg8XGFdLEOzQ12Fsr1oLx7DEsyrJZzLzIaxYYaxGljc3DXLuy5LUWLHzJ2YxZSfTBlXcuCJ31jhxc8jM",
@@ -54,7 +51,7 @@ class SendNotficationImpl implements SendNotficationRepository {
 
         print(response.body.toString());
 
-        return Right(unit);
+        return const Right(unit);
       } catch (e) {
         return Left(UnknownFailure());
       }

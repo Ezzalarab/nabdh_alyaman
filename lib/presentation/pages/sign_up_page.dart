@@ -105,7 +105,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Function buildVerificationDialog(BuildContext context) {
-    final GlobalKey<FormState> _verificationFormState = GlobalKey<FormState>();
+    final GlobalKey<FormState> verificationFormState = GlobalKey<FormState>();
     return () => AwesomeDialog(
           headerAnimationLoop: false,
           dialogType: DialogType.noHeader,
@@ -113,7 +113,7 @@ class _SignUpPageState extends State<SignUpPage> {
           body: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Form(
-              key: _verificationFormState,
+              key: verificationFormState,
               child: Column(
                 children: [
                   const Text(
@@ -141,7 +141,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     title: "تأكيد",
                     onPressed: () {
                       FocusScope.of(context).unfocus();
-                      if (_verificationFormState.currentState!.validate()) {
+                      if (verificationFormState.currentState!.validate()) {
                         BlocProvider.of<SignUpCubit>(context).verify(
                           context: context,
                           smsCode: smsCode!,

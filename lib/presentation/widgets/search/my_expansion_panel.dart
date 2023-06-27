@@ -46,9 +46,7 @@ class MyExpansionPanelList extends StatefulWidget {
     this.expandedHeaderPadding = _kPanelHeaderExpandedDefaultPadding,
     this.dividerColor,
     this.elevation = 2,
-  })  : assert(children != null),
-        assert(animationDuration != null),
-        _allowOnlyOnePanelOpen = false,
+  })  : _allowOnlyOnePanelOpen = false,
         initialOpenPanelValue = null;
 
   /// Creates a radio expansion panel list widget.
@@ -73,9 +71,7 @@ class MyExpansionPanelList extends StatefulWidget {
     this.expandedHeaderPadding = _kPanelHeaderExpandedDefaultPadding,
     this.dividerColor,
     this.elevation = 2,
-  })  : assert(children != null),
-        assert(animationDuration != null),
-        _allowOnlyOnePanelOpen = true;
+  }) : _allowOnlyOnePanelOpen = true;
 
   /// The children of the expansion panel list. They are laid out in a similar
   /// fashion to [ListBody].

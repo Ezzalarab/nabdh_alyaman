@@ -1,7 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:nabdh_alyaman/data/data_sources/local/local_data.dart';
-import 'package:nabdh_alyaman/domain/entities/global_app_data.dart';
 
 import 'data/repositories/global_repo_impl.dart';
 import 'domain/repositories/global_repo.dart';

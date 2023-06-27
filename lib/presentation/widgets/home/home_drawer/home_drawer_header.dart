@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../presentation/resources/font_manager.dart';
@@ -14,7 +13,6 @@ class HomeDrawerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User? currentUser = FirebaseAuth.instance.currentUser;
     return DrawerHeader(
       decoration: const BoxDecoration(
         color: ColorManager.primary,

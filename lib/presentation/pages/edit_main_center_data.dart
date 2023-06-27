@@ -17,7 +17,7 @@ import '../widgets/forms/my_text_form_field.dart';
 ProfileCenterData? profileCenterData;
 
 class EditMainCenterDataPage extends StatefulWidget {
-  EditMainCenterDataPage({
+  const EditMainCenterDataPage({
     Key? key,
   }) : super(key: key);
   static const String routeName = "edit_main_center_data";
@@ -46,7 +46,7 @@ class _EditMainCenterDataPageState extends State<EditMainCenterDataPage> {
           listener: (context, state) {},
           builder: (context, state) {
             if (state is ProfileLoadingBeforFetch) {
-              return MyLottie(
+              return const MyLottie(
                 lottie: AppStrings.lottieOnHomePage,
               );
             }

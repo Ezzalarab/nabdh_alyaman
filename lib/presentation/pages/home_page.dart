@@ -312,7 +312,7 @@ class _HomePageState extends State<HomePage> {
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': 'key= ${AppConstants.serverKey}',
-        'project_id': "${AppConstants.senderId}"
+        'project_id': AppConstants.senderId
       },
       body: dataNotifications,
     );

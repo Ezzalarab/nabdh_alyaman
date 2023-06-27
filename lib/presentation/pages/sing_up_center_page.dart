@@ -19,9 +19,7 @@ import '../resources/constatns.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 import '../widgets/common/my_stepper.dart' as my_stepper;
-import '../widgets/forms/my_outlined_icon_button.dart';
 import '../widgets/forms/my_text_form_field.dart';
-import 'home_page.dart';
 
 class SignUpCenter extends StatefulWidget {
   const SignUpCenter({Key? key}) : super(key: key);

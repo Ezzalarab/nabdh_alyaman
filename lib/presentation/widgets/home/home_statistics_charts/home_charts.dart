@@ -18,11 +18,11 @@ class HomeCharts extends StatelessWidget {
           child: Container(
             height: 200,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: Wrap(
+            child: const Wrap(
               direction: Axis.horizontal,
               alignment: WrapAlignment.start,
               crossAxisAlignment: WrapCrossAlignment.start,
-              children: const [
+              children: [
                 Text(
                   "حسب البيانات المسجلة في التطبيق",
                   textDirection: TextDirection.rtl,

@@ -85,7 +85,7 @@ const AndroidInitializationSettings _androidInitializationSettings =
 
 void initialisendNotfications() async {
   InitializationSettings initializationSettings =
-      InitializationSettings(android: _androidInitializationSettings);
+      const InitializationSettings(android: _androidInitializationSettings);
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
@@ -202,7 +202,7 @@ class MyApp extends StatelessWidget {
         SearchMapPage.routeName: (context) => const SearchMapPage(),
         IntroductionPage.routeName: (context) => const IntroductionPage(),
         ProfileCenterPage.routeName: (context) => const ProfileCenterPage(),
-        EditMainCenterDataPage.routeName: (context) => EditMainCenterDataPage(),
+        EditMainCenterDataPage.routeName: (context) => const EditMainCenterDataPage(),
         AboutPage.routeName: (context) => const AboutPage(),
       },
     );

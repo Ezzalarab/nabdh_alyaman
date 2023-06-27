@@ -6,6 +6,7 @@ abstract class ProfileState {}
 
 class ProfileInitial extends ProfileState {}
 
+// ignore: must_be_immutable
 class ProfileGetData extends ProfileState {
   Donor donors;
   ProfileGetData({
@@ -13,6 +14,7 @@ class ProfileGetData extends ProfileState {
   });
 }
 
+// ignore: must_be_immutable
 class ProfileGetCenterData extends ProfileState {
   BloodCenter bloodCenter;
   ProfileGetCenterData({

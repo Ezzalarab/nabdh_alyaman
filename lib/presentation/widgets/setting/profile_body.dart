@@ -188,7 +188,7 @@ class EditBasicData extends StatelessWidget {
         // di.initProfile();
         BlocProvider.of<ProfileCubit>(context).getDataToProfilePage();
         Navigator.of(context).push(MaterialPageRoute<void>(
-            builder: (BuildContext context) => EditMainDataPage()));
+            builder: (BuildContext context) => const EditMainDataPage()));
       },
     );
   }
