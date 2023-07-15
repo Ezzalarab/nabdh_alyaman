@@ -14,7 +14,7 @@ class GlobalCubit extends Cubit<GlobalState> {
     // required this.appData,
   }) : super(GlobalInitial());
   final GetGlobalDataUC getGlobalDataUC;
-  // GlobalAppData appData;
+  GlobalAppData? appData;
 
   Future<void> getGlobalData() async {
     try {
@@ -22,6 +22,7 @@ class GlobalCubit extends Cubit<GlobalState> {
         appDataOrFailure.fold((failure) {
           emit(GlobalStateFailure());
         }, (data) {
+          appData = data;
           emit(GlobalStateSuccess(
             appData: data,
           ));

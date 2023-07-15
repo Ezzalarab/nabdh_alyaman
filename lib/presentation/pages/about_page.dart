@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nabdh_alyaman/data/data_sources/local/local_data.dart';
+import 'package:nabdh_alyaman/data/data_sources/local_data.dart';
 import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 import 'package:nabdh_alyaman/presentation/resources/color_manageer.dart';
 import 'package:nabdh_alyaman/presentation/resources/values_manager.dart';

@@ -1,8 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 
-import '../../../../presentation/resources/color_manageer.dart';
+import '../../../cubit/global_cubit/global_cubit.dart';
+import '../../../resources/color_manageer.dart';
 
 class CarouselItem extends StatelessWidget {
   const CarouselItem({
@@ -32,7 +33,15 @@ class CarouselItem extends StatelessWidget {
             BlocBuilder<GlobalCubit, GlobalState>(
               builder: (context, state) {
                 if (state is GlobalStateSuccess) {
-                  return Image.network(item, fit: BoxFit.fill, width: 900.0);
+                  return CachedNetworkImage(
+                    imageUrl: item,
+                    fit: BoxFit.fill,
+                    width: 900.0,
+                    progressIndicatorBuilder: (context, url, progress) =>
+                        const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
                 } else {
                   return Image.asset(item, fit: BoxFit.fill, width: 900.0);
                 }

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/data_sources/local/local_data.dart';
+import '../../../data/data_sources/local_data.dart';
 import '../../../presentation/cubit/global_cubit/global_cubit.dart';
 import '../../../di.dart' as di;
 import '../../cubit/signup_cubit/signup_cubit.dart';

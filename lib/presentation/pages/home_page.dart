@@ -5,30 +5,29 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
-import '../../di.dart' as di;
 import '../../core/app_constants.dart';
 import '../../core/methode/shared_method.dart';
 import '../../core/update.dart';
 import '../../core/utils.dart';
-import '../../data/data_sources/local/local_data.dart';
+import '../../di.dart' as di;
 import '../../domain/entities/donor.dart';
 import '../../main.dart';
-import '../cubit/global_cubit/global_cubit.dart';
 import '../pages/update_loc&show_notfication.dart';
 import '../resources/color_manageer.dart';
 import '../resources/values_manager.dart';
-import '../widgets/home/home_about.dart';
 import '../widgets/home/home_carousel/home_carousel.dart';
 import '../widgets/home/home_drawer/home_drawer.dart';
+import '../widgets/home/home_info.dart';
 import '../widgets/home/home_welcome.dart';
+import '../widgets/home/news_cards.dart';
 import 'introduction_page.dart';
 import 'notfication_page.dart';
+import 'search_page.dart';
 import 'setting_page.dart';
 import 'sign_in_page.dart';
 
@@ -185,73 +184,17 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             backgroundColor: ColorManager.white,
-            body: SingleChildScrollView(
+            body: const SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const HomeWelcome(),
-                  const HomeCarousel(),
-                  const SizedBox(height: AppSize.s10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppPadding.p30,
-                      vertical: AppPadding.p20,
-                    ),
-                    child: BlocBuilder<GlobalCubit, GlobalState>(
-                      builder: (context, state) {
-                        String infoTitle = 'فوائد التبرع بالدم';
-                        if (state is GlobalStateSuccess) {
-                          infoTitle = state.appData.infoTitile;
-                        }
-                        return Text(
-                          infoTitle,
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayLarge!
-                              .copyWith(
-                                  height: 1.5,
-                                  fontSize: 20,
-                                  color: ColorManager.primary),
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                    child: BlocBuilder<GlobalCubit, GlobalState>(
-                      builder: (context, state) {
-                        List<String> homeInfoList =
-                            LocalData.initialAppData.infoList;
-                        if (state is GlobalStateSuccess) {
-                          homeInfoList = state.appData.infoList;
-                        }
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: homeInfoList.length,
-                          itemBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 5,
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                "-  ${homeInfoList[index]}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(height: 1.4),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const HomeAbout(),
-                  const SizedBox(height: AppSize.s20),
+                  HomeWelcome(),
+                  HomeCarousel(),
+                  SizedBox(height: AppSize.s10),
+                  HomeInfo(),
+                  NewsCards(),
+                  SizedBox(height: AppSize.s40),
                 ],
               ),
             ),
@@ -260,7 +203,12 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: ColorManager.primary,
               child: const Icon(Icons.search_rounded),
               onPressed: () async {
-                _firebaseAuth.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const SearchPage(),
+                  ),
+                );
               },
             ),
           );

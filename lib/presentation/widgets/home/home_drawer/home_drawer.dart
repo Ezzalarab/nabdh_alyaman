@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
-import 'package:nabdh_alyaman/data/data_sources/local/local_data.dart';
-import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../data/data_sources/local_data.dart';
+import '../../../../presentation/cubit/global_cubit/global_cubit.dart';
 import '../../../../presentation/pages/setting_page.dart';
 import '../../../../presentation/widgets/home/home_drawer/home_drawer_center_body.dart';
 import '../../../../presentation/widgets/home/home_drawer/home_drawer_donor_body.dart';
