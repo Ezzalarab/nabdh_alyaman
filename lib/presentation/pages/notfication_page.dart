@@ -11,6 +11,7 @@ import '../../domain/entities/donor.dart';
 import '../../domain/entities/get_notfication.dart';
 import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/values_manager.dart';
+import '../widgets/common/loading_widget.dart';
 
 // ignore: must_be_immutable
 class NotFicationPage extends StatefulWidget {
@@ -83,9 +84,7 @@ class _NotFicationPageState extends State<NotFicationPage> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.blue,
-              ),
+              child: LoadingWidget(),
             );
           }
           List<GetNotficationData> notfication = snapshot.data!.docs.map((doc) {
@@ -143,8 +142,9 @@ class _NotFicationPageState extends State<NotFicationPage> {
                               Positioned(
                                   top: 20,
                                   left: 70,
-                                  child: Text(
-                                      notfication[index].date.substring(0, 10))),
+                                  child: Text(notfication[index]
+                                      .date
+                                      .substring(0, 10))),
                               Positioned(
                                   bottom: 80,
                                   right: 130,

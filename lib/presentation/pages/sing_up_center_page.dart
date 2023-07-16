@@ -18,6 +18,7 @@ import '../resources/color_manageer.dart';
 import '../resources/constatns.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
+import '../widgets/common/loading_widget.dart';
 import '../widgets/common/my_stepper.dart' as my_stepper;
 import '../widgets/forms/my_text_form_field.dart';
 
@@ -161,6 +162,7 @@ class _SignUpCenterState extends State<SignUpCenter> {
         }, builder: (context, state) {
           return ModalProgressHUD(
             inAsyncCall: (state is SignUpLoading),
+            progressIndicator: const LoadingWidget(),
             child: my_stepper.Stepper(
               svgPictureAsset: "assets/images/blood_drop.svg",
               iconColor: Theme.of(context).primaryColor,

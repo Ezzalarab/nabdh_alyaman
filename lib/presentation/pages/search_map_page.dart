@@ -10,6 +10,7 @@ import '../../domain/entities/notfication_data.dart';
 import '../cubit/maps_cubit/maps_cubit.dart';
 import '../cubit/send_notfication/send_notfication_cubit.dart';
 import '../resources/color_manageer.dart';
+import '../widgets/common/loading_widget.dart';
 
 class SearchMapPage extends StatefulWidget {
   const SearchMapPage({Key? key}) : super(key: key);
@@ -94,7 +95,7 @@ class _SearchMapPageState extends State<SearchMapPage> {
                 ),
               );
             } else if (state is MapsLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: LoadingWidget());
             } else {
               return const Center(child: Text("not map success"));
             }

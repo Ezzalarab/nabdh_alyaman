@@ -10,6 +10,7 @@ import '../../../presentation/widgets/search/result_tabs.dart';
 import '../../cubit/search_cubit/search_cubit.dart';
 import '../../widgets/search/doner_card_details.dart';
 import '../../widgets/search/my_expansion_panel.dart';
+import '../common/loading_widget.dart';
 import 'doner_card_body.dart';
 
 class SearchResult extends StatefulWidget {
@@ -211,7 +212,7 @@ class _SearchResultState extends State<SearchResult>
               return const SizedBox(
                 height: 400,
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: LoadingWidget(),
                 ),
               );
             } else {

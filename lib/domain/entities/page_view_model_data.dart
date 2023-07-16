@@ -1,8 +1,11 @@
 class PageViewModelData {
-  final lottei;
-  final title;
-  final description;
+  final String lottei;
+  final String title;
+  final String description;
 
-  PageViewModelData(
-      {required this.lottei, required this.title, required this.description});
+  PageViewModelData({
+    required this.lottei,
+    required this.title,
+    required this.description,
+  });
 }

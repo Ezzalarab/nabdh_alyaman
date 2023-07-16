@@ -8,8 +8,7 @@ import '../../../presentation/widgets/common/dialog_lottie.dart';
 PageViewModel myPageViewModel(PageViewModelData pageViewModelData) {
   return PageViewModel(
     // titleWidget: Text("data"),
-    // body:
-    //     'Body of 1st Page With that out of the way let’s create our introduction screen. First, let’s create ourselves an',
+    // body: 'Body of 1st Page With that out of the way let’s create our introduction screen. First, let’s create ourselves an',
     bodyWidget: SingleChildScrollView(
       child: Column(
         children: [
@@ -31,8 +30,8 @@ PageViewModel myPageViewModel(PageViewModelData pageViewModelData) {
             child: Text(
               pageViewModelData.description,
               textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontFamily: FontConstants.fontFamily, fontSize: 22),
+              style: const TextStyle(
+                  fontFamily: FontConstants.fontFamily, fontSize: 22),
             ),
           )
         ],

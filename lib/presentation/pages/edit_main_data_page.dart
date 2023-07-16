@@ -11,7 +11,9 @@ import '../../presentation/resources/strings_manager.dart';
 import '../../presentation/resources/values_manager.dart';
 import '../../presentation/widgets/common/dialog_lottie.dart';
 import '../../presentation/widgets/setting/profile_body.dart';
+import '../resources/assets_manager.dart';
 import '../resources/style.dart';
+import '../widgets/common/loading_widget.dart';
 import '../widgets/forms/my_button.dart';
 import '../widgets/forms/my_dropdown_button_form_field.dart';
 import '../widgets/forms/my_text_form_field.dart';
@@ -50,12 +52,12 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
           builder: (context, state) {
             if (state is ProfileLoadingBeforFetch) {
               return const MyLottie(
-                lottie: AppStrings.lottieOnHomePage,
+                lottie: JsonAssets.bloodDonation,
               );
             }
             if (state is ProfileLoading) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: LoadingWidget(),
               );
             }
             if (state is ProfileGetData) {
@@ -279,7 +281,7 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
             } else {
               return const Center(
                 child: MyLottie(
-                  lottie: AppStrings.lottieOnHomePage,
+                  lottie: JsonAssets.bloodDonation,
                 ),
               );
             }

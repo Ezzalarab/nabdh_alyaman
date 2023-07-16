@@ -73,13 +73,8 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/
+    - assets/json/
     - data/country.json
-    - assets/images/onboarding_logo1.svg
-    - assets/images/hollow_cirlce_ic.svg
-    - assets/images/solid_circle_ic.svg
-    - assets/images/left_arrow_ic.svg
-    - assets/images/right_arrow_ic.svg
 
   fonts:
     - family: Montserrat

@@ -12,10 +12,12 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../core/utils.dart';
 import '../../domain/entities/donor.dart';
 import '../cubit/profile_cubit/profile_cubit.dart';
+import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 import '../widgets/common/dialog_lottie.dart';
+import '../widgets/common/loading_widget.dart';
 import '../widgets/setting/profile_body.dart';
 import '../widgets/setting/select_photo_options_screen.dart';
 
@@ -154,6 +156,7 @@ class _SettingPageState extends State<SettingPage> {
       }, builder: (context, state) {
         return ModalProgressHUD(
           inAsyncCall: (state is ProfileLoading),
+          progressIndicator: const LoadingWidget(),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -176,7 +179,7 @@ class _SettingPageState extends State<SettingPage> {
                 if (state is ProfileFailure)
                   const Center(
                     child: MyLottie(
-                      lottie: AppStrings.lottieOnHomePage,
+                      lottie: JsonAssets.bloodDonation,
                     ),
                   ),
               ],

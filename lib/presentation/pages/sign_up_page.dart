@@ -16,6 +16,7 @@ import '../../domain/entities/blood_types.dart';
 import '../../domain/entities/donor.dart';
 import '../cubit/signup_cubit/signup_cubit.dart';
 import '../resources/font_manager.dart';
+import '../widgets/common/loading_widget.dart';
 import '../widgets/forms/my_button.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
@@ -225,24 +226,28 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: BlocConsumer<SignUpCubit, SignUpState>(
         listener: (context, state) {
-          if (state is SignUpAuthVerifying) {
-          } else if (state is SignUpDataSuccess) {
-            Utils.showSuccessSnackBar(
-                context: context, msg: AppStrings.signUpSuccessMessage);
-            Navigator.of(context).pushReplacementNamed(HomePage.routeName);
-          } else if (state is SignUpFailure) {
-            Utils.showFalureSnackBar(context: context, msg: state.error);
-          } else if (state is SignUpDataFailure) {
-            Utils.showFalureSnackBar(context: context, msg: state.error);
-          } else if (state is SignUpAuthFailure) {
-            Utils.showFalureSnackBar(context: context, msg: state.error);
-          } else if (state is SignUpAuthSuccess) {
-            setState(() => _activeStepIndex++);
+          if (state is SignUpLoading) {
+          } else {
+            if (state is SignUpAuthVerifying) {
+            } else if (state is SignUpDataSuccess) {
+              Utils.showSuccessSnackBar(
+                  context: context, msg: AppStrings.signUpSuccessMessage);
+              Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+            } else if (state is SignUpFailure) {
+              Utils.showFalureSnackBar(context: context, msg: state.error);
+            } else if (state is SignUpDataFailure) {
+              Utils.showFalureSnackBar(context: context, msg: state.error);
+            } else if (state is SignUpAuthFailure) {
+              Utils.showFalureSnackBar(context: context, msg: state.error);
+            } else if (state is SignUpAuthSuccess) {
+              setState(() => _activeStepIndex++);
+            }
           }
         },
         builder: (context, state) {
           return ModalProgressHUD(
             inAsyncCall: (state is SignUpLoading),
+            progressIndicator: const LoadingWidget(),
             child: my_stepper.Stepper(
               svgPictureAsset: ImageAssets.bloodDrop,
               iconColor: Theme.of(context).primaryColor,

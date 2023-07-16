@@ -3,22 +3,6 @@ class AppStrings {
 
   static const unDefined = "غير محدد";
 
-  //-----------------------------------------------------
-  //------- OoBoarding Page
-  static const String noBoardingTitle1 = "SEE THE BEST COURSE #1";
-  static const String noBoardingTitle2 = "SEE THE BEST COURSE #2";
-  static const String noBoardingTitle3 = "SEE THE BEST COURSE #3";
-  static const String noBoardingTitle4 = "SEE THE BEST COURSE #4";
-  static const String noBoardingSubTitle1 =
-      "Tut app is an awesome flutter using clean architecture #1";
-  static const String noBoardingSubTitle2 =
-      "Tut app is an awesome flutter using clean architecture #2";
-  static const String noBoardingSubTitle3 =
-      "Tut app is an awesome flutter using clean architecture #3";
-  static const String noBoardingSubTitle4 =
-      "Tut app is an awesome flutter using clean architecture #4";
-  static const String skip = "skip";
-
   //----------------------------------------------------------------
   // Home Page
   static const String homeAppBarTitle = "بنك الدم الإلكتروني";
@@ -117,14 +101,4 @@ class AppStrings {
   static const String editMainDataTextName = "الاسم";
   static const String editMainDataTextNameValidator =
       "لا يمكن أن يكون الاسم أقل من حرفين";
-
-  // --------------------------------
-  //    Lottie
-  static const String lottieOnHomePage = 'assets/blood-donation.json';
-  static const String OnboradingPageLottie1 =
-      'assets/108419-donate-blood-safe-life.json';
-  static const String OnboradingPageLottie2 =
-      'assets/17192-coronavirus-blood-health-heart-hypertension-medical-pressure-pulse.json';
-  static const String OnboradingPageLottie3 =
-      'assets/16535-medical-transfusion-bag-loading.json';
 }

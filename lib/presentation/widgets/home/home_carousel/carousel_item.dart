@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../cubit/global_cubit/global_cubit.dart';
 import '../../../resources/color_manageer.dart';
+import '../../common/loading_widget.dart';
 
 class CarouselItem extends StatelessWidget {
   const CarouselItem({
@@ -39,7 +40,7 @@ class CarouselItem extends StatelessWidget {
                     width: 900.0,
                     progressIndicatorBuilder: (context, url, progress) =>
                         const Center(
-                      child: CircularProgressIndicator(),
+                      child: LoadingWidget(),
                     ),
                   );
                 } else {

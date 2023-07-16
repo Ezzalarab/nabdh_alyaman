@@ -5,7 +5,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import '../../domain/entities/page_view_model_data.dart';
 import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/font_manager.dart';
-import '../../presentation/resources/strings_manager.dart';
+import '../resources/assets_manager.dart';
 import '../widgets/onboarding/page_view_model.dart';
 import 'home_page.dart';
 import 'setting_page.dart';
@@ -23,19 +23,19 @@ class IntroductionPage extends StatelessWidget {
         pages: [
           myPageViewModel(
             PageViewModelData(
-                lottei: AppStrings.OnboradingPageLottie1,
+                lottei: JsonAssets.bloodSaveLife,
                 title: '',
                 description: 'ومن أحياها فكأنما أحيا الناس جميعاً'),
           ),
           myPageViewModel(
             PageViewModelData(
-                lottei: AppStrings.OnboradingPageLottie2,
+                lottei: JsonAssets.healthHeart,
                 title: '',
                 description: 'نقطة دم تساوي حياة'),
           ),
           myPageViewModel(
             PageViewModelData(
-                lottei: AppStrings.OnboradingPageLottie3,
+                lottei: JsonAssets.transfusionBag,
                 title: '',
                 description: 'كن سبب في حياة انسان '),
           ),

@@ -77,7 +77,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 late Position position;
-//-------------------------------------.
+//----------------------
 const AndroidInitializationSettings _androidInitializationSettings =
     AndroidInitializationSettings('@mipmap/ic_launcher');
 // final DarwinInitializationSettings _darwinInitializationSettings =
@@ -202,7 +202,8 @@ class MyApp extends StatelessWidget {
         SearchMapPage.routeName: (context) => const SearchMapPage(),
         IntroductionPage.routeName: (context) => const IntroductionPage(),
         ProfileCenterPage.routeName: (context) => const ProfileCenterPage(),
-        EditMainCenterDataPage.routeName: (context) => const EditMainCenterDataPage(),
+        EditMainCenterDataPage.routeName: (context) =>
+            const EditMainCenterDataPage(),
         AboutPage.routeName: (context) => const AboutPage(),
       },
     );

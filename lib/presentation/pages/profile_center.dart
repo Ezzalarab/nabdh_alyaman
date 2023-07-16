@@ -13,6 +13,8 @@ import '../../presentation/resources/strings_manager.dart';
 import '../../presentation/resources/values_manager.dart';
 import '../../presentation/widgets/common/dialog_lottie.dart';
 import '../../presentation/widgets/forms/my_button.dart';
+import '../resources/assets_manager.dart';
+import '../widgets/common/loading_widget.dart';
 
 class ProfileCenterPage extends StatefulWidget {
   static const String routeName = "profileCenter";
@@ -81,11 +83,11 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
         builder: (context, state) {
           if (state is ProfileLoadingBeforFetch) {
             return const MyLottie(
-              lottie: AppStrings.lottieOnHomePage,
+              lottie: JsonAssets.bloodDonation,
             );
           }
           if (state is ProfileLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: LoadingWidget());
           }
           if (state is ProfileGetCenterData) {
             profileCenterData = ProfileCenterData(
@@ -150,7 +152,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
           } else {
             return const Center(
               child: MyLottie(
-                lottie: AppStrings.lottieOnHomePage,
+                lottie: JsonAssets.bloodDonation,
               ),
             );
           }

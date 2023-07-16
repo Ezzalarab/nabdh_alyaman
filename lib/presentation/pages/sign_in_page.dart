@@ -16,6 +16,7 @@ import '../resources/constatns.dart';
 import '../resources/font_manager.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
+import '../widgets/common/loading_widget.dart';
 import '../widgets/forms/my_button.dart';
 import '../widgets/forms/my_text_form_field.dart';
 import 'home_page.dart';
@@ -172,6 +173,7 @@ class _SignInPageState extends State<SignInPage> {
           builder: (context, state) {
             return ModalProgressHUD(
               inAsyncCall: (state is SignInLoading),
+              progressIndicator: const LoadingWidget(),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

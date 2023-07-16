@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../resources/color_manageer.dart';
 import '../../resources/values_manager.dart';
 import '../../../domain/entities/news_card_data.dart';
+import '../common/loading_widget.dart';
 
 class NewsCard extends StatelessWidget {
   final NewsCardData newsData;
@@ -20,7 +21,7 @@ class NewsCard extends StatelessWidget {
           launchUrl(url);
         } else {
           Fluttertoast.showToast(
-            msg: 'لا يوجد انترنت',
+            msg: 'لا يمكن فتح الرابط',
             backgroundColor: ColorManager.black.withOpacity(0.5),
           );
         }
@@ -43,7 +44,7 @@ class NewsCard extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: newsData.image,
                     progressIndicatorBuilder: (context, url, progress) =>
-                        const Center(child: CircularProgressIndicator()),
+                        const Center(child: LoadingWidget()),
                     height: 200,
                     width: double.infinity,
                     fit: BoxFit.contain,
