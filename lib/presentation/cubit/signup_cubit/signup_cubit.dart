@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 
@@ -37,29 +38,37 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(SignUpLoading());
     String today = Utils.getCurrentDate();
     bool areUsers40Today = true;
-    await _fireStore
-        .collection("users_per_day")
-        .doc(today)
-        .get()
-        .then((value) async {
-      if (value.exists) {
-        int usersCount = await value.get("users_count") ?? 0;
-        print(usersCount);
-        if (usersCount >= 40) {
-          areUsers40Today = false;
+    try {
+      await _fireStore
+          .collection("users_per_day")
+          .doc(today)
+          .get()
+          .then((value) async {
+        if (value.exists) {
+          int usersCount = await value.get("users_count") ?? 0;
+          print(usersCount);
+          if (usersCount >= 40) {
+            areUsers40Today = false;
+          }
+        } else {
+          await FirebaseFirestore.instance
+              .collection("users_per_day")
+              .doc(today)
+              .set({
+            "users_count": 1,
+          });
         }
-      } else {
-        await FirebaseFirestore.instance
-            .collection("users_per_day")
-            .doc(today)
-            .set({
-          "users_count": 1,
-        });
+      });
+      print(areUsers40Today);
+      canSignUpWithPhone = areUsers40Today;
+      emit(SignUpInitial(canSignUpWithPhone: areUsers40Today));
+    } catch (e, s) {
+      if (kDebugMode) {
+        print(e);
+        print(s);
       }
-    });
-    print(areUsers40Today);
-    canSignUpWithPhone = areUsers40Today;
-    emit(SignUpInitial(canSignUpWithPhone: areUsers40Today));
+      emit(SignUpAuthFailure(error: e.toString()));
+    }
   }
 
   Future<void> increaseUsersToday() async {
@@ -115,8 +124,11 @@ class SignUpCubit extends Cubit<SignUpState> {
           await _fireAuth.signInWithCredential(credential);
         },
         verificationFailed: (FirebaseException e) {
-          print("verificationFailed");
-          print(e);
+          if (kDebugMode) {
+            print("verificationFailed");
+            print(e);
+          }
+          emit(SignUpAuthFailure(error: e.toString()));
         },
         codeSent: (String verificationId, int? resendToken) async {
           emit(SignUpInitial(canSignUpWithPhone: canSignUpWithPhone));

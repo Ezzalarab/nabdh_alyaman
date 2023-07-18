@@ -5,6 +5,7 @@ import 'package:csc_picker/csc_picker.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -223,6 +224,9 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
         backgroundColor: ColorManager.grey0,
         title: const Text(AppStrings.signUpAppBarTitle),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: ColorManager.grey0,
+        ),
       ),
       body: BlocConsumer<SignUpCubit, SignUpState>(
         listener: (context, state) {

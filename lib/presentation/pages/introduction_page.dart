@@ -31,7 +31,7 @@ class IntroductionPage extends StatelessWidget {
             PageViewModelData(
                 lottei: JsonAssets.healthHeart,
                 title: '',
-                description: 'نقطة دم تساوي حياة'),
+                description: 'قطرة دم تساوي حياة'),
           ),
           myPageViewModel(
             PageViewModelData(
