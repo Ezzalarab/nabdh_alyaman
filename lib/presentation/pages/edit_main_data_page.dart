@@ -9,9 +9,7 @@ import '../../presentation/cubit/profile_cubit/profile_cubit.dart';
 import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/strings_manager.dart';
 import '../../presentation/resources/values_manager.dart';
-import '../../presentation/widgets/common/dialog_lottie.dart';
 import '../../presentation/widgets/setting/profile_body.dart';
-import '../resources/assets_manager.dart';
 import '../resources/style.dart';
 import '../widgets/common/loading_widget.dart';
 import '../widgets/forms/my_button.dart';
@@ -51,8 +49,8 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
           listener: (context, state) {},
           builder: (context, state) {
             if (state is ProfileLoadingBeforFetch) {
-              return const MyLottie(
-                lottie: JsonAssets.bloodDonation,
+              return const Center(
+                child: LoadingWidget(),
               );
             }
             if (state is ProfileLoading) {
@@ -280,9 +278,7 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
               );
             } else {
               return const Center(
-                child: MyLottie(
-                  lottie: JsonAssets.bloodDonation,
-                ),
+                child: Text('خطأ غير معروف'),
               );
             }
           },

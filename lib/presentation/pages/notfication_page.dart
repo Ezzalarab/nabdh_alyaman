@@ -71,9 +71,9 @@ class _NotFicationPageState extends State<NotFicationPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("الاشعارات"),
+        title: const Text("الإشعارات"),
       ),
-      backgroundColor: ColorManager.grey1,
+      backgroundColor: ColorManager.white,
       body: StreamBuilder<QuerySnapshot>(
         stream: _firebaseFirestore
             .collection("notifications")

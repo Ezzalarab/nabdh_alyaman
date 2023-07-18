@@ -11,9 +11,7 @@ import '../../presentation/pages/home_page.dart';
 import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/strings_manager.dart';
 import '../../presentation/resources/values_manager.dart';
-import '../../presentation/widgets/common/dialog_lottie.dart';
 import '../../presentation/widgets/forms/my_button.dart';
-import '../resources/assets_manager.dart';
 import '../widgets/common/loading_widget.dart';
 
 class ProfileCenterPage extends StatefulWidget {
@@ -82,8 +80,8 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
         },
         builder: (context, state) {
           if (state is ProfileLoadingBeforFetch) {
-            return const MyLottie(
-              lottie: JsonAssets.bloodDonation,
+            return const Center(
+              child: LoadingWidget(),
             );
           }
           if (state is ProfileLoading) {
@@ -151,9 +149,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
             );
           } else {
             return const Center(
-              child: MyLottie(
-                lottie: JsonAssets.bloodDonation,
-              ),
+              child: Text('خطأ غير معروف'),
             );
           }
         },

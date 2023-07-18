@@ -160,25 +160,29 @@ class _SignUpCenterState extends State<SignUpCenter> {
             Utils.showFalureSnackBar(context: context, msg: state.error);
           }
         }, builder: (context, state) {
-          return ModalProgressHUD(
-            inAsyncCall: (state is SignUpLoading),
-            progressIndicator: const LoadingWidget(),
-            child: my_stepper.Stepper(
-              svgPictureAsset: "assets/images/blood_drop.svg",
-              iconColor: Theme.of(context).primaryColor,
-              elevation: 0,
-              type: my_stepper.StepperType.horizontal,
-              currentStep: _activeStepIndex,
-              steps: stepList(),
-              onStepContinue: _onStepContinue,
-              onStepCancel: _onStepCancel,
-              onStepTapped: _onStepTapped,
-              controlsBuilder:
-                  (BuildContext context, my_stepper.ControlsDetails controls) {
-                return _buildNavigationButtons(context, controls);
-              },
-            ),
-          );
+          if (state is SignUpSuccess) {
+            return const Center(child: Text('تم إنشاء الحساب بنجاح'));
+          } else {
+            return ModalProgressHUD(
+              inAsyncCall: (state is SignUpLoading),
+              progressIndicator: const LoadingWidget(),
+              child: my_stepper.Stepper(
+                svgPictureAsset: "assets/images/blood_drop.svg",
+                iconColor: Theme.of(context).primaryColor,
+                elevation: 0,
+                type: my_stepper.StepperType.horizontal,
+                currentStep: _activeStepIndex,
+                steps: stepList(),
+                onStepContinue: _onStepContinue,
+                onStepCancel: _onStepCancel,
+                onStepTapped: _onStepTapped,
+                controlsBuilder: (BuildContext context,
+                    my_stepper.ControlsDetails controls) {
+                  return _buildNavigationButtons(context, controls);
+                },
+              ),
+            );
+          }
         }));
   }
 
@@ -353,7 +357,7 @@ class _SignUpCenterState extends State<SignUpCenter> {
                   .copyWith(color: Theme.of(context).primaryColor)
               : Theme.of(context).textTheme.bodySmall),
       content: SizedBox(
-        height: signUpStepHight,
+        height: signUpStepHight + 50,
         child: Form(
           key: _secondFormState,
           child: Column(

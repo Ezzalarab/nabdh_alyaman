@@ -17,9 +17,8 @@ class ImageAssets {
 
 class JsonAssets {
   static const String jsonPath = "assets/json";
-  static const String bloodDonation = "$jsonPath/blood-donation.json";
   static const String bloodDrop = "$jsonPath/blood-drop.json";
-  static const String bloodLoading = "$jsonPath/blood-loading.json";
+  static const String bloodLoading = "$jsonPath/blood-bag-loading.json";
   static const String bloodSaveLife = "$jsonPath/blood-save-life.json";
   static const String healthHeart = "$jsonPath/health-heart.json";
   static const String transfusionBag = "$jsonPath/transfusion-bag-loading.json";

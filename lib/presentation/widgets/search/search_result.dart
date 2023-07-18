@@ -11,6 +11,7 @@ import '../../cubit/search_cubit/search_cubit.dart';
 import '../../widgets/search/doner_card_details.dart';
 import '../../widgets/search/my_expansion_panel.dart';
 import '../common/loading_widget.dart';
+import '../forms/my_button.dart';
 import 'doner_card_body.dart';
 
 class SearchResult extends StatefulWidget {
@@ -94,54 +95,78 @@ class _SearchResultState extends State<SearchResult>
                                       data: MediaQuery.of(context)
                                           .copyWith(textScaleFactor: 1.0),
                                       child: const ResultTabs()),
-                                  MyExpansionPanelList.radio(
-                                    expansionCallback:
-                                        (int index, bool isExpanded) {
-                                      setState(() => state.donors[index]
-                                          .isExpanded = !isExpanded);
-                                    },
-                                    expandedHeaderPadding: EdgeInsets.zero,
-                                    elevation: 0,
-                                    dividerColor: ColorManager.white,
-                                    children: compatibleDonors
-                                        .map<ExpansionPanel>((Donor donor) {
-                                      return ExpansionPanelRadio(
-                                        value: state.donors.indexOf(donor),
-                                        backgroundColor:
-                                            const Color.fromARGB(0, 0, 0, 0),
-                                        canTapOnHeader: true,
-                                        headerBuilder: (BuildContext ctx,
-                                            bool isExpanded) {
-                                          return ListTile(
-                                            leading: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(3.0),
-                                              child: CircleAvatar(
-                                                backgroundColor:
-                                                    Theme.of(context)
-                                                        .primaryColor,
-                                                radius: 25,
-                                                child: Text(
-                                                  donor.bloodType,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleLarge,
-                                                ),
+                                  (compatibleDonors.isEmpty)
+                                      ? SizedBox(
+                                          height: 200,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              const Text(
+                                                  'لا يوجد متبرعين بهذه الفصية'),
+                                              const SizedBox(height: 20),
+                                              if (state.donors.isNotEmpty)
+                                                const Text(
+                                                    'قد يوجد متبرع مناسب من فصيلة أخرى'),
+                                            ],
+                                          ),
+                                        )
+                                      : MyExpansionPanelList.radio(
+                                          expansionCallback:
+                                              (int index, bool isExpanded) {
+                                            setState(() => state.donors[index]
+                                                .isExpanded = !isExpanded);
+                                          },
+                                          expandedHeaderPadding:
+                                              EdgeInsets.zero,
+                                          elevation: 0,
+                                          dividerColor: ColorManager.white,
+                                          children: compatibleDonors
+                                              .map<ExpansionPanel>(
+                                                  (Donor donor) {
+                                            return ExpansionPanelRadio(
+                                              value:
+                                                  state.donors.indexOf(donor),
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      0, 0, 0, 0),
+                                              canTapOnHeader: true,
+                                              headerBuilder: (BuildContext ctx,
+                                                  bool isExpanded) {
+                                                return ListTile(
+                                                  leading: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            3.0),
+                                                    child: CircleAvatar(
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .primaryColor,
+                                                      radius: 25,
+                                                      child: Text(
+                                                        donor.bloodType,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleLarge,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  title: DonerCardDetails(
+                                                    donerName: donor.name,
+                                                    donerCity:
+                                                        donor.neighborhood,
+                                                    donerPhone: donor.phone,
+                                                  ),
+                                                );
+                                              },
+                                              body: DonerCardBody(
+                                                phone: donor.phone,
                                               ),
-                                            ),
-                                            title: DonerCardDetails(
-                                              donerName: donor.name,
-                                              donerCity: donor.neighborhood,
-                                              donerPhone: donor.phone,
-                                            ),
-                                          );
-                                        },
-                                        body: DonerCardBody(
-                                          phone: donor.phone,
+                                            );
+                                          }).toList(),
                                         ),
-                                      );
-                                    }).toList(),
-                                  ),
                                 ],
                               ),
                             );
@@ -151,7 +176,7 @@ class _SearchResultState extends State<SearchResult>
                                     .centers.isEmpty)
                                 ? const Center(
                                     child: Text(
-                                      "لا يوجد مراكز طبية تمتلك بهذه المنطقة",
+                                      "لا يوجد مراكز طبية بهذه المنطقة تمتلك زمر دم مناسبة",
                                     ),
                                   )
                                 : SingleChildScrollView(
@@ -215,12 +240,47 @@ class _SearchResultState extends State<SearchResult>
                   child: LoadingWidget(),
                 ),
               );
+            } else if (state is SearchFailure) {
+              print(state.error);
+              return SizedBox(
+                height: 400,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(state.error),
+                    if (state.error == 'لا يوجد إنترنت')
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20.0),
+                        child: Text('تحقق من اتصال الانترنت ثم حاول مرة أخرى'),
+                      ),
+                    const SizedBox(height: 20),
+                    MyButton(
+                      title: 'حاول مرة أخرى',
+                      color: ColorManager.primary,
+                      onPressed: () {
+                        BlocProvider.of<SearchCubit>(context)
+                            .searchDonorsAndCenters();
+                      },
+                    ),
+                  ],
+                ),
+              );
             } else {
               print(state.runtimeType);
-              return const SizedBox(
+              return SizedBox(
                 height: 400,
-                child: Center(
-                  child: Text('حدث خطأ'),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MyButton(
+                      title: 'حاول مرة أخرى',
+                      color: ColorManager.primary,
+                      onPressed: () {
+                        BlocProvider.of<SearchCubit>(context)
+                            .searchDonorsAndCenters();
+                      },
+                    ),
+                  ],
                 ),
               );
             }
@@ -231,95 +291,125 @@ class _SearchResultState extends State<SearchResult>
   }
 
   Widget buildCenterListTile(BuildContext context, BloodCenter center) {
-    return ListTile(
-      leading: Padding(
-        padding: const EdgeInsets.all(3.0),
-        child: CircleAvatar(
-          backgroundColor: Theme.of(context).primaryColor,
-          radius: 25,
-          child: Text(
-            getCompatibleBloodAmount(
-              center: center,
-              bloodType:
-                  BlocProvider.of<SearchCubit>(context).selectedBloodType!,
-            ),
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      decoration: const BoxDecoration(
+        color: ColorManager.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
         ),
       ),
-      title: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            child: Wrap(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              runSpacing: 5,
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Wrap(
-                    children: [
-                      const Text("الاسم  : "),
-                      Text(
-                        center.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Wrap(
-                    children: [
-                      const Text("المنطقة  : "),
-                      Text(center.neighborhood),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Align(
-                  alignment: Alignment.centerRight,
-                  child:
-                      Text("يرجى التواصل مع المركز للتأكد من الكمية الفعلية"),
-                ),
-              ],
+      child: ListTile(
+        leading: Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: CircleAvatar(
+            backgroundColor: Theme.of(context).primaryColor,
+            radius: 25,
+            child: Text(
+              getCompatibleBloodAmount(
+                center: center,
+                bloodType:
+                    BlocProvider.of<SearchCubit>(context).selectedBloodType!,
+              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
+        ),
+        title: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              child: Wrap(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                runSpacing: 5,
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Wrap(
+                      children: [
+                        const Text("الاسم  : "),
+                        Text(
+                          center.name,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Wrap(
+                      children: [
+                        const Text("المنطقة  : "),
+                        Text(center.neighborhood),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child:
+                        Text("يرجى التواصل مع المركز للتأكد من الكمية الفعلية"),
+                  ),
+                ],
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () async {
-                    final Uri launchUri = Uri(
-                      scheme: 'tel',
-                      path: center.phone,
-                    );
-                    await launcher.launch(
-                      launchUri.toString(),
-                      useSafariVC: false,
-                      useWebView: false,
-                      enableJavaScript: false,
-                      enableDomStorage: false,
-                      universalLinksOnly: true,
-                      headers: <String, String>{},
-                    );
-                  },
-                  child: Container(
+            Container(
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      final Uri launchUri = Uri(
+                        scheme: 'tel',
+                        path: center.phone,
+                      );
+                      await launcher.launch(
+                        launchUri.toString(),
+                        useSafariVC: false,
+                        useWebView: false,
+                        enableJavaScript: false,
+                        enableDomStorage: false,
+                        universalLinksOnly: true,
+                        headers: <String, String>{},
+                      );
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 120,
+                      decoration: const BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(0),
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.phone,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  ),
+                  Container(
                     height: 50,
-                    width: 120,
+                    width: 80,
                     decoration: const BoxDecoration(
-                      color: Colors.green,
+                      color: Colors.amber,
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10),
@@ -328,37 +418,16 @@ class _SearchResultState extends State<SearchResult>
                       ),
                     ),
                     child: const Icon(
-                      Icons.phone,
+                      Icons.message,
                       color: Colors.white,
                       size: 30,
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.05,
-                ),
-                Container(
-                  height: 50,
-                  width: 80,
-                  decoration: const BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                      topLeft: Radius.circular(0),
-                      topRight: Radius.circular(0),
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.message,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

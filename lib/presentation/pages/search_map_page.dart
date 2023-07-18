@@ -81,7 +81,48 @@ class _SearchMapPageState extends State<SearchMapPage> {
                   .sendNotficationUseCase(
                       sendNotficationData: notificationMessage);
               List<DonorPoint> listPoints = state.nearbyDonors;
-              final List<Marker> markBrach = _generateMarkers(listPoints);
+              final List<Marker> markBrach =
+                  // [
+                  //   const Marker(
+                  //     markerId: MarkerId('value1'),
+                  //     position: LatLng(13.9661070, 44.1714835),
+                  //     infoWindow: InfoWindow(title: '1'),
+                  //   ),
+                  //   const Marker(
+                  //     markerId: MarkerId('value2'),
+                  //     position: LatLng(13.9631070, 44.1614835),
+                  //     infoWindow: InfoWindow(title: '2'),
+                  //   ),
+                  //   const Marker(
+                  //     markerId: MarkerId('value3'),
+                  //     position: LatLng(13.9625070, 44.1654835),
+                  //     infoWindow: InfoWindow(title: '3'),
+                  //   ),
+                  //   const Marker(
+                  //     markerId: MarkerId('value4'),
+                  //     position: LatLng(13.9610070, 44.1714835),
+                  //     infoWindow: InfoWindow(title: '4'),
+                  //   ),
+                  //   const Marker(
+                  //     markerId: MarkerId('value5'),
+                  //     position: LatLng(13.9641070, 44.1754835),
+                  //     infoWindow: InfoWindow(title: '5'),
+                  //   ),
+                  //   const Marker(
+                  //     markerId: MarkerId('value6'),
+                  //     position: LatLng(13.9651070, 44.1814835),
+                  //     infoWindow: InfoWindow(title: '6'),
+                  //   ),
+                  //   const Marker(
+                  //     markerId: MarkerId('value7'),
+                  //     position: LatLng(13.9714000, 44.1716835),
+                  //     infoWindow: InfoWindow(
+                  //       title: 'AB+',
+                  //       snippet: "محمد الحميدي • 📞 775744266",
+                  //     ),
+                  //   ),
+                  // ];
+                  _generateMarkers(listPoints);
               _marker.addAll(markBrach);
               Position position = state.position;
               return GoogleMap(
@@ -91,7 +132,7 @@ class _SearchMapPageState extends State<SearchMapPage> {
                     position.latitude,
                     position.longitude,
                   ),
-                  zoom: 13.5,
+                  zoom: 15.0,
                 ),
               );
             } else if (state is MapsLoading) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../presentation/resources/color_manageer.dart';
@@ -18,12 +19,13 @@ class SearchPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('البحث عن دم'),
-        // backgroundColor: Colors.white,
-        // foregroundColor: ColorManager.primary,
-        backgroundColor: const Color.fromARGB(255, 250, 250, 250),
+        backgroundColor: ColorManager.grey0,
         elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: ColorManager.grey0,
+        ),
       ),
-      // backgroundColor: const Color.fromARGB(255, 250, 250, 250),
+      backgroundColor: ColorManager.grey0,
       body: Column(
         children: <Widget>[
           SizedBox(
@@ -55,7 +57,7 @@ class SearchPage extends StatelessWidget {
         builder: (context, state) {
           return (state is SearchSuccess)
               ? FloatingActionButton(
-                  child: const Icon(Icons.place_outlined),
+                  backgroundColor: Theme.of(context).primaryColor,
                   onPressed: () async {
                     BlocProvider.of<MapsCubit>(context).showMaps(
                       stateDonors: state.stateDonors,
@@ -70,6 +72,7 @@ class SearchPage extends StatelessWidget {
                       ),
                     );
                   },
+                  child: const Icon(Icons.place_outlined),
                 )
               : const SizedBox();
         },

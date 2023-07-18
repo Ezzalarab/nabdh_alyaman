@@ -9,8 +9,6 @@ import '../../presentation/pages/profile_center.dart';
 import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/strings_manager.dart';
 import '../../presentation/resources/values_manager.dart';
-import '../../presentation/widgets/common/dialog_lottie.dart';
-import '../resources/assets_manager.dart';
 import '../resources/style.dart';
 import '../widgets/common/loading_widget.dart';
 import '../widgets/forms/my_button.dart';
@@ -48,8 +46,8 @@ class _EditMainCenterDataPageState extends State<EditMainCenterDataPage> {
           listener: (context, state) {},
           builder: (context, state) {
             if (state is ProfileLoadingBeforFetch) {
-              return const MyLottie(
-                lottie: JsonAssets.bloodDonation,
+              return const Center(
+                child: LoadingWidget(),
               );
             }
 
