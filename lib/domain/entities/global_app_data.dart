@@ -1,28 +1,28 @@
 import 'dart:convert';
 
-import 'news_card_data.dart';
+import 'event_card_data.dart';
 
 class GlobalAppData {
   String appName;
   String aboutApp;
   String homeHeader;
   String infoTitle;
-  String newsTitle;
+  String eventsTitle;
   String reportLink;
   List<String> infoList;
   List<String> homeSlides;
-  List<NewsCardData> newsCardsData;
+  List<EventCardData> eventsCardsData;
 
   GlobalAppData({
     required this.appName,
     required this.aboutApp,
     required this.homeHeader,
     required this.infoTitle,
-    required this.newsTitle,
+    required this.eventsTitle,
     required this.reportLink,
     required this.infoList,
     required this.homeSlides,
-    required this.newsCardsData,
+    required this.eventsCardsData,
   });
 
   Map<String, dynamic> toMap() {
@@ -31,11 +31,11 @@ class GlobalAppData {
       GlobalAppDataFields.aboutApp: aboutApp,
       GlobalAppDataFields.homeHeader: homeHeader,
       GlobalAppDataFields.infoTitile: infoTitle,
-      GlobalAppDataFields.newsTitile: newsTitle,
+      GlobalAppDataFields.eventsTitile: eventsTitle,
       GlobalAppDataFields.reportLink: reportLink,
       GlobalAppDataFields.infoList: infoList,
       GlobalAppDataFields.homeSlides: homeSlides,
-      GlobalAppDataFields.newsCardsData: newsCardsData,
+      GlobalAppDataFields.eventsCardsData: eventsCardsData,
     };
   }
 
@@ -48,20 +48,20 @@ class GlobalAppData {
     List<String> homeSileds =
         List<String>.from(map[GlobalAppDataFields.homeSlides] as List<String>);
 
-    List<NewsCardData> newsCardsData =
-        (jsonDecode(map[GlobalAppDataFields.newsCardsData] ?? "[]") as List)
-            .map((cardMap) => NewsCardData.fromMap(cardMap))
+    List<EventCardData> eventCardsData =
+        (jsonDecode(map[GlobalAppDataFields.eventsCardsData] ?? "[]") as List)
+            .map((cardMap) => EventCardData.fromMap(cardMap))
             .toList();
     return GlobalAppData(
       appName: map[GlobalAppDataFields.appName]?.toString() ?? "",
       aboutApp: map[GlobalAppDataFields.aboutApp]?.toString() ?? "",
       homeHeader: map[GlobalAppDataFields.homeHeader]?.toString() ?? "",
       infoTitle: map[GlobalAppDataFields.infoTitile]?.toString() ?? "",
-      newsTitle: map[GlobalAppDataFields.newsTitile]?.toString() ?? "",
+      eventsTitle: map[GlobalAppDataFields.eventsTitile]?.toString() ?? "",
       reportLink: map[GlobalAppDataFields.reportLink]?.toString() ?? "",
       infoList: newInfoList,
       homeSlides: homeSileds,
-      newsCardsData: newsCardsData,
+      eventsCardsData: eventCardsData,
     );
   }
 
@@ -78,9 +78,9 @@ class GlobalAppDataFields {
   static const String aboutApp = "about_app";
   static const String homeHeader = "home_header";
   static const String infoTitile = "info_titile";
-  static const String newsTitile = "news_title";
+  static const String eventsTitile = "events_title";
   static const String reportLink = "report_link";
   static const String infoList = "info_list";
   static const String homeSlides = "home_slides";
-  static const String newsCardsData = "news_cards_data";
+  static const String eventsCardsData = "events_cards_data";
 }

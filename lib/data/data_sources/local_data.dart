@@ -22,9 +22,9 @@ class LocalData {
       "blood-donation-bag-heart.png",
       "hands-donate.jpg",
     ],
-    newsTitle: "مستجدات",
-    newsCardsData: [
-      // NewsCardData(
+    eventsTitle: "مستجدات",
+    eventsCardsData: [
+      // EventCardData(
       //   id: "id",
       //   title: "title",
       //   desc: "desc",

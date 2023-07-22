@@ -5,18 +5,18 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../resources/color_manageer.dart';
 import '../../resources/values_manager.dart';
-import '../../../domain/entities/news_card_data.dart';
+import '../../../domain/entities/event_card_data.dart';
 import '../common/loading_widget.dart';
 
-class NewsCard extends StatelessWidget {
-  final NewsCardData newsData;
-  const NewsCard({Key? key, required this.newsData}) : super(key: key);
+class EventCard extends StatelessWidget {
+  final EventCardData eventData;
+  const EventCard({Key? key, required this.eventData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        Uri url = Uri.parse(newsData.link);
+        Uri url = Uri.parse(eventData.link);
         if (await canLaunchUrl(url)) {
           launchUrl(url);
         } else {
@@ -42,7 +42,7 @@ class NewsCard extends StatelessWidget {
                     topRight: Radius.circular(20),
                   ),
                   child: CachedNetworkImage(
-                    imageUrl: newsData.image,
+                    imageUrl: eventData.image,
                     progressIndicatorBuilder: (context, url, progress) =>
                         const Center(child: LoadingWidget()),
                     height: 200,
@@ -105,7 +105,7 @@ class NewsCard extends StatelessWidget {
                         child: FittedBox(
                           fit: BoxFit.contain,
                           child: Text(
-                            newsData.title,
+                            eventData.title,
                             style: const TextStyle(
                               color: ColorManager.white,
                               fontSize: AppSize.s30,
@@ -127,7 +127,7 @@ class NewsCard extends StatelessWidget {
                   Align(
                       alignment: Alignment.topRight,
                       child: Text(
-                        newsData.desc,
+                        eventData.desc,
                         style: const TextStyle(fontSize: 18),
                       )),
                   const SizedBox(height: 5),
@@ -137,7 +137,7 @@ class NewsCard extends StatelessWidget {
                       const SizedBox(width: 10),
                       Align(
                         alignment: Alignment.topRight,
-                        child: Text(newsData.date),
+                        child: Text(eventData.date),
                       ),
                     ],
                   ),
@@ -148,7 +148,7 @@ class NewsCard extends StatelessWidget {
                       const SizedBox(width: 10),
                       Align(
                         alignment: Alignment.topRight,
-                        child: Text(newsData.place),
+                        child: Text(eventData.place),
                       ),
                     ],
                   ),

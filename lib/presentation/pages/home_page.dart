@@ -27,7 +27,7 @@ import '../widgets/home/home_carousel/home_carousel.dart';
 import '../widgets/home/home_drawer/home_drawer.dart';
 import '../widgets/home/home_info.dart';
 import '../widgets/home/home_welcome.dart';
-import '../widgets/home/news_cards.dart';
+import '../widgets/home/events_cards.dart';
 import 'introduction_page.dart';
 import 'notfication_page.dart';
 import 'setting_page.dart';
@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                   HomeCarousel(),
                   SizedBox(height: AppSize.s10),
                   HomeInfo(),
-                  NewsCards(),
+                  EventsCards(),
                   SizedBox(height: AppSize.s40),
                 ],
               ),
