@@ -35,7 +35,7 @@ import 'presentation/pages/splash_screen.dart';
 import 'presentation/resources/theme_manager.dart';
 
 String? version;
-//---------------------
+
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'com.google.firebase.messaging.default_notification_channel_id',
@@ -77,7 +77,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 late Position position;
-//----------------------
+
 const AndroidInitializationSettings _androidInitializationSettings =
     AndroidInitializationSettings('@mipmap/ic_launcher');
 // final DarwinInitializationSettings _darwinInitializationSettings =

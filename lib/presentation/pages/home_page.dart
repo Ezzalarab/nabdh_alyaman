@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -20,6 +21,8 @@ import '../../main.dart';
 import '../pages/update_loc&show_notfication.dart';
 import '../resources/color_manageer.dart';
 import '../resources/values_manager.dart';
+import '../widgets/forms/my_button.dart';
+import '../widgets/forms/my_text_form_field.dart';
 import '../widgets/home/home_carousel/home_carousel.dart';
 import '../widgets/home/home_drawer/home_drawer.dart';
 import '../widgets/home/home_info.dart';
@@ -27,7 +30,6 @@ import '../widgets/home/home_welcome.dart';
 import '../widgets/home/news_cards.dart';
 import 'introduction_page.dart';
 import 'notfication_page.dart';
-import 'search_page.dart';
 import 'setting_page.dart';
 import 'sign_in_page.dart';
 
@@ -47,6 +49,7 @@ class _HomePageState extends State<HomePage> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   late Position position;
   int _counter = 0;
+  final FirebaseAuth _fireAuth = FirebaseAuth.instance;
 
   // Timer? _timer;
   // final String _phone = "714296685";
@@ -203,12 +206,103 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: ColorManager.primary,
               child: const Icon(Icons.search_rounded),
               onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const SearchPage(),
-                  ),
-                );
+                String? _verificationId;
+                String smsCode = '';
+                await _fireAuth
+                    .verifyPhoneNumber(
+                  phoneNumber: "+967775337668",
+                  verificationCompleted:
+                      (PhoneAuthCredential credential) async {
+                    await _fireAuth.signInWithCredential(credential);
+                  },
+                  verificationFailed: (FirebaseException e) {
+                    if (kDebugMode) {
+                      print("verificationFailed");
+                      print(e);
+                    }
+                  },
+                  codeSent: (String verificationId, int? resendToken) async {
+                    _verificationId = verificationId;
+                    final GlobalKey<FormState> verificationFormState =
+                        GlobalKey<FormState>();
+                    AwesomeDialog(
+                      headerAnimationLoop: false,
+                      dialogType: DialogType.noHeader,
+                      context: context,
+                      body: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Form(
+                          key: verificationFormState,
+                          child: Column(
+                            children: [
+                              const Text(
+                                "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
+                                style: TextStyle(
+                                  height: 2,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 20),
+                              MyTextFormField(
+                                onChange: (value) => smsCode = value,
+                                hint: "اكتب رقم التأكيد",
+                                keyBoardType: TextInputType.number,
+                                blurrBorderColor: ColorManager.lightGrey,
+                                focusBorderColor: ColorManager.lightSecondary,
+                                fillColor: ColorManager.white,
+                                autofocus: true,
+                                validator: (value) => (value != null &&
+                                        value.length > 5)
+                                    ? null
+                                    : "يجب كتابة رمز التأكيد المكون من 6 أرقام",
+                              ),
+                              const SizedBox(height: 20),
+                              MyButton(
+                                title: "تأكيد",
+                                onPressed: () async {
+                                  FocusScope.of(context).unfocus();
+                                  if (verificationFormState.currentState!
+                                      .validate()) {
+                                    Navigator.of(context).pop();
+                                    PhoneAuthCredential phoneAuthCredential =
+                                        PhoneAuthProvider.credential(
+                                      verificationId: _verificationId!,
+                                      smsCode: smsCode,
+                                    );
+                                    await _fireAuth
+                                        .signInWithCredential(
+                                            phoneAuthCredential)
+                                        .then((userCredential) async {
+                                      if (userCredential.user != null) {
+                                        print("userCredential.user!.uid");
+                                        print(userCredential.user!.uid);
+                                        Hive.box(dataBoxName).put('user', "1");
+                                      } else {
+                                        print('failed with null user');
+                                      }
+                                    });
+                                  }
+                                },
+                                color: ColorManager.primary,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ).show();
+                  },
+                  codeAutoRetrievalTimeout: (String verificationId) {},
+                )
+                    .catchError((e) {
+                  print("firebase error -------------");
+                  print(e);
+                });
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (_) => const SearchPage(),
+                //   ),
+                // );
               },
             ),
           );

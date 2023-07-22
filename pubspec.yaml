@@ -13,17 +13,17 @@ dependencies:
   awesome_dialog: ^3.0.2
   cached_network_image: ^3.2.3
   carousel_slider: ^4.1.1
-  cloud_firestore: ^4.3.2
+  cloud_firestore: ^4.5.2
   csc_picker:
     path: packages/csc_picker-0.2.6
   cupertino_icons: ^1.0.2
   dartz: ^0.10.1
   email_validator: ^2.1.17
   equatable: ^2.0.5
-  firebase_auth: ^4.2.6
-  firebase_core: ^2.5.0
-  firebase_messaging: ^14.2.2
-  firebase_storage: ^11.2.1
+  firebase_auth: ^4.4.2
+  firebase_core: ^2.10.0
+  firebase_messaging: ^14.4.1
+  firebase_storage: ^11.1.1
   fl_chart: ^0.55.2
   flutter:
     sdk: flutter
