@@ -1,3 +1,6 @@
+# Classified files
+lib/core/encryption.dart
+
 # Miscellaneous
 *.class
 *.log
@@ -42,6 +45,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-# Classified files
-lib/core/encryption.dart
