@@ -32,7 +32,7 @@ class AuthRepositoryImpl implements AuthRepo {
         return await _firebaseAuth
             .signInWithEmailAndPassword(
           email: email,
-          password: password,
+          password: Encryption.encode(password),
         )
             .then((userCredential) async {
           if (userCredential.user != null) {
