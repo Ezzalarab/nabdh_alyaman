@@ -1,5 +1,5 @@
 # Classified files
-lib/core/encryption.dart
+**/encryption.dart
 
 # Miscellaneous
 *.class
