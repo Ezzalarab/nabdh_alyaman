@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -151,6 +152,10 @@ class _SignInPageState extends State<SignInPage> {
       appBar: AppBar(
         title: const Text(AppStrings.signInAppBarTitle),
         elevation: AppSize.s0,
+        backgroundColor: ColorManager.grey0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: ColorManager.grey0,
+        ),
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),

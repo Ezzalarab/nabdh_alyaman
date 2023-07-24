@@ -13,6 +13,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart' as loc;
 
 import '../../core/utils.dart';
+import '../../di.dart' as di;
 import '../../domain/entities/blood_types.dart';
 import '../../domain/entities/donor.dart';
 import '../cubit/signup_cubit/signup_cubit.dart';
@@ -846,11 +847,9 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _moveToSignInPage() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => const SignInPage(),
-      ),
-    );
+    di.initSignIn();
+    Navigator.push(
+        context, MaterialPageRoute(builder: ((context) => const SignInPage())));
   }
 
   // void _moveToPrivacyPolicyPage() {}
