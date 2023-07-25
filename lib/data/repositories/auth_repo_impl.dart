@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
@@ -26,9 +27,6 @@ class AuthRepositoryImpl implements AuthRepo {
       {required String email, required String password}) async {
     if (await networkInfo.isConnected) {
       try {
-        print("email & password");
-        print(email);
-        print(password);
         return await _firebaseAuth
             .signInWithEmailAndPassword(
           email: email,
@@ -40,7 +38,9 @@ class AuthRepositoryImpl implements AuthRepo {
             return Right(userCredential);
           } else {
             _firebaseAuth.signInWithPhoneNumber(email);
-            print("no user");
+            if (kDebugMode) {
+              print("no user");
+            }
             return Left(UnknownFailure());
           }
         });
