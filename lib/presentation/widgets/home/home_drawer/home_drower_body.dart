@@ -114,8 +114,10 @@ class HomeDrawerBody extends StatelessWidget {
               HomeDrawerMenuItem(
                 title: "مشاركة التطبيق",
                 icon: Icons.share,
-                onTap: () => Share.share(
-                    'https://play.google.com/store/apps/details?id=d.threedevils.devicey'),
+                onTap: () async {
+                  await Share.share(
+                      'https://play.google.com/store/apps/details?id=d.threedevils.devicey');
+                },
               ),
 
               HomeDrawerMenuItem(

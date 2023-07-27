@@ -52,7 +52,7 @@ dependencies:
   package_info_plus: ^3.0.3
   permission_handler: ^10.2.0
   rename: ^2.1.1
-  share_plus: ^6.3.0
+  share_plus: ^7.0.2
   url_launcher: ^6.1.7
 
 flutter_icons:
@@ -61,8 +61,8 @@ flutter_icons:
   image_path: "assets/images/nabdh square.png"
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.11.0
   build_runner: null
+  flutter_launcher_icons: ^0.11.0
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter

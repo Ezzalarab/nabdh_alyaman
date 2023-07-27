@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,19 +9,16 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
 
 import '../../core/app_constants.dart';
 import '../../core/methode/shared_method.dart';
 import '../../core/update.dart';
-import '../../core/utils.dart';
-import '../../di.dart' as di;
 import '../../domain/entities/donor.dart';
 import '../../main.dart';
 import '../pages/update_loc&show_notfication.dart';
 import '../resources/color_manageer.dart';
 import '../resources/values_manager.dart';
-import '../widgets/forms/my_button.dart';
-import '../widgets/forms/my_text_form_field.dart';
 import '../widgets/home/home_carousel/home_carousel.dart';
 import '../widgets/home/home_drawer/home_drawer.dart';
 import '../widgets/home/home_info.dart';
@@ -30,8 +26,8 @@ import '../widgets/home/home_welcome.dart';
 import '../widgets/home/events_cards.dart';
 import 'introduction_page.dart';
 import 'notfication_page.dart';
+import 'search_page.dart';
 import 'setting_page.dart';
-import 'sign_in_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -49,7 +45,6 @@ class _HomePageState extends State<HomePage> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   late Position position;
   int _counter = 0;
-  final FirebaseAuth _fireAuth = FirebaseAuth.instance;
 
   // Timer? _timer;
   // final String _phone = "714296685";
@@ -152,26 +147,33 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     IconButton(
                       onPressed: () async {
-                        if (_firebaseAuth.currentUser != null) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => NotFicationPage())));
-                        } else {
-                          di.initSignIn();
-                          // Navigator.pushNamed(context, SignInPage.routeName);
-                          Utils.showSnackBar(
-                            context: context,
-                            msg: " يتطلب تسجيل الدخول اولا  ",
-                          );
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => const SignInPage())));
-                        }
+                        String appId = 'com.ezzcode.nabdh_alyaman';
+                        String appUrl =
+                            'https://play.google.com/store/apps/details?id=$appId';
+                        String message =
+                            'تطبيق (نبض اليمن) قد تكون سببًا في إنقاذ حياة\n\n$appUrl';
+                        await Share.share(message);
+
+                        // if (_firebaseAuth.currentUser != null) {
+                        //   Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: ((context) => NotFicationPage())));
+                        // } else {
+                        //   di.initSignIn();
+                        //   // Navigator.pushNamed(context, SignInPage.routeName);
+                        //   Utils.showSnackBar(
+                        //     context: context,
+                        //     msg: " يتطلب تسجيل الدخول اولا  ",
+                        //   );
+                        //   Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: ((context) => const SignInPage())));
+                        // }
                       },
                       icon: const Icon(
-                        Icons.notifications,
+                        Icons.share,
                       ),
                     ),
                     // const Positioned(
@@ -206,106 +208,388 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: ColorManager.primary,
               child: const Icon(Icons.search_rounded),
               onPressed: () async {
-                String? _verificationId;
-                String smsCode = '';
-                await _fireAuth
-                    .verifyPhoneNumber(
-                  phoneNumber: "+967775337668",
-                  verificationCompleted:
-                      (PhoneAuthCredential credential) async {
-                    await _fireAuth.signInWithCredential(credential);
-                  },
-                  verificationFailed: (FirebaseException e) {
-                    if (kDebugMode) {
-                      print("verificationFailed");
-                      print(e);
-                    }
-                  },
-                  codeSent: (String verificationId, int? resendToken) async {
-                    _verificationId = verificationId;
-                    final GlobalKey<FormState> verificationFormState =
-                        GlobalKey<FormState>();
-                    AwesomeDialog(
-                      headerAnimationLoop: false,
-                      dialogType: DialogType.noHeader,
-                      context: context,
-                      body: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Form(
-                          key: verificationFormState,
-                          child: Column(
-                            children: [
-                              const Text(
-                                "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
-                                style: TextStyle(
-                                  height: 2,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 20),
-                              MyTextFormField(
-                                onChange: (value) => smsCode = value,
-                                hint: "اكتب رقم التأكيد",
-                                keyBoardType: TextInputType.number,
-                                blurrBorderColor: ColorManager.lightGrey,
-                                focusBorderColor: ColorManager.lightSecondary,
-                                fillColor: ColorManager.white,
-                                autofocus: true,
-                                validator: (value) => (value != null &&
-                                        value.length > 5)
-                                    ? null
-                                    : "يجب كتابة رمز التأكيد المكون من 6 أرقام",
-                              ),
-                              const SizedBox(height: 20),
-                              MyButton(
-                                title: "تأكيد",
-                                onPressed: () async {
-                                  FocusScope.of(context).unfocus();
-                                  if (verificationFormState.currentState!
-                                      .validate()) {
-                                    Navigator.of(context).pop();
-                                    PhoneAuthCredential phoneAuthCredential =
-                                        PhoneAuthProvider.credential(
-                                      verificationId: _verificationId!,
-                                      smsCode: smsCode,
-                                    );
-                                    await _fireAuth
-                                        .signInWithCredential(
-                                            phoneAuthCredential)
-                                        .then((userCredential) async {
-                                      if (userCredential.user != null) {
-                                        print("userCredential.user!.uid");
-                                        print(userCredential.user!.uid);
-                                        Hive.box(dataBoxName).put('user', "1");
-                                      } else {
-                                        print('failed with null user');
-                                      }
-                                    });
-                                  }
-                                },
-                                color: ColorManager.primary,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ).show();
-                  },
-                  codeAutoRetrievalTimeout: (String verificationId) {},
-                )
-                    .catchError((e) {
-                  print("firebase error -------------");
-                  print(e);
-                });
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) => const SearchPage(),
-                //   ),
-                // );
+                // prepareIbbDonors();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const SearchPage(),
+                  ),
+                );
               },
             ),
           );
+  }
+
+  void prepareIbbDonors() async {
+    List<Map<String, dynamic>> ibbDonorsMap = [
+      {
+        "name": "أحمد المنتصر",
+        "phone": "774330229",
+        "blood_type": "A+",
+        "district": "جبلة",
+        "neighborhood": "مفرق جبله"
+      },
+      {
+        "name": "عماد الرباعي",
+        "phone": "771215817",
+        "blood_type": "A+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "عمر عبده أمين",
+        "phone": "777401559",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "طاهر الشراعي",
+        "phone": "775769693",
+        "blood_type": "A+",
+        "district": "جبلة",
+        "neighborhood": "مفرق جبله"
+      },
+      {
+        "name": "عبدالحكيم مطيع الجهمي",
+        "phone": "774086679",
+        "blood_type": "A+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "مطيع الجعفري",
+        "phone": "775453460",
+        "blood_type": "A+",
+        "district": "ريف إب",
+        "neighborhood": "اكمة عيسئ"
+      },
+      {
+        "name": "وازع محمد الصلاحي",
+        "phone": "774988489",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "شعب عماق دار الشرف"
+      },
+      {
+        "name": "وهيب عبدة المرهبي",
+        "phone": "777721289",
+        "blood_type": "A+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "محمد مطيع الجهمي",
+        "phone": "711301185",
+        "blood_type": "A+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "مصطفي القيفي",
+        "phone": "711861544",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "عبدالسلام علي النهمي",
+        "phone": "770933315",
+        "blood_type": "A+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "موفق علايه",
+        "phone": "777111227",
+        "blood_type": "B+",
+        "district": "جبلة",
+        "neighborhood": "مفرق جبله"
+      },
+      {
+        "name": "جلال عبدالله الحراني",
+        "phone": "771977949",
+        "blood_type": "O+",
+        "district": "جبلة",
+        "neighborhood": "مفرق جبله"
+      },
+      {
+        "name": "عبدالله الظراب",
+        "phone": "770253700",
+        "blood_type": "A+",
+        "district": "جبلة",
+        "neighborhood": "مفرق جبله"
+      },
+      {
+        "name": "محسن قايد أمين أبو راس",
+        "phone": "700062244",
+        "blood_type": "A+",
+        "district": "جبلة",
+        "neighborhood": "مفرق جبله"
+      },
+      {
+        "name": "كمال محمد ناجي الفقيه",
+        "phone": "712563675",
+        "blood_type": "A+",
+        "district": "ريف إب",
+        "neighborhood": "اكمه عيسئ"
+      },
+      {
+        "name": "أحمد عبدالله عبادي العجمي",
+        "phone": "715366393",
+        "blood_type": "A+",
+        "district": "الظهار",
+        "neighborhood": "المحافظه"
+      },
+      {
+        "name": "غمدان النهمي",
+        "phone": "777665027",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "مروان الحسام",
+        "phone": "772100551",
+        "blood_type": "A+",
+        "district": "جبلة",
+        "neighborhood": "مفرق جبله"
+      },
+      {
+        "name": "محمد عبد الواحد الحميري",
+        "phone": "711900079",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "أحمد الرخمي",
+        "phone": "772930434",
+        "blood_type": "A+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "هشام البدوي",
+        "phone": "775077620",
+        "blood_type": "A+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "عبد الحكيم جوبح",
+        "phone": "771288549",
+        "blood_type": "O+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "فارس السلمي",
+        "phone": "771306377",
+        "blood_type": "B+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "عدنان سعيد البدوي",
+        "phone": "715672302",
+        "blood_type": "AB+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "محمد علي حمادي",
+        "phone": "771480737",
+        "blood_type": "A+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "شايف الرباعي",
+        "phone": "773021640",
+        "blood_type": "A+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "محمد الجهيم",
+        "phone": "713107613",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "عماد هادي عساكر",
+        "phone": "775606377",
+        "blood_type": "A+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "زكريا صادق العمدة",
+        "phone": "772878622",
+        "blood_type": "B+",
+        "district": "جبلة",
+        "neighborhood": "مفرق جبلة"
+      },
+      {
+        "name": "عبدالملك العمدة",
+        "phone": "715729801",
+        "blood_type": "O+",
+        "district": "جبلة",
+        "neighborhood": "مفرق جبلة"
+      },
+      {
+        "name": "هيثم عبدالله الجهراني",
+        "phone": "774949775",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "نادر امين الجهراني",
+        "phone": "771372590",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "بهاء علي الحبيشي",
+        "phone": "777247180",
+        "blood_type": "O+",
+        "district": "الشعر",
+        "neighborhood": "جوار فندق تاج اب"
+      },
+      {
+        "name": "حسام عبدالله الجهراني",
+        "phone": "777110021",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "عماد الدين رشاد السعيدي",
+        "phone": "771255923",
+        "blood_type": "-O",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "هشام عبد السلام الجبري",
+        "phone": "774404476",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "أكمة عيسئ"
+      },
+      {
+        "name": "علي أحمد قاسم جوبح",
+        "phone": "771296697",
+        "blood_type": "A+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "علي عبدالكريم الرباعي",
+        "phone": "770970315",
+        "blood_type": "O+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "أيمن محمد عبد عوض الرباعي",
+        "phone": "774126209",
+        "blood_type": "-B",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "إبراهيم أمين قاسم أحمد الرباعي",
+        "phone": "775025638",
+        "blood_type": "--A",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "بلال عبد سعيد الرباعي",
+        "phone": "770017186",
+        "blood_type": "O+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "ياسر أمين قاسم أحمد الرباعي",
+        "phone": "774050165",
+        "blood_type": "O+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "محمد أحمد ظافر",
+        "phone": "770651378",
+        "blood_type": "O+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "عبد الواسع الرباعي",
+        "phone": "773075193",
+        "blood_type": "O+",
+        "district": "المشنة",
+        "neighborhood": "عياد"
+      },
+      {
+        "name": "عبدالسلام امين احمد الاصبحي",
+        "phone": "774389714",
+        "blood_type": "_B",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "ايمن على قحطان",
+        "phone": "715626695",
+        "blood_type": "A+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "علي عبود الجماعي",
+        "phone": "777329500",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "محمد عبدالله القمراء",
+        "phone": "771077310",
+        "blood_type": "A+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      },
+      {
+        "name": "طارق احمدالشعري",
+        "phone": "777993635",
+        "blood_type": "O+",
+        "district": "ريف إب",
+        "neighborhood": "دار الشرف"
+      }
+    ];
+    List<Donor> ibbDonors = [];
+    for (Map<String, dynamic> ibbDonorMap in ibbDonorsMap) {
+      ibbDonorMap['state'] = 'إب';
+      ibbDonorMap['created_at'] = DateTime.now();
+      Donor ibbDonor = Donor.fromMap(ibbDonorMap);
+      ibbDonors.add(ibbDonor);
+    }
+    // print('ibbDonors.last.toMap()');
+    // print(ibbDonors.last.toMap());
+    // print('ibbDonors.first.toMap()');
+    // print(ibbDonors.first.toMap());
+    for (Donor ibbDonor in ibbDonors) {
+      await FirebaseFirestore.instance
+          .collection('donors')
+          .add(ibbDonor.toMap());
+      print(ibbDonor.name);
+    }
   }
 
   Future<bool> pushNotificationsSpecificDevice({

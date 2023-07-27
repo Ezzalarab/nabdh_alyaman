@@ -81,13 +81,13 @@ class Donor extends Equatable {
       neighborhood: map[DonorFields.neighborhood]?.toString() ?? "",
       image: map[DonorFields.image]?.toString() ?? "",
       brithDate: map[DonorFields.brithDate]?.toString() ?? "",
-      isShown: map[DonorFields.isShown]?.toString() ?? "",
-      isShownPhone: map[DonorFields.isShownPhone]?.toString() ?? "",
-      isGpsOn: map[DonorFields.isGpsOn]?.toString() ?? "",
+      isShown: map[DonorFields.isShown]?.toString() ?? "1",
+      isShownPhone: map[DonorFields.isShownPhone]?.toString() ?? "1",
+      isGpsOn: map[DonorFields.isGpsOn]?.toString() ?? "1",
       token: map[DonorFields.token]?.toString() ?? "",
       lat: map[DonorFields.lat]?.toString() ?? "",
       lon: map[DonorFields.lon]?.toString() ?? "",
-      status: map[DonorFields.status]?.toString() ?? "",
+      status: map[DonorFields.status]?.toString() ?? "ACTIVE",
     );
   }
 

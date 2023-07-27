@@ -23,8 +23,9 @@ class AppStrings {
   static const String resetPasswordDialogMessage =
       "راجع الرسائل الواردة في بريدك الالكتروني يمكن ان تكون في قائمة المهملات او spam ومن ثم قم بتغير كلمة السر وسجل الدخول في التطبيق من جديد";
   static const String resetPasswordDialogOkButton = "تم";
-  static const String signInEmailHint = "البريد الإلكتروني";
-  static const String signInEmailValidatorError = "اكتب بريد إيميل صحيح";
+  static const String signInEmailHint = "البريد الإلكتروني أو رقم الهاتف";
+  static const String signInEmailValidatorError =
+      "اكتب بريد إيميل صحيح أو رقم هاتف صحيح";
   static const String signInPasswordHint = "كلمة المرور";
   static const String firebasePasswordValidatorError =
       "يجب أن يكون طول كلمة المرور ستة أو أكثر";
@@ -39,7 +40,7 @@ class AppStrings {
   static const String signUpFirstStepMotivationPhrase =
       "بخطواتـك هذه قد تـنـقـذ حيـاة إنــسان";
   static const String signUpEmailHint = "بريدك الإلكتروني";
-  static const String signUpEmailValidator = "اكتب بريد إيميل صحيح";
+  static const String signUpEmailValidator = "اكتب بريد إيميل";
   static const String signUpPasswordHint = "أنشئ كلمة مرور";
   static const String signUpSecondStepTitle = "بياناتك";
   static const String signUpNameHint = "اسمك";

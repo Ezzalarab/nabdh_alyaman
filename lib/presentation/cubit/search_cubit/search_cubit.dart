@@ -50,10 +50,17 @@ class SearchCubit extends Cubit<SearchState> {
             stateDonors = fetchedStateDonors;
             print("stateDonors.length");
             print(stateDonors.length);
-            donors = fetchedStateDonors
-                .where((donor) =>
-                    donor.district == selectedDistrict || donor.district == "")
-                .toList();
+            donors = fetchedStateDonors.where((donor) {
+              bool inDistrict =
+                  donor.district == selectedDistrict || donor.district == "";
+              if (donor.district == '') {
+                donor.neighborhood = '${donor.district} (المديرية غير محددة)';
+              }
+              if (donor.district != '' && donor.neighborhood == '') {
+                donor.neighborhood = '(المنطقة غير محددة)';
+              }
+              return inDistrict;
+            }).toList();
             print("donors.length");
             print(donors.length);
             await searchCentersUseCase(
