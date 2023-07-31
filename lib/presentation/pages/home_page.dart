@@ -1,22 +1,21 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
 
 import '../../core/app_constants.dart';
-import '../../core/methode/shared_method.dart';
+// import '../../core/methode/shared_method.dart';
 import '../../core/update.dart';
 import '../../domain/entities/donor.dart';
-import '../../main.dart';
-import '../pages/update_loc&show_notfication.dart';
+// import '../pages/update_loc&show_notfication.dart';
 import '../resources/color_manageer.dart';
 import '../resources/values_manager.dart';
 import '../widgets/home/home_carousel/home_carousel.dart';
@@ -25,7 +24,6 @@ import '../widgets/home/home_info.dart';
 import '../widgets/home/home_welcome.dart';
 import '../widgets/home/events_cards.dart';
 import 'introduction_page.dart';
-import 'notfication_page.dart';
 import 'search_page.dart';
 import 'setting_page.dart';
 
@@ -39,12 +37,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  FlutterLocalNotificationsPlugin fltNotification =
-      FlutterLocalNotificationsPlugin();
+  // FlutterLocalNotificationsPlugin fltNotification =
+  //     FlutterLocalNotificationsPlugin();
   final db = FirebaseFirestore.instance;
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   late Position position;
-  int _counter = 0;
+  // int _counter = 0;
 
   // Timer? _timer;
   // final String _phone = "714296685";
@@ -56,70 +54,70 @@ class _HomePageState extends State<HomePage> {
     checkUpdate();
     super.initState();
 
-    initialMessageing();
+    // initialMessageing();
     // pushnot();
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      await SharedMethod().checkGps();
-      position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      if (kDebugMode) {
-        print(position.longitude); //Output: 80.24599079
-        print(position.latitude); //Output: 29.6593457
-      }
-      print("1010101");
-      if (_firebaseAuth.currentUser != null) {
-        await FirebaseFirestore.instance
-            .collection('donors')
-            .doc(_firebaseAuth.currentUser!.uid)
-            .update({
-          DonorFields.lat: position.latitude.toString(),
-          DonorFields.lon: position.longitude.toString()
-        }).then((value) => print("okkokokok"));
-      }
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    //   await SharedMethod().checkGps();
+    //   position = await Geolocator.getCurrentPosition(
+    //       desiredAccuracy: LocationAccuracy.high);
+    //   if (kDebugMode) {
+    //     print(position.longitude); //Output: 80.24599079
+    //     print(position.latitude); //Output: 29.6593457
+    //   }
+    //   print("1010101");
+    //   if (_firebaseAuth.currentUser != null) {
+    //     await FirebaseFirestore.instance
+    //         .collection('donors')
+    //         .doc(_firebaseAuth.currentUser!.uid)
+    //         .update({
+    //       DonorFields.lat: position.latitude.toString(),
+    //       DonorFields.lon: position.longitude.toString()
+    //     }).then((value) => print("okkokokok"));
+    //   }
 
-      RemoteNotification? notification = message.notification;
-      flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification!.title,
-        notification.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channel.id,
-            channel.name,
-            color: const Color.fromARGB(255, 214, 139, 11),
-            playSound: true,
-            icon: '@mipmap/ic_launcher',
-          ),
-        ),
-      );
-    });
+    //   RemoteNotification? notification = message.notification;
+    //   flutterLocalNotificationsPlugin.show(
+    //     notification.hashCode,
+    //     notification!.title,
+    //     notification.body,
+    //     NotificationDetails(
+    //       android: AndroidNotificationDetails(
+    //         channel.id,
+    //         channel.name,
+    //         color: const Color.fromARGB(255, 214, 139, 11),
+    //         playSound: true,
+    //         icon: '@mipmap/ic_launcher',
+    //       ),
+    //     ),
+    //   );
+    // });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: ((context) => NotFicationPage(
-                remoteMessage: message.notification!,
-                dateTime: message.sentTime!,
-              )),
-        ),
-      );
-    });
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: ((context) => NotFicationPage(
+    //             remoteMessage: message.notification!,
+    //             dateTime: message.sentTime!,
+    //           )),
+    //     ),
+    //   );
+    // });
   }
 
-  initialMessageing() async {
-    var message = await FirebaseMessaging.instance.getInitialMessage();
-    if (message != null) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: ((context) => UpdateLocNotFicationPage(
-              remoteMessage: message.notification!,
-              dateTime: message.sentTime!)),
-        ),
-      );
-    }
-  }
+  // initialMessageing() async {
+  //   var message = await FirebaseMessaging.instance.getInitialMessage();
+  //   if (message != null) {
+  //     Navigator.of(context).push(
+  //       MaterialPageRoute(
+  //         builder: ((context) => UpdateLocNotFicationPage(
+  //             remoteMessage: message.notification!,
+  //             dateTime: message.sentTime!)),
+  //       ),
+  //     );
+  //   }
+  // }
 
   //----------- updating ------- check version
   void checkUpdate() async {
@@ -675,27 +673,27 @@ class _HomePageState extends State<HomePage> {
     return true;
   }
 
-  void showNotification() {
-    setState(() {
-      _counter++;
-    });
-    flutterLocalNotificationsPlugin.show(
-      0,
-      "Testing $_counter",
-      "How you doin ?",
-      NotificationDetails(
-        android: AndroidNotificationDetails(channel.id,
-            "com.google.firebase.messaging.default_notification_channel_id",
-            channelDescription:
-                'This channel is used for important notifications.',
-            importance: Importance.max,
-            color: Colors.blue,
-            priority: Priority.high,
-            playSound: true,
-            icon: '@mipmap/ic_launcher'),
-      ),
-    );
-  }
+  // void showNotification() {
+  //   setState(() {
+  //     _counter++;
+  //   });
+  //   flutterLocalNotificationsPlugin.show(
+  //     0,
+  //     "Testing $_counter",
+  //     "How you doin ?",
+  //     NotificationDetails(
+  //       android: AndroidNotificationDetails(channel.id,
+  //           "com.google.firebase.messaging.default_notification_channel_id",
+  //           channelDescription:
+  //               'This channel is used for important notifications.',
+  //           importance: Importance.max,
+  //           color: Colors.blue,
+  //           priority: Priority.high,
+  //           playSound: true,
+  //           icon: '@mipmap/ic_launcher'),
+  //     ),
+  //   );
+  // }
 }
 
 // floatingActionButton: GestureDetector(

@@ -1,10 +1,7 @@
 part of 'send_notfication_cubit.dart';
 
-abstract class SendNotficationState extends Equatable {
+abstract class SendNotficationState {
   const SendNotficationState();
-
-  @override
-  List<Object> get props => [];
 }
 
 class SendNotficationInitial extends SendNotficationState {}

@@ -1,11 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'maps_cubit.dart';
 
-abstract class MapsState extends Equatable {
+abstract class MapsState {
   const MapsState();
 
-  @override
-  List<Object> get props => [];
 }
 
 class MapsInitial extends MapsState {}

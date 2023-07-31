@@ -1,9 +1,9 @@
-import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../pages/setting_page.dart';
 import '../../resources/style.dart';
+import '../common/csc_picker.dart';
 import '../forms/my_text_form_field.dart';
 
 class AddressMainData extends StatelessWidget {

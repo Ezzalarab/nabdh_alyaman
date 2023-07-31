@@ -1,10 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
-
 // ignore: must_be_immutable
-class Donor extends Equatable {
+class Donor {
   String id;
   String email;
   String password;
@@ -96,27 +94,27 @@ class Donor extends Equatable {
   factory Donor.fromJson(String source) =>
       Donor.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  @override
-  List<Object?> get props => [
-        id,
-        name,
-        email,
-        password,
-        phone,
-        state,
-        district,
-        neighborhood,
-        image,
-        brithDate,
-        isShown,
-        isShownPhone,
-        isGpsOn,
-        token,
-        lat,
-        lon,
-        status,
-        isExpanded,
-      ];
+  // @override
+  // List<Object?> get props => [
+  //       id,
+  //       name,
+  //       email,
+  //       password,
+  //       phone,
+  //       state,
+  //       district,
+  //       neighborhood,
+  //       image,
+  //       brithDate,
+  //       isShown,
+  //       isShownPhone,
+  //       isGpsOn,
+  //       token,
+  //       lat,
+  //       lon,
+  //       status,
+  //       isExpanded,
+  //     ];
 }
 
 class DonorFields {

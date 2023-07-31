@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,6 +9,7 @@ import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/strings_manager.dart';
 import '../../presentation/resources/values_manager.dart';
 import '../resources/style.dart';
+import '../widgets/common/csc_picker.dart';
 import '../widgets/common/loading_widget.dart';
 import '../widgets/forms/my_button.dart';
 import '../widgets/forms/my_text_form_field.dart';

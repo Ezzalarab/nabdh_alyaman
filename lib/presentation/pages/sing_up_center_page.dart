@@ -1,7 +1,6 @@
 import '../../presentation/cubit/profile_cubit/profile_cubit.dart';
 import '../../presentation/pages/profile_center.dart';
 import '../../presentation/widgets/forms/my_button.dart';
-import 'package:csc_picker/csc_picker.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ import '../resources/color_manageer.dart';
 import '../resources/constatns.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
+import '../widgets/common/csc_picker.dart';
 import '../widgets/common/loading_widget.dart';
 import '../widgets/common/my_stepper.dart' as my_stepper;
 import '../widgets/forms/my_text_form_field.dart';

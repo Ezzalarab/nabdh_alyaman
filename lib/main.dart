@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
@@ -36,58 +36,58 @@ import 'presentation/resources/theme_manager.dart';
 
 String? version;
 
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'com.google.firebase.messaging.default_notification_channel_id',
-    description: 'This channel is used for important notifications.',
-    // title // description
-    importance: Importance.high,
-    playSound: true);
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// const AndroidNotificationChannel channel = AndroidNotificationChannel(
+//     'high_importance_channel', // id
+//     'com.google.firebase.messaging.default_notification_channel_id',
+//     description: 'This channel is used for important notifications.',
+//     // title // description
+//     importance: Importance.high,
+//     playSound: true);
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print('A bg message just showed up :  ${message.messageId}');
-  await SharedMethod().getLocation();
-  // position = await Geolocator.getCurrentPosition(
-  //         desiredAccuracy: LocationAccuracy.high)
-  //     .then((value) {
-  //   print(position.latitude);
-  //   print(position.longitude);
-  //   Fluttertoast.showToast(msg: message.notification!.body.toString());
-  //   return value;
-  // });
-  // Fluttertoast.showToast(msg: message.notification!.body.toString());
-  RemoteNotification? notification = message.notification;
-  // AndroidNotification? android = message.notification?.android;
-  flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification!.title,
-      notification.body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          color: Colors.blue,
-          playSound: true,
-          icon: '@mipmap/ic_launcher',
-        ),
-      ));
-}
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   await Firebase.initializeApp();
+//   print('A bg message just showed up :  ${message.messageId}');
+//   await SharedMethod().getLocation();
+//   // position = await Geolocator.getCurrentPosition(
+//   //         desiredAccuracy: LocationAccuracy.high)
+//   //     .then((value) {
+//   //   print(position.latitude);
+//   //   print(position.longitude);
+//   //   Fluttertoast.showToast(msg: message.notification!.body.toString());
+//   //   return value;
+//   // });
+//   // Fluttertoast.showToast(msg: message.notification!.body.toString());
+//   RemoteNotification? notification = message.notification;
+//   // AndroidNotification? android = message.notification?.android;
+//   flutterLocalNotificationsPlugin.show(
+//       notification.hashCode,
+//       notification!.title,
+//       notification.body,
+//       NotificationDetails(
+//         android: AndroidNotificationDetails(
+//           channel.id,
+//           channel.name,
+//           color: Colors.blue,
+//           playSound: true,
+//           icon: '@mipmap/ic_launcher',
+//         ),
+//       ));
+// }
 
 late Position position;
 
-const AndroidInitializationSettings _androidInitializationSettings =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+// const AndroidInitializationSettings _androidInitializationSettings =
+//     AndroidInitializationSettings('@mipmap/ic_launcher');
 // final DarwinInitializationSettings _darwinInitializationSettings =
 //     const DarwinInitializationSettings();
 
-void initialisendNotfications() async {
-  InitializationSettings initializationSettings =
-      const InitializationSettings(android: _androidInitializationSettings);
-  flutterLocalNotificationsPlugin.initialize(initializationSettings);
-}
+// void initialisendNotfications() async {
+//   InitializationSettings initializationSettings =
+//       const InitializationSettings(android: _androidInitializationSettings);
+//   flutterLocalNotificationsPlugin.initialize(initializationSettings);
+// }
 
 Future<void> backgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -136,14 +136,14 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox(dataBoxName);
 
-  //-----------------------------------
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessageOpenedApp.listen((message) async {});
+  // //-----------------------------------
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FirebaseMessaging.onMessageOpenedApp.listen((message) async {});
 
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
+  // await flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<
+  //         AndroidFlutterLocalNotificationsPlugin>()
+  //     ?.createNotificationChannel(channel);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -151,7 +151,7 @@ void main() async {
     sound: true,
   );
 
-  initialisendNotfications();
+  // initialisendNotfications();
   //-----------------------------------------------------
 
   // FirebaseMessaging.onBackgroundMessage(

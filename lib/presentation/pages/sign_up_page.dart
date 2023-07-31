@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:csc_picker/csc_picker.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ import '../../domain/entities/blood_types.dart';
 import '../../domain/entities/donor.dart';
 import '../cubit/signup_cubit/signup_cubit.dart';
 import '../resources/font_manager.dart';
+import '../widgets/common/csc_picker.dart';
 import '../widgets/common/loading_widget.dart';
 import '../widgets/forms/my_button.dart';
 import '../resources/assets_manager.dart';

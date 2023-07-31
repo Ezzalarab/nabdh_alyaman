@@ -1,6 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nabdh_alyaman/domain/entities/global_app_data.dart';
 
