@@ -45,3 +45,5 @@ app.*.map.json
 
 # Classified files
 lib/core/encryption.dart
+**/android/key.properties
+**/android/app/upload-keystore.jks

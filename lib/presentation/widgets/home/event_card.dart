@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../resources/color_manageer.dart';
@@ -17,14 +16,7 @@ class EventCard extends StatelessWidget {
     return InkWell(
       onTap: () async {
         Uri url = Uri.parse(eventData.link);
-        if (await canLaunchUrl(url)) {
-          launchUrl(url);
-        } else {
-          Fluttertoast.showToast(
-            msg: 'لا يمكن فتح الرابط',
-            backgroundColor: ColorManager.black.withOpacity(0.5),
-          );
-        }
+        launchUrl(url);
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -128,16 +120,27 @@ class EventCard extends StatelessWidget {
                       alignment: Alignment.topRight,
                       child: Text(
                         eventData.desc,
+                        softWrap: true,
                         style: const TextStyle(fontSize: 18),
                       )),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
                       const Icon(Icons.access_time_outlined),
                       const SizedBox(width: 10),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Text(eventData.date),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Text(
+                            eventData.date,
+                            softWrap: true,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(height: 1.4),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -146,9 +149,18 @@ class EventCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.place_outlined),
                       const SizedBox(width: 10),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Text(eventData.place),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Text(
+                            eventData.place,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(height: 1.4),
+                          ),
+                        ),
                       ),
                     ],
                   ),

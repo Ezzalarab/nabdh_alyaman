@@ -23,21 +23,28 @@ class GlobalRepoImpl implements GlobalRepo {
             .get()
             .then((result) async {
           Map<String, dynamic> dataMap = result.docs.first.data();
-          List<String> homeSliderImagesPaths =
-              (dataMap[GlobalAppDataFields.homeSlides] as List<dynamic>)
-                  .map((e) => e.toString())
-                  .toList();
-          List<String> homeSliderImagesUrls = [];
+          GlobalAppData? appData = GlobalAppData.fromMap(dataMap);
+
+          // set slides images url form firebase storage
           Reference sliderImagesRef = _fireStorage
               .ref()
-              .child(GlobalAppDataFields.homeSliderImageFolderName);
-          for (var imgPath in homeSliderImagesPaths) {
-            String imgUrl =
-                await sliderImagesRef.child(imgPath).getDownloadURL();
-            homeSliderImagesUrls.add(imgUrl);
+              .child(GlobalAppDataFields.homeSliderImagesFolderName);
+          List<String> slidesImagesUrls = [];
+          for (var slideImage in appData.homeSlides) {
+            slideImage =
+                await sliderImagesRef.child(slideImage).getDownloadURL();
+            slidesImagesUrls.add(slideImage);
           }
-          dataMap[GlobalAppDataFields.homeSlides] = homeSliderImagesUrls;
-          GlobalAppData? appData = GlobalAppData.fromMap(dataMap);
+          appData.homeSlides = slidesImagesUrls;
+
+          // set events images url from firebase storage
+          Reference eventsImagesRef = _fireStorage
+              .ref()
+              .child(GlobalAppDataFields.eventsImagesFolderName);
+          for (var event in appData.eventsCardsData) {
+            event.image =
+                await eventsImagesRef.child(event.image).getDownloadURL();
+          }
           return Right(appData);
         });
       } catch (e) {

@@ -46,7 +46,9 @@ class GlobalAppData {
             .toList();
 
     List<String> homeSileds =
-        List<String>.from(map[GlobalAppDataFields.homeSlides] as List<String>);
+        (map[GlobalAppDataFields.homeSlides] as List<dynamic>)
+            .map((e) => e.toString())
+            .toList();
 
     List<EventCardData> eventCardsData =
         (jsonDecode(map[GlobalAppDataFields.eventsCardsData] ?? "[]") as List)
@@ -73,7 +75,8 @@ class GlobalAppData {
 
 class GlobalAppDataFields {
   static const String collectionName = "global_app_data";
-  static const String homeSliderImageFolderName = "home_slider_images";
+  static const String homeSliderImagesFolderName = "home_slider_images";
+  static const String eventsImagesFolderName = "events_images";
   static const String appName = "app_name";
   static const String aboutApp = "about_app";
   static const String homeHeader = "home_header";

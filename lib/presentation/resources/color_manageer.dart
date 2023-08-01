@@ -3,27 +3,27 @@ import 'package:flutter/animation.dart';
 class ColorManager {
   // Main Colors
   static const Color primary =
-      //  Color.fromARGB(255, 230, 230, 230);
+      // Color.fromARGB(255, 230, 230, 230);
       // Color.fromARGB(255, 255, 150, 150);
       Color(0xfff2494c);
-  static const Color lightPrimary = Color.fromARGB(255, 255, 150, 150);
-  static const Color darkPrimary = Color.fromARGB(255, 100, 0, 0);
+  static const Color lightPrimary = Color(0xFFFF9696);
+  static const Color darkPrimary = Color(0xFF640000);
   static const Color secondary = Color(0xff2A3990);
-  static const Color lightSecondary = Color.fromARGB(255, 120, 140, 255);
+  static const Color lightSecondary = Color(0xFF788CFF);
   static const Color darkSecondary = Color(0xff050590);
 
   // Other Colors
 
-  static const Color grey = Color.fromARGB(255, 125, 125, 125);
-  static const Color darkGrey = Color.fromARGB(255, 80, 80, 80);
-  static const Color lightGrey = Color.fromARGB(255, 180, 180, 180);
-  static const Color grey0 = Color.fromARGB(255, 250, 250, 250);
-  static const Color grey1 = Color.fromARGB(255, 240, 240, 240);
-  static const Color grey2 = Color.fromARGB(255, 200, 200, 200);
-  static const Color grey3 = Color.fromARGB(255, 150, 150, 150);
+  static const Color grey = Color(0xFF7D7D7D);
+  static const Color darkGrey = Color(0xFF505050);
+  static const Color lightGrey = Color(0xFFB4B4B4);
+  static const Color grey0 = Color(0xFFFAFAFA);
+  static const Color grey1 = Color(0xFFF0F0F0);
+  static const Color grey2 = Color(0xFFC8C8C8);
+  static const Color grey3 = Color(0xFF969696);
   static const Color white = Color(0xffFFFFFF);
   static const Color black = Color(0xff000000);
-  static const Color link = Color(0xff33aaff);
-  static const Color error = Color(0xffff0000);
-  static const Color success = Color(0xff00ff00);
+  static const Color link = Color(0xFF2196F3);
+  static const Color error = Color(0xFFF44336);
+  static const Color success = Color(0xFF4CAF50);
 }

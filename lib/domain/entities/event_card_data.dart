@@ -4,7 +4,7 @@ class EventCardData {
   final String id;
   final String title;
   final String desc;
-  final String image;
+  String image;
   final String date;
   final String place;
   final String link;
