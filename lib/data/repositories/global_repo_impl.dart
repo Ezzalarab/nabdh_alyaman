@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../core/error/failures.dart';
 import '../../../core/network/network_info.dart';
@@ -42,8 +43,15 @@ class GlobalRepoImpl implements GlobalRepo {
               .ref()
               .child(GlobalAppDataFields.eventsImagesFolderName);
           for (var event in appData.eventsCardsData) {
-            event.image =
-                await eventsImagesRef.child(event.image).getDownloadURL();
+            try {
+              event.image =
+                  await eventsImagesRef.child(event.image).getDownloadURL();
+              if (kDebugMode) {
+                print(event.image);
+              }
+            } catch (e) {
+              rethrow;
+            }
           }
           return Right(appData);
         });

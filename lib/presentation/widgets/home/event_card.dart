@@ -16,7 +16,10 @@ class EventCard extends StatelessWidget {
     return InkWell(
       onTap: () async {
         Uri url = Uri.parse(eventData.link);
-        launchUrl(url);
+        launchUrl(
+          url,
+          mode: LaunchMode.externalApplication,
+        );
       },
       child: Card(
         shape: RoundedRectangleBorder(
