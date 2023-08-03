@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,11 +31,6 @@ class _EditMainCenterDataPageState extends State<EditMainCenterDataPage> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final GlobalKey<FormState> _formStateBloodType = GlobalKey<FormState>();
   String? bloodType;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +200,10 @@ class _EditMainCenterDataPageState extends State<EditMainCenterDataPage> {
                                           : profileCenterData!.district,
                                   onStateChanged: (value) {
                                     // stateName = value;
-                                    print(profileCenterData!.state);
+                                    if (kDebugMode) {
+                                      print('profileCenterData!.state');
+                                      print(profileCenterData!.state);
+                                    }
                                     // box.put("state_name", value);
                                     profileCenterData!.state = value;
                                   },

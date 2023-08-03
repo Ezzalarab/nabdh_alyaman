@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -53,7 +54,10 @@ class IntroductionPage extends StatelessWidget {
         onChange: (value) {},
         onSkip: () {
           // You can also override onSkip callback
-          print(box.get('introduction'));
+          if (kDebugMode) {
+            print("box.get('introduction')");
+            print(box.get('introduction'));
+          }
           box.put('introduction', false);
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(

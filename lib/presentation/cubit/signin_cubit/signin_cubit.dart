@@ -1,8 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 
@@ -101,8 +100,10 @@ class SignInCubit extends Cubit<SignInState> {
           await _firebaseAuth.signInWithCredential(credential);
         },
         verificationFailed: (FirebaseAuthException e) {
-          print("firebaseAuthException");
-          print(e.message);
+          if (kDebugMode) {
+            print("firebaseAuthException");
+            print(e.message);
+          }
           emit(SignInFailure(
               error: e.message ?? "Sign in with phone verification failed"));
         },
@@ -141,15 +142,19 @@ class SignInCubit extends Cubit<SignInState> {
         }
       });
     } on FirebaseException catch (fireError) {
-      print("fireError.code");
-      print(fireError.code);
+      if (kDebugMode) {
+        print("fireError.code");
+        print(fireError.code);
+      }
       if (fireError.code == 'invalid-verification-code') {
         emit(SignInFailure(error: "رمز التأكيد خطأ، حاول مرة أخرى."));
       } else {
         emit(SignInFailure(error: fireError.code));
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       emit(SignInFailure(error: e.toString()));
     }
   }
@@ -173,12 +178,15 @@ class SignInCubit extends Cubit<SignInState> {
 
   Future<void> updateToken(String uid) async {
     String userType = Hive.box(dataBoxName).get('user') ?? "0";
-    print(userType);
+    // print(userType);
     String collectionName = userType == "1" ? "donors" : "centers";
     String token = await FirebaseMessaging.instance
         .getToken()
         .then((value) => value.toString());
-    print(token);
+    if (kDebugMode) {
+      print('token');
+      print(token);
+    }
     FirebaseFirestore.instance.collection(collectionName).doc(uid).update({
       "token": token,
     });

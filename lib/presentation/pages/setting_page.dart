@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -17,7 +13,6 @@ import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 import '../widgets/common/loading_widget.dart';
 import '../widgets/setting/profile_body.dart';
-import '../widgets/setting/select_photo_options_screen.dart';
 
 // Table name data user in hive database
 const String dataBoxName = "dataProfile";
@@ -31,7 +26,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  File? _image;
+  // File? _image;
   Donor? donor, donors;
   Box? dataBox;
   bool? checkErrorFromSata;
@@ -59,22 +54,26 @@ class _SettingPageState extends State<SettingPage> {
   //   }
   // }
 
-  Future _pickImage(ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
-      File? img = File(image.path);
-      // img = await _cropImage(imageFile: img);
-      setState(() {
-        _image = img;
-        print(_image);
-        Navigator.of(context).pop();
-      });
-    } on PlatformException catch (e) {
-      print(e);
-      Navigator.of(context).pop();
-    }
-  }
+  // Future _pickImage(ImageSource source) async {
+  //   try {
+  //     final image = await ImagePicker().pickImage(source: source);
+  //     if (image == null) return;
+  //     File? img = File(image.path);
+  //     // img = await _cropImage(imageFile: img);
+  //     setState(() {
+  //       _image = img;
+  //       if (kDebugMode) {
+  //         print(_image?.path);
+  //       }
+  //       Navigator.of(context).pop();
+  //     });
+  //   } on PlatformException catch (e) {
+  //     if (kDebugMode) {
+  //       print(e);
+  //     }
+  //     Navigator.of(context).pop();
+  //   }
+  // }
 
   // Future<File?> _cropImage({required File imageFile}) async {
   //   CroppedFile? croppedImage =
@@ -83,30 +82,30 @@ class _SettingPageState extends State<SettingPage> {
   //   return File(croppedImage.path);
   // }
 
-  void _showSelectPhotoOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(25.0),
-        ),
-      ),
-      builder: (context) => DraggableScrollableSheet(
-          initialChildSize: 0.28,
-          maxChildSize: 0.4,
-          minChildSize: 0.28,
-          expand: false,
-          builder: (context, scrollController) {
-            return SingleChildScrollView(
-              controller: scrollController,
-              child: SelectPhotoOptionsScreen(
-                onTap: _pickImage,
-              ),
-            );
-          }),
-    );
-  }
+  // void _showSelectPhotoOptions(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(
+  //         top: Radius.circular(25.0),
+  //       ),
+  //     ),
+  //     builder: (context) => DraggableScrollableSheet(
+  //         initialChildSize: 0.28,
+  //         maxChildSize: 0.4,
+  //         minChildSize: 0.28,
+  //         expand: false,
+  //         builder: (context, scrollController) {
+  //           return SingleChildScrollView(
+  //             controller: scrollController,
+  //             child: SelectPhotoOptionsScreen(
+  //               onTap: _pickImage,
+  //             ),
+  //           );
+  //         }),
+  //   );
+  // }
 
   PermissionStatus? _permissionStatus;
 

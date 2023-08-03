@@ -1,9 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 
 import '../../../core/error/failures.dart';
@@ -46,7 +46,10 @@ class SignUpCubit extends Cubit<SignUpState> {
           .then((value) async {
         if (value.exists) {
           int usersCount = await value.get("users_count") ?? 0;
-          print(usersCount);
+          if (kDebugMode) {
+            print('usersCount');
+            print(usersCount);
+          }
           if (usersCount >= 40) {
             areUsers40Today = false;
           }
@@ -59,7 +62,10 @@ class SignUpCubit extends Cubit<SignUpState> {
           });
         }
       });
-      print(areUsers40Today);
+      if (kDebugMode) {
+        print('areUsers40Today');
+        print(areUsers40Today);
+      }
       canSignUpWithPhone = areUsers40Today;
       emit(SignUpInitial(canSignUpWithPhone: areUsers40Today));
     } catch (e, s) {
@@ -138,12 +144,16 @@ class SignUpCubit extends Cubit<SignUpState> {
         codeAutoRetrievalTimeout: (String verificationId) {},
       )
           .catchError((e) {
-        print("firebase error -------------");
-        print(e);
+        if (kDebugMode) {
+          print("firebase error -------------");
+          print(e);
+        }
       });
     } catch (e, s) {
-      print(e);
-      print(s);
+      if (kDebugMode) {
+        print(e);
+        print(s);
+      }
       emit(SignUpFailure(error: e.toString()));
     }
   }
@@ -182,8 +192,10 @@ class SignUpCubit extends Cubit<SignUpState> {
           .signInWithCredential(phoneAuthCredential)
           .then((userCredential) async {
         if (userCredential.user != null) {
-          print("userCredential.user!.uid");
-          print(userCredential.user!.uid);
+          if (kDebugMode) {
+            print("userCredential.user!.uid");
+            print(userCredential.user!.uid);
+          }
           _currentUserCredential = userCredential;
           increaseUsersToday();
           Hive.box(dataBoxName).put('user', "1");
@@ -193,15 +205,20 @@ class SignUpCubit extends Cubit<SignUpState> {
         }
       });
     } on FirebaseException catch (fireError) {
-      print("fireError.code");
-      print(fireError.code);
+      if (kDebugMode) {
+        print("fireError.code");
+        print(fireError.code);
+      }
       if (fireError.code == 'invalid-verification-code') {
         emit(SignUpFailure(error: "رمز التأكيد خطأ، حاول مرة أخرى."));
       } else {
         emit(SignUpFailure(error: fireError.code));
       }
-    } catch (e) {
-      print(e);
+    } catch (e, s) {
+      if (kDebugMode) {
+        print(e);
+        print(s);
+      }
       emit(SignUpFailure(error: e.toString()));
     }
   }

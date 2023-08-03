@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart' as info;
 import 'package:url_launcher/url_launcher.dart';
@@ -25,11 +26,13 @@ class Updating {
           errorMessage = event.docs[0].data()['message'];
           errorDegree = event.docs[0].data()['waring_degree'];
           updateLink = event.docs[0].data()['update_link'];
-          print("check update");
-          print("old");
-          print(oldVersion);
-          print("new");
-          print(newVersion);
+          if (kDebugMode) {
+            print("check update");
+            print("old");
+            print(oldVersion);
+            print("new");
+            print(newVersion);
+          }
           if (errorDegree == "1") {
             errorFlage = false;
           } else if (errorDegree == "0") {
@@ -43,7 +46,9 @@ class Updating {
         }
       });
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 

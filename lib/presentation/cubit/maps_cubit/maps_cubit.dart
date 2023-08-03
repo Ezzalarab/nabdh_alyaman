@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -110,7 +112,9 @@ class MapsCubit extends Cubit<MapsState> {
       long = position.longitude.toString();
       lat = position.latitude.toString();
     });
-    print(positionStream);
+    if (kDebugMode) {
+      print(positionStream);
+    }
   }
 
   List<DonorPoint> getDonorPoints({
@@ -143,11 +147,11 @@ class MapsCubit extends Cubit<MapsState> {
     required double distanceKm,
   }) {
     List<DonorPoint> nearPoints = [];
-    print(distanceKm);
+    // print(distanceKm);
     for (var point in points) {
       double far = getDistanceFromLatLonInKM(point1: base, point2: point);
-      print("========far====distanceKm=====");
-      print(far);
+      // print("========far====distanceKm=====");
+      // print(far);
       if (far < distanceKm) {
         nearPoints.add(point);
       }

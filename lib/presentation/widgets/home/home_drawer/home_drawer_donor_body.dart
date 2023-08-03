@@ -37,7 +37,6 @@ class HomeDrawerDonorBody extends StatelessWidget {
             onTap: () {
               BlocProvider.of<ProfileCubit>(context).getDataToProfilePage();
               if (FirebaseAuth.instance.currentUser != null) {
-                print("+0000");
                 Navigator.of(context).pop();
                 Navigator.push(
                   context,
@@ -46,7 +45,6 @@ class HomeDrawerDonorBody extends StatelessWidget {
                   ),
                 );
               } else {
-                print("object");
                 Utils.showSnackBar(
                   context: context,
                   msg: AppStrings.homeDrawerSignInFirstToast,

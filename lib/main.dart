@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -99,8 +100,10 @@ Future<void> backgroundMessage(RemoteMessage message) async {
   position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high)
       .then((value) {
-    print(position.latitude);
-    print(position.longitude);
+    if (kDebugMode) {
+      print(position.latitude);
+      print(position.longitude);
+    }
     return value;
   });
 
@@ -110,7 +113,11 @@ Future<void> backgroundMessage(RemoteMessage message) async {
       .update({
     DonorFields.lat: position.latitude.toString(),
     DonorFields.lon: position.longitude.toString()
-  }).then((value) => print("location updated"));
+  }).then((value) {
+    if (kDebugMode) {
+      print("location updated");
+    }
+  });
 }
 
 // Future updateLocation(RemoteMessage msg) async {

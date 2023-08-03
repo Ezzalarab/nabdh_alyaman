@@ -750,8 +750,8 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  String? _confirmValidator(value) =>
-      !value! ? AppStrings.signUpYouHaveToConfirm : null;
+  // String? _confirmValidator(value) =>
+  //     !value! ? AppStrings.signUpYouHaveToConfirm : null;
 
   Icon _buildPasswordIcon() {
     return Icon(isPasswordHidden

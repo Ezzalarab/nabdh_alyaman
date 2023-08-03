@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 import '../../domain/entities/blood_center.dart';
@@ -42,21 +43,23 @@ class CheckActive {
     try {
       if (_auth.currentUser != null) {
         String uId = _auth.currentUser!.uid;
-        print(uId);
-        print("=============================uId");
+        // print(uId);
+        // print("=============================uId");
         await _fireStore.collection("donors").doc(uId).get().then((doc) async {
-          print(doc.exists);
-          print("===============doc.exists");
+          // print(doc.exists);
+          // print("===============doc.exists");
           if (doc.exists) {
             currentDonor = Donor.fromMap(doc.data()!);
-            print("=================currentDonor============");
-            print(currentDonor!.name);
-            print(doc.data());
+            // print("=================currentDonor============");
+            // print(currentDonor!.name);
+            // print(doc.data());
           }
         });
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -67,14 +70,16 @@ class CheckActive {
         await _fireStore.collection("centers").doc(uId).get().then((doc) {
           if (doc.exists) {
             currentBloodCenter = BloodCenter.fromMap(doc.data()!);
-            print("=================currentBloodCenter============");
-            print(currentBloodCenter!.name);
-            print(doc.data());
+            // print("=================currentBloodCenter============");
+            // print(currentBloodCenter!.name);
+            // print(doc.data());
           }
         });
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 }

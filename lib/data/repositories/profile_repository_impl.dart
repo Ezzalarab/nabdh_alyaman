@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../core/error/failures.dart';
 import '../../core/network/network_info.dart';
@@ -183,9 +184,11 @@ class ProfileReopsitoryImpl implements ProfileRepository {
               .doc(currentUser.currentUser!.uid.toString())
               .get()
               .then((value) async {
-            print(value.id);
             bloodCenter = BloodCenter.fromMap(value.data()!);
-            print(bloodCenter!.name);
+            if (kDebugMode) {
+              print(value.id);
+              print(bloodCenter!.name);
+            }
 
             return Right(bloodCenter!);
           });

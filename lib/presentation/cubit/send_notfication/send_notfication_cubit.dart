@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:bloc/bloc.dart';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/notfication_data.dart';
 import '../../../domain/usecases/send_notfication_.dart';
@@ -22,6 +24,10 @@ class SendNotficationCubit extends Cubit<SendNotficationState> {
             (failure) => emit(SendNotficationStateFailure()),
             (right) => emit(SendNotficationStateSuccess()));
       });
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 }

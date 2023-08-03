@@ -12,7 +12,6 @@ import '../../core/network/network_info.dart';
 import '../../domain/entities/blood_center.dart';
 import '../../domain/entities/donor.dart';
 import '../../domain/repositories/auth_repo.dart';
-// import '../../core/encryption.dart';
 
 class AuthRepositoryImpl implements AuthRepo {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -30,7 +29,7 @@ class AuthRepositoryImpl implements AuthRepo {
         return await _firebaseAuth
             .signInWithEmailAndPassword(
           email: email,
-          password: Encryption.encode(password),
+          password: password,
         )
             .then((userCredential) async {
           if (userCredential.user != null) {
@@ -45,8 +44,8 @@ class AuthRepositoryImpl implements AuthRepo {
           }
         });
       } on FirebaseException catch (fireError) {
-        print("fireError.code");
-        print(fireError.code);
+        // print("fireError.code");
+        // print(fireError.code);
         if (fireError.code == 'user-not-found') {
           return Left(WrongDataFailure());
         } else if (fireError.code == 'wrong-password') {
@@ -69,7 +68,9 @@ class AuthRepositoryImpl implements AuthRepo {
   Future saveUserTypeLocal(UserCredential userCredential) async {
     final box = Hive.box(dataBoxName);
     String docId = userCredential.user!.uid;
-    print(docId);
+    if (kDebugMode) {
+      print(docId);
+    }
     await _fireStore
         .collection(BloodCenterFields.collectionName)
         .doc(docId)
@@ -91,7 +92,9 @@ class AuthRepositoryImpl implements AuthRepo {
         box.put('user', "2");
       }
     });
-    print(box.get("user") ?? "5");
+    if (kDebugMode) {
+      print(box.get("user") ?? "5");
+    }
   }
 
   @override
@@ -134,7 +137,9 @@ class AuthRepositoryImpl implements AuthRepo {
           }
         });
       } on FirebaseException catch (fireError) {
-        print(fireError.code);
+        if (kDebugMode) {
+          print(fireError.code);
+        }
         if (fireError.code == 'invalid-email') {
           return Left(InvalidEmailFailure());
         } else if (fireError.code == 'weak-password') {
@@ -177,7 +182,9 @@ class AuthRepositoryImpl implements AuthRepo {
             return const Right(unit);
           });
         } else {
-          print("no current user");
+          if (kDebugMode) {
+            print("no current user");
+          }
           return left(WrongDataFailure());
         }
       } on FirebaseException catch (fireError) {
@@ -186,15 +193,19 @@ class AuthRepositoryImpl implements AuthRepo {
         } else if (fireError.code == 'too-many-request') {
           return Left(ServerFailure());
         } else {
-          print("fireError.code");
-          print(fireError.code);
+          if (kDebugMode) {
+            print("fireError.code");
+            print(fireError.code);
+          }
           return Left(UnknownFailure());
         }
       } on ServerException {
         return Left(ServerFailure());
       } catch (e) {
-        print("sign up failed");
-        print(e);
+        if (kDebugMode) {
+          print("sign up failed");
+          print(e);
+        }
         return Left(UnknownFailure());
       }
     } else {
@@ -216,13 +227,13 @@ class AuthRepositoryImpl implements AuthRepo {
             .then((userCredential) async {
           if (userCredential.user != null) {
             try {
-              Map<String, dynamic> centerDate = center.toMap();
-              centerDate['password'] =
-                  Encryption.encode(centerDate['password']);
+              Map<String, dynamic> centerData = center.toMap();
+              centerData['password'] =
+                  Encryption.encode(centerData['password']);
               return await _fireStore
                   .collection('centers')
                   .doc(userCredential.user!.uid)
-                  .set(center.toMap())
+                  .set(centerData)
                   .then((_) async {
                 Hive.box(dataBoxName).put('user', "2");
                 return const Right(unit);

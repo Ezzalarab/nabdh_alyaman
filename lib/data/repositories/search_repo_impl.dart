@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../domain/entities/blood_center.dart';
 import '../../core/error/failures.dart';
@@ -38,8 +39,10 @@ class SearchRepoImpl implements SearchRepo {
           }
         });
       } on FirebaseException catch (fireError) {
-        print("Search=Donors====fireError.code");
-        print(fireError.code);
+        if (kDebugMode) {
+          print("Search=Donors====fireError.code");
+          print(fireError.code);
+        }
         if (fireError.code == 'unknown') {
           return Left(FirebaseUnknownFailure());
         } else if (fireError.code == 'too-many-request') {
@@ -48,8 +51,10 @@ class SearchRepoImpl implements SearchRepo {
           return Left(UnknownFailure());
         }
       } catch (e) {
-        print("Search=Donors====exception");
-        print(e);
+        if (kDebugMode) {
+          print("Search=Donors====exception");
+          print(e);
+        }
         return Left(UnknownFailure());
       }
     } else {
@@ -61,7 +66,6 @@ class SearchRepoImpl implements SearchRepo {
   Future<Either<Failure, List<Donor>>> searchStateDonors({
     required String state,
   }) async {
-    print("result");
     if (await networkInfo.isConnected) {
       List<Donor> stateDonors = <Donor>[];
       try {
@@ -71,7 +75,9 @@ class SearchRepoImpl implements SearchRepo {
             .get()
             .then((value) async {
           for (var doc in value.docs) {
-            print(doc.data());
+            if (kDebugMode) {
+              print(doc.data());
+            }
           }
           if (value.docs.isNotEmpty) {
             stateDonors = value.docs
@@ -85,8 +91,10 @@ class SearchRepoImpl implements SearchRepo {
           }
         });
       } on FirebaseException catch (fireError) {
-        print("Search=State=Donors====fireError.code");
-        print(fireError.code);
+        if (kDebugMode) {
+          print("Search=State=Donors====fireError.code");
+          print(fireError.code);
+        }
         if (fireError.code == 'unknown') {
           return Left(FirebaseUnknownFailure());
         } else if (fireError.code == 'too-many-request') {
@@ -95,8 +103,10 @@ class SearchRepoImpl implements SearchRepo {
           return Left(UnknownFailure());
         }
       } catch (e) {
-        print("Search=State=Donors====exception");
-        print(e);
+        if (kDebugMode) {
+          print("Search=State=Donors====exception");
+          print(e);
+        }
         return Left(UnknownFailure());
       }
     } else {
@@ -128,8 +138,10 @@ class SearchRepoImpl implements SearchRepo {
           }
         });
       } on FirebaseException catch (fireError) {
-        print("Search=Centers====fireError.code");
-        print(fireError.code);
+        if (kDebugMode) {
+          print("Search=Centers====fireError.code");
+          print(fireError.code);
+        }
         if (fireError.code == 'unknown') {
           return Left(FirebaseUnknownFailure());
         } else if (fireError.code == 'too-many-request') {
@@ -138,8 +150,10 @@ class SearchRepoImpl implements SearchRepo {
           return Left(UnknownFailure());
         }
       } catch (e) {
-        print("Search=Centers====exception");
-        print(e);
+        if (kDebugMode) {
+          print("Search=Centers====exception");
+          print(e);
+        }
         return Left(UnknownFailure());
       }
     } else {

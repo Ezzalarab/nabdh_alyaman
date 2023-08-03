@@ -32,7 +32,7 @@ class HomeDrawerCenterBody extends StatelessWidget {
             icon: Icons.sync,
             onTap: () {
               if (FirebaseAuth.instance.currentUser != null) {
-                print("+0000");
+                // print("+0000");
                 Navigator.of(context).pop();
                 BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
                 // Navigator.of(context).pop();
@@ -41,7 +41,6 @@ class HomeDrawerCenterBody extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (_) => const ProfileCenterPage()));
               } else {
-                print("object");
                 Utils.showSnackBar(
                   context: context,
                   msg: AppStrings.homeDrawerSignInFirstToast,
@@ -61,7 +60,6 @@ class HomeDrawerCenterBody extends StatelessWidget {
             icon: Icons.sync,
             onTap: () {
               if (FirebaseAuth.instance.currentUser != null) {
-                print("+0000");
                 BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
                 Navigator.of(context).pop();
                 Navigator.push(
@@ -69,7 +67,6 @@ class HomeDrawerCenterBody extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (_) => const EditMainCenterDataPage()));
               } else {
-                print("object");
                 Utils.showSnackBar(
                   context: context,
                   msg: AppStrings.homeDrawerSignInFirstToast,

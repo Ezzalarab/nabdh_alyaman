@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,12 +31,6 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
   getProfileCenterData() async {
     di.initSignIn();
     await BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
   }
 
   @override
@@ -176,7 +171,6 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
   final TextEditingController _controller = TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller.text = ProfileCenterData.getProfileCenterDataBlodTyeb(
             widget.bloodType, profileCenterData!)
@@ -194,7 +188,7 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
           widget.bloodType, profileCenterData!);
       if (repoSetory >= 1) {
         --repoSetory;
-        ProfileCenterData.IncressProfileCenterDataBlodTyeb(
+        ProfileCenterData.incressProfileCenterDataBlodTyeb(
             widget.bloodType, profileCenterData!, repoSetory);
         _controller.text = repoSetory.toString();
         // BlocProvider.of<ProfileCubit>(context)
@@ -212,12 +206,12 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
     setState(() {
       int repoSetory = ProfileCenterData.getProfileCenterDataBlodTyeb(
           widget.bloodType, profileCenterData!);
-      print(repoSetory);
-      print(widget.bloodType);
-      print("adddddddddddddddddddddddd");
+      // print(repoSetory);
+      // print(widget.bloodType);
+      // print("adddddddddddddddddddddddd");
 
       ++repoSetory;
-      ProfileCenterData.IncressProfileCenterDataBlodTyeb(
+      ProfileCenterData.incressProfileCenterDataBlodTyeb(
           widget.bloodType, profileCenterData!, repoSetory);
       _controller.text = repoSetory.toString();
       // print(widget.profileCenterData.aPlus);
@@ -343,9 +337,11 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
                     style: const TextStyle(fontSize: 20),
                     onChanged: (value) {
                       int intValue = int.tryParse(value) ?? 0;
-                      print("widget.bloodType");
-                      print(widget.bloodType);
-                      ProfileCenterData.IncressProfileCenterDataBlodTyeb(
+                      if (kDebugMode) {
+                        print("widget.bloodType");
+                        print(widget.bloodType);
+                      }
+                      ProfileCenterData.incressProfileCenterDataBlodTyeb(
                         widget.bloodType,
                         profileCenterData!,
                         intValue,
@@ -451,7 +447,7 @@ class ProfileCenterData {
     }
   }
 
-  static IncressProfileCenterDataBlodTyeb(
+  static incressProfileCenterDataBlodTyeb(
       String bloodType, ProfileCenterData profileCenterData, int value) {
     switch (bloodType) {
       case BloodCenterFields.aPlus:

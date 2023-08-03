@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../core/app_constants.dart';
@@ -26,7 +27,9 @@ class SendNotficationImpl implements SendNotficationRepository {
         "f-wunReNSZyR8BAs3xgl4y:APA91bE_FxTEdtlzH5PfdEau6vPVIfA3Hk8Ykb--azdYgONq3ZaN9D9HUQBnsDR36NYD74qEgfhHF-W_3JrMEwO8z6GIQPwXifmGeGpX4Qreb1TYgWC2ypAP6YuLcJW3UVmodljWqVx_",
       ];
       jsonEncode(_listToken);
-      print(jsonEncode(_listToken));
+      if (kDebugMode) {
+        print(jsonEncode(_listToken));
+      }
       try {
         String dataNotifications = '{'
             '"operation": "create",'
@@ -48,9 +51,9 @@ class SendNotficationImpl implements SendNotficationRepository {
           },
           body: dataNotifications,
         );
-
-        print(response.body.toString());
-
+        if (kDebugMode) {
+          print(response.body.toString());
+        }
         return const Right(unit);
       } catch (e) {
         return Left(UnknownFailure());

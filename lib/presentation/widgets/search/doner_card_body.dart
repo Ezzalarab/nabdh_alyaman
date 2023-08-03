@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 

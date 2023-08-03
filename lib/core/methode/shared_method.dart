@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -18,7 +20,9 @@ class SharedMethod {
 
   checkGps() async {
     servicestatus = await location.serviceEnabled();
-    print(servicestatus);
+    if (kDebugMode) {
+      print(servicestatus);
+    }
     if (servicestatus) {
       permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
@@ -75,13 +79,17 @@ class SharedMethod {
     StreamSubscription<Position> positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position position) {
-      print(position.longitude); //Output: 80.24599079
-      print(position.latitude); //Output: 29.6593457
+      if (kDebugMode) {
+        print(position.longitude);
+        print(position.latitude); //Output: 29.6593457
+      } //Output: 80.24599079
 
       long = position.longitude.toString();
       lat = position.latitude.toString();
     });
-    print(positionStream);
+    if (kDebugMode) {
+      print(positionStream);
+    }
     return done;
   }
 }

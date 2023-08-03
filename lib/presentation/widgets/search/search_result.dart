@@ -1,3 +1,6 @@
+// ignore_for_file: depend_on_referenced_packages
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
@@ -241,7 +244,10 @@ class _SearchResultState extends State<SearchResult>
                 ),
               );
             } else if (state is SearchFailure) {
-              print(state.error);
+              if (kDebugMode) {
+                print('state.error');
+                print(state.error);
+              }
               return SizedBox(
                 height: 400,
                 child: Column(
@@ -266,7 +272,10 @@ class _SearchResultState extends State<SearchResult>
                 ),
               );
             } else {
-              print(state.runtimeType);
+              if (kDebugMode) {
+                print('search state.runtimeType');
+                print(state.runtimeType);
+              }
               return SizedBox(
                 height: 400,
                 child: Column(

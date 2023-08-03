@@ -15,7 +15,7 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("search refresh");
+    // print("search refresh");
     return Scaffold(
       appBar: AppBar(
         title: const Text('البحث عن دم'),

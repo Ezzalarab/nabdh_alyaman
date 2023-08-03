@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -586,7 +587,10 @@ class _HomePageState extends State<HomePage> {
       await FirebaseFirestore.instance
           .collection('donors')
           .add(ibbDonor.toMap());
-      print(ibbDonor.name);
+      if (kDebugMode) {
+        print('ibbDonor.name');
+        print(ibbDonor.name);
+      }
     }
   }
 
@@ -640,9 +644,11 @@ class _HomePageState extends State<HomePage> {
       },
       body: dataNotifications,
     );
-    print("+1");
-    print(response.body.toString());
-    print("+0");
+    if (kDebugMode) {
+      print("+1");
+      print(response.body.toString());
+      print("+0");
+    }
 
     return true;
   }
@@ -669,7 +675,10 @@ class _HomePageState extends State<HomePage> {
       },
       body: dataNotifications,
     );
-    print(response.body.toString());
+    if (kDebugMode) {
+      print('response.body');
+      print(response.body);
+    }
     return true;
   }
 

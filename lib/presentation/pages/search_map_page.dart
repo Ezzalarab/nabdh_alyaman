@@ -66,7 +66,7 @@ class _SearchMapPageState extends State<SearchMapPage> {
           listener: (context, state) {},
           builder: (context, state) {
             if (state is MapsSuccess) {
-              print("map sccess");
+              // print("map sccess");
               // Send Notification
               List<String> nearbyTokens = state.nearbyDonors
                   .map((donorPoint) => donorPoint.token)

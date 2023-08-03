@@ -113,7 +113,9 @@ class _SignUpCenterState extends State<SignUpCenter> {
       if (!await location.serviceEnabled()) {
         await location.requestService();
       }
-      print("GPS Service is not enabled, turn on GPS location");
+      if (kDebugMode) {
+        print("GPS Service is not enabled, turn on GPS location");
+      }
     }
   }
 
@@ -404,7 +406,6 @@ class _SignUpCenterState extends State<SignUpCenter> {
                   onCityChanged: _onCityChanged,
                 ),
               ),
-              // TODO add neighborhood TextFormField
               const SizedBox(height: AppSize.s20),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),

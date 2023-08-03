@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,9 +16,11 @@ class SearchOptions extends StatelessWidget {
   final GlobalKey<FormState> searchFormState = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    print("initial city and state");
-    print(BlocProvider.of<SearchCubit>(context).selectedState);
-    print(BlocProvider.of<SearchCubit>(context).selectedDistrict);
+    if (kDebugMode) {
+      print("initial city and state");
+      print(BlocProvider.of<SearchCubit>(context).selectedState);
+      print(BlocProvider.of<SearchCubit>(context).selectedDistrict);
+    }
     return Form(
       key: searchFormState,
       child: SingleChildScrollView(
