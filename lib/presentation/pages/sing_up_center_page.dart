@@ -440,6 +440,8 @@ class _SignUpCenterState extends State<SignUpCenter> {
   }
 
   void _validateForm({int? stepIndex}) {
+    print('_activeStepIndex');
+    print(_activeStepIndex);
     FocusScope.of(context).unfocus();
     FormState? formData = currentFormState();
     if (_activeStepIndex == 0) checkGps();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../core/urls.dart';
 import '../../../../di.dart' as di;
 import '../../../cubit/signup_cubit/signup_cubit.dart';
 import '../../../pages/about_page.dart';
@@ -115,8 +116,10 @@ class HomeDrawerBody extends StatelessWidget {
                 title: "مشاركة التطبيق",
                 icon: Icons.share,
                 onTap: () async {
-                  await Share.share(
-                      'https://play.google.com/store/apps/details?id=d.threedevils.devicey');
+                  String appUrl = Urls.googleStoreAppLink;
+                  String message =
+                      'تطبيق (نبض اليمن) قد تكون سببًا في إنقاذ حياة\n\n$appUrl';
+                  await Share.share(message);
                 },
               ),
 

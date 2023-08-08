@@ -9,30 +9,24 @@ environment:
 
 dependencies:
   animated_splash_screen: ^1.3.0
-  # animated_text_kit: ^4.2.2
   awesome_dialog: ^3.0.2
   cached_network_image: ^3.2.3
   carousel_slider: ^4.1.1
-  cloud_firestore: ^4.5.2
+  cloud_firestore: ^4.8.4
   csc_picker: ^0.2.6
   cupertino_icons: ^1.0.2
   dartz: ^0.10.1
   email_validator: ^2.1.17
-  # equatable: ^2.0.5
-  firebase_auth: ^4.4.2
-  firebase_core: ^2.10.0
-  firebase_messaging: ^14.4.1
-  firebase_storage: ^11.1.1
-  # fl_chart: ^0.55.2
+  firebase_auth: ^4.7.2
+  firebase_core: ^2.15.0
+  firebase_messaging: ^14.6.5
+  firebase_storage: ^11.2.5
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
   flutter_datetime_picker: ^1.5.1
-  # flutter_local_notifications: ^12.0.4
   flutter_localizations:
     sdk: flutter
-  # flutter_polyline_points: ^1.0.0
-  # flutter_staggered_animations: ^1.1.1
   flutter_svg: ^1.1.4
   fluttertoast: ^8.1.3
   geolocator: ^9.0.2
@@ -41,7 +35,6 @@ dependencies:
   hive: null
   hive_flutter: null
   http: ^0.13.5
-  # image_cropper: ^3.0.1
   image_picker: ^0.8.6
   internet_connection_checker: ^1.0.0+1
   introduction_screen: ^3.1.4
@@ -50,7 +43,6 @@ dependencies:
   modal_progress_hud_nsn: ^0.3.0
   package_info_plus: ^3.0.3
   permission_handler: ^10.2.0
-  # rename: ^2.1.1
   share_plus: ^7.0.2
   url_launcher: ^6.1.7
 

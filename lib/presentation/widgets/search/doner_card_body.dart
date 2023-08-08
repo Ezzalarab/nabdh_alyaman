@@ -64,22 +64,39 @@ class DonerCardBody extends StatelessWidget {
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.05,
           ),
-          Container(
-            height: 50,
-            width: 120,
-            decoration: const BoxDecoration(
-              color: Colors.amber,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
-                topLeft: Radius.circular(0),
-                topRight: Radius.circular(0),
+          InkWell(
+            onTap: () async {
+              final Uri launchUri = Uri(
+                scheme: 'sms',
+                path: phone,
+              );
+              await launcher.launch(
+                launchUri.toString(),
+                useSafariVC: false,
+                useWebView: false,
+                enableJavaScript: false,
+                enableDomStorage: false,
+                universalLinksOnly: true,
+                headers: <String, String>{},
+              );
+            },
+            child: Container(
+              height: 50,
+              width: 120,
+              decoration: const BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                  topLeft: Radius.circular(0),
+                  topRight: Radius.circular(0),
+                ),
               ),
-            ),
-            child: const Icon(
-              Icons.message,
-              color: Colors.white,
-              size: 30,
+              child: const Icon(
+                Icons.message,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
           ),
         ],

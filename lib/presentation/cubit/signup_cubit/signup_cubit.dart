@@ -50,7 +50,7 @@ class SignUpCubit extends Cubit<SignUpState> {
             print('usersCount');
             print(usersCount);
           }
-          if (usersCount >= 40) {
+          if (usersCount >= 45) {
             areUsers40Today = false;
           }
         } else {
@@ -300,7 +300,9 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<String> getToken() async {
-    return FirebaseMessaging.instance.getToken().toString();
+    return await FirebaseMessaging.instance
+        .getToken()
+        .then((value) => value.toString());
   }
 
   String _getFailureMessage(Failure failur) {

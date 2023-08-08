@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart' as info;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../main.dart';
+import 'urls.dart';
 
 class Updating {
   bool flagUpdata = false, errorFlage = true;
@@ -92,8 +93,7 @@ class Updating {
               ),
               child: const Text("تحديث"),
               onPressed: () {
-                launchAppStore(updateLink ??
-                    "https://play.google.com/store/apps/details?id=com.ezzcode.nabdh_alyaman");
+                launchAppStore(updateLink ?? Urls.googleStoreAppLink);
               },
             ),
           ),
@@ -104,8 +104,6 @@ class Updating {
   }
 
   void launchAppStore(String updateLink) async {
-    // var updateLinke =
-    //     "https://play.google.com/store/apps/details?id=com.ezzcode.nabdh_alyaman";
     if (await canLaunchUrl(Uri.parse(updateLink))) {
       await launchUrl(Uri.parse(updateLink));
     }

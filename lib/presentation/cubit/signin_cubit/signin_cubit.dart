@@ -135,6 +135,7 @@ class SignInCubit extends Cubit<SignInState> {
       await _firebaseAuth.signInWithCredential(credential).then((value) {
         if (value.user != null) {
           Hive.box(dataBoxName).put('user', "1");
+          updateToken(value.user!.uid);
           increaseUsersToday();
           emit(SignInSuccess());
         } else {
@@ -180,9 +181,7 @@ class SignInCubit extends Cubit<SignInState> {
     String userType = Hive.box(dataBoxName).get('user') ?? "0";
     // print(userType);
     String collectionName = userType == "1" ? "donors" : "centers";
-    String token = await FirebaseMessaging.instance
-        .getToken()
-        .then((value) => value.toString());
+    String token = await getToken();
     if (kDebugMode) {
       print('token');
       print(token);
@@ -209,6 +208,8 @@ class SignInCubit extends Cubit<SignInState> {
   }
 
   Future<String> getToken() async {
-    return FirebaseMessaging.instance.getToken().toString();
+    return await FirebaseMessaging.instance
+        .getToken()
+        .then((value) => value.toString());
   }
 }

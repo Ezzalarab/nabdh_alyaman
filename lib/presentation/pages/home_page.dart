@@ -15,6 +15,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../core/app_constants.dart';
 // import '../../core/methode/shared_method.dart';
 import '../../core/update.dart';
+import '../../core/urls.dart';
 import '../../domain/entities/donor.dart';
 // import '../pages/update_loc&show_notfication.dart';
 import '../resources/color_manageer.dart';
@@ -146,9 +147,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     IconButton(
                       onPressed: () async {
-                        String appId = 'com.ezzcode.nabdh_alyaman';
-                        String appUrl =
-                            'https://play.google.com/store/apps/details?id=$appId';
+                        String appUrl = Urls.googleStoreAppLink;
                         String message =
                             'تطبيق (نبض اليمن) قد تكون سببًا في إنقاذ حياة\n\n$appUrl';
                         await Share.share(message);

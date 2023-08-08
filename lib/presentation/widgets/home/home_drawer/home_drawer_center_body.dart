@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../core/urls.dart';
 import '../../../../core/utils.dart';
 import '../../../../presentation/cubit/profile_cubit/profile_cubit.dart';
 import '../../../../presentation/pages/about_page.dart';
@@ -85,8 +86,12 @@ class HomeDrawerCenterBody extends StatelessWidget {
           HomeDrawerMenuItem(
             title: "مشاركة التطبيق",
             icon: Icons.share,
-            onTap: () => Share.share(
-                'https://play.google.com/store/apps/details?id=d.threedevils.devicey'),
+            onTap: () async {
+              String appUrl = Urls.googleStoreAppLink;
+              String message =
+                  'تطبيق (نبض اليمن) قد تكون سببًا في إنقاذ حياة\n\n$appUrl';
+              await Share.share(message);
+            },
           ),
           HomeDrawerMenuItem(
             title: AppStrings.homeDrawerAboutApp,

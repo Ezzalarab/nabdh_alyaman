@@ -96,7 +96,7 @@ ThemeData getApplicationTheme() {
       ),
       bodyLarge: getBoldStyle(
         color: ColorManager.grey,
-        fontSize: FontSize.s18,
+        fontSize: FontSize.s16,
       ),
       bodyMedium: getRegularStyle(
         color: ColorManager.darkGrey,

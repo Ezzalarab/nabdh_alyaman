@@ -163,6 +163,8 @@ class _SignInPageState extends State<SignInPage> {
           listener: (context, state) async {
             if (state is SignInSuccess) {
               // CheckActive.checkActiveUser();
+              Utils.showSuccessSnackBar(
+                  context: context, msg: AppStrings.signInSuccessMessage);
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const HomePage()));
             } else if (state is SignInFailure) {
