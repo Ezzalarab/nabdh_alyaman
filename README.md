@@ -3,7 +3,7 @@
 Application of blood donation, Developed using Flutter
 The data is fetched using Firebase API. So, you need internet to use the app.
 
-<img src="https://github.com/Ezzalarab/nabdh_alyaman/screenshots/main_view.png">
+<img src="https://github.com/Ezzalarab/nabdh_alyaman/blob/master/screenshots/main_view.png">
 
 <div align="center">
 
@@ -34,8 +34,8 @@ flutter run
 
 ## 📱 Screen Shots
 
-<img src="https://github.com/Ezzalarab/nabdh_alyaman/screenshots/image1.jpeg" width=180> <img src="https://github.com/Ezzalarab/nabdh_alyaman/screenshots/image2.jpeg" width=180> <img src="https://github.com/Ezzalarab/nabdh_alyaman/screenshots/image3.jpeg" width=180> <img src="https://github.com/Ezzalarab/nabdh_alyaman/screenshots/image4.jpeg" width=180>
-<img src="https://github.com/Ezzalarab/nabdh_alyaman/screenshots/image5.jpeg" width=180>
+<img src="https://github.com/Ezzalarab/nabdh_alyaman/blob/master/screenshots/image1.jpeg" width=180> <img src="https://github.com/Ezzalarab/nabdh_alyaman/blob/master/screenshots/image2.jpeg" width=180> <img src="https://github.com/Ezzalarab/nabdh_alyaman/blob/master/screenshots/image3.jpeg" width=180> <img src="https://github.com/Ezzalarab/nabdh_alyaman/blob/master/screenshots/image4.jpeg" width=180>
+<img src="https://github.com/Ezzalarab/nabdh_alyaman/blob/master/screenshots/image5.jpeg" width=180>
 
 
 ## 🎯 Features
