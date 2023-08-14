@@ -146,7 +146,6 @@ void main() async {
   // //-----------------------------------
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // FirebaseMessaging.onMessageOpenedApp.listen((message) async {});
-
   // await flutterLocalNotificationsPlugin
   //     .resolvePlatformSpecificImplementation<
   //         AndroidFlutterLocalNotificationsPlugin>()

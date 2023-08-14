@@ -10,7 +10,12 @@ import 'urls.dart';
 
 class Updating {
   bool flagUpdata = false, errorFlage = true;
-  String? oldVersion, newVersion, errorMessage, errorDegree, updateLink;
+  String? oldVersion,
+      newVersion,
+      errorMessage,
+      errorDegree,
+      updateLink,
+      showDialog;
 
   Future getVersion() async {
     info.PackageInfo? packageInfo = await info.PackageInfo.fromPlatform();
@@ -23,6 +28,7 @@ class Updating {
           .listen((event) {
         // print(event.docs.first);
         if (event.docs.isNotEmpty) {
+          showDialog = event.docs[0].data()['show_dialog'];
           newVersion = event.docs[0].data()['new_version'];
           errorMessage = event.docs[0].data()['message'];
           errorDegree = event.docs[0].data()['waring_degree'];
@@ -34,15 +40,17 @@ class Updating {
             print("new");
             print(newVersion);
           }
-          if (errorDegree == "1") {
-            errorFlage = false;
-          } else if (errorDegree == "0") {
-            errorFlage = true;
-          }
-          if (newVersion == oldVersion) {
-            flagUpdata = false;
-          } else {
-            flagUpdata = true;
+          if (showDialog == '1') {
+            if (errorDegree == "1") {
+              errorFlage = false;
+            } else if (errorDegree == "0") {
+              errorFlage = true;
+            }
+            if (newVersion == oldVersion) {
+              flagUpdata = false;
+            } else {
+              flagUpdata = true;
+            }
           }
         }
       });

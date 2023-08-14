@@ -1,7 +1,8 @@
-import 'package:csc_picker/model/select_status_model.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
+
+import 'package:csc_picker/model/select_status_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 import 'dropdown_with_search.dart';
 

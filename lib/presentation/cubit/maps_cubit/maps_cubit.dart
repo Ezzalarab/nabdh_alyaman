@@ -164,7 +164,7 @@ class MapsCubit extends Cubit<MapsState> {
     required DonorPoint point2,
   }) {
     var R = 6371; // Radius of the earth in km
-    var dLat = deg2rad(point2.lat - point1.lat); // deg2rad below
+    var dLat = deg2rad(point2.lat - point1.lat); // deg2rad function
     var dLon = deg2rad(point2.lon - point1.lon);
     var a = math.sin(dLat / 2) * math.sin(dLat / 2) +
         math.cos(deg2rad(point1.lat)) *
@@ -172,7 +172,7 @@ class MapsCubit extends Cubit<MapsState> {
             math.sin(dLon / 2) *
             math.sin(dLon / 2);
     var c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
-    var d = R * c; // Distance in km
+    var d = R * c; // distance in km
     return d;
   }
 

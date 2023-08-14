@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 
+import '../../../cubit/global_cubit/global_cubit.dart';
 import '../../../resources/assets_manager.dart';
 import 'carousel_item.dart';
 

@@ -264,6 +264,7 @@ class SignUpCubit extends Cubit<SignUpState> {
         });
       });
     } catch (e) {
+      print(e);
       emit(SignUpDataFailure(error: e.toString()));
     }
   }

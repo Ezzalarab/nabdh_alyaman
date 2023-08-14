@@ -13,7 +13,7 @@ class AppStrings {
   static const String homeDrawerSignInFirstToast = "الرجاء تسجيل الدخول أولاً";
   static const String homeDrawerUpdateBloodBank = "تعديل مخزون البنك";
   static const String homeDrawerEditProfileCenter = "تعديل بيانات المركز ";
-  static const String homeDrawerAboutApp = "حول التبيق";
+  static const String homeDrawerAboutApp = "حول التطبيق";
   static const String homeDrawerLogOut = "تسجيل خروج";
 
   //-------------------------------------------------------

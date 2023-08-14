@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nabdh_alyaman/data/data_sources/local_data.dart';
-import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
-import 'package:nabdh_alyaman/presentation/resources/color_manageer.dart';
-import 'package:nabdh_alyaman/presentation/resources/values_manager.dart';
 
+import '../../data/data_sources/local_data.dart';
+import '../cubit/global_cubit/global_cubit.dart';
 import '../resources/assets_manager.dart';
+import '../resources/color_manageer.dart';
+import '../resources/values_manager.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -79,6 +79,7 @@ class _AboutPageState extends State<AboutPage> {
                 ),
               ),
             ),
+            const SizedBox(height: AppSize.s50),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nabdh_alyaman/presentation/resources/assets_manager.dart';
-import 'package:nabdh_alyaman/presentation/widgets/common/dialog_lottie.dart';
+
+import '../../resources/assets_manager.dart';
+import 'dialog_lottie.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({super.key});

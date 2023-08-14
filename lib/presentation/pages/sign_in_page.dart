@@ -5,10 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-import '../../di.dart' as di;
 import '../../core/extensions/extension.dart';
 import '../../core/utils.dart';
 import '../../data/models/dialod_reset_password.dart';
+import '../../di.dart' as di;
 import '../cubit/signin_cubit/signin_cubit.dart';
 import '../cubit/signup_cubit/signup_cubit.dart';
 import '../resources/assets_manager.dart';
@@ -38,6 +38,13 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController passwordController = TextEditingController();
   bool isPasswordVisible = true;
   String? smsCode;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   String? emailOrPhoneValidator(value) {
     String strValue = value?.toString() ?? "";

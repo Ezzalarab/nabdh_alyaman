@@ -177,6 +177,12 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
         .toString();
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
 //----------------------------
   int counter = 0;
   bool ontap = false;

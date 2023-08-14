@@ -1,8 +1,8 @@
 name: nabdh_alyaman
-description: A new Flutter project.
+description: A blood donation app
 publish_to: "none"
 
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: ">=2.19.2 <3.0.0"
@@ -42,7 +42,7 @@ dependencies:
   lottie: ^2.2.0
   modal_progress_hud_nsn: ^0.3.0
   package_info_plus: ^3.0.3
-  permission_handler: ^10.2.0
+  permission_handler: ^10.4.3
   share_plus: ^7.0.2
   url_launcher: ^6.1.7
 

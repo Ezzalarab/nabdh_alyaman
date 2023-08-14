@@ -55,7 +55,7 @@ android {
         applicationId "com.ezzcode.nabdh_alyaman"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion Math.max(flutter.minSdkVersion, 24)//21 //flutter.minSdkVersion
+        minSdkVersion Math.max(flutter.minSdkVersion, 21)//21 //flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -87,4 +87,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation "androidx.multidex:multidex:2.0.1"
+    implementation 'com.google.android.gms:play-services-base:17.6.0'
 }

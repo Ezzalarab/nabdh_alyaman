@@ -28,13 +28,25 @@ class _SearchResultState extends State<SearchResult>
     with TickerProviderStateMixin {
   bool onDonors = false;
   final UrlLauncherPlatform launcher = UrlLauncherPlatform.instance;
+  TabController? tabController;
 
   @override
-  Widget build(BuildContext context) {
-    TabController tabController = TabController(
+  void initState() {
+    tabController = TabController(
       vsync: this,
       length: 2,
     );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController!.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
         child: BlocBuilder<SearchCubit, SearchState>(
@@ -108,7 +120,7 @@ class _SearchResultState extends State<SearchResult>
                                                 CrossAxisAlignment.center,
                                             children: [
                                               const Text(
-                                                  'لا يوجد متبرعين بهذه الفصية'),
+                                                  'لا يوجد متبرعين بهذه الفصيلة'),
                                               const SizedBox(height: 20),
                                               if (state.donors.isNotEmpty)
                                                 const Text(

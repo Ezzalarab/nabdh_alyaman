@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/data_sources/local_data.dart';
-import '../../../presentation/cubit/global_cubit/global_cubit.dart';
 import '../../../di.dart' as di;
+import '../../../presentation/cubit/global_cubit/global_cubit.dart';
 import '../../cubit/signup_cubit/signup_cubit.dart';
 import '../../pages/search_page.dart';
 import '../../pages/sign_up_page.dart';
