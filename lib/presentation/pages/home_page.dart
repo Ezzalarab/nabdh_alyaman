@@ -1,23 +1,18 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
 
 import '../../core/app_constants.dart';
-// import '../../core/methode/shared_method.dart';
 import '../../core/update.dart';
 import '../../core/urls.dart';
 import '../../domain/entities/donor.dart';
-// import '../pages/update_loc&show_notfication.dart';
 import '../resources/color_manageer.dart';
 import '../resources/values_manager.dart';
 import '../widgets/home/events_cards.dart';
@@ -39,17 +34,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  // FlutterLocalNotificationsPlugin fltNotification =
-  //     FlutterLocalNotificationsPlugin();
   final db = FirebaseFirestore.instance;
-  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   late Position position;
-  // int _counter = 0;
-
-  // Timer? _timer;
-  // final String _phone = "714296685";
-  // String? smsCode;
-  // String? _verificationId;
 
   @override
   void initState() {

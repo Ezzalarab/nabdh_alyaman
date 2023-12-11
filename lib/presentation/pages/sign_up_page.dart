@@ -160,6 +160,65 @@ class _SignUpPageState extends State<SignUpPage> {
         ).show();
   }
 
+  Future<void> showGpsPermissionDialog() async {
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.noHeader,
+      body: SizedBox(
+        width: 300,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                "يرجى السماح بصلاحية الوصول إلى الموقع الجغرافي ليتمكن المحتاج للدم من معرفة مكانك",
+                style: TextStyle(
+                  color: ColorManager.darkGrey,
+                  fontWeight: FontWeight.bold,
+                  height: 1.2,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MyButton(
+                    title: 'سماح',
+                    color: ColorManager.success,
+                    minWidth: 100,
+                    onPressed: () {
+                      try {
+                        checkGps();
+                      } catch (e) {
+                        Fluttertoast.showToast(
+                          msg: e.toString(),
+                          toastLength: Toast.LENGTH_LONG,
+                        );
+                      }
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  MyButton(
+                    title: 'رفض',
+                    color: ColorManager.error,
+                    minWidth: 100,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ).show();
+  }
+
   checkGps() async {
     bool haspermission = false;
     LocationPermission permission;
@@ -715,7 +774,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void _validateForm({int? stepIndex}) async {
     FormState? formData = currentFormState();
-    if (_activeStepIndex == 1) checkGps();
+    if (_activeStepIndex == 1) showGpsPermissionDialog();
     if (_activeStepIndex == 2 && districtController.text == "") {
       Fluttertoast.showToast(msg: AppStrings.signUpStateCityValidator);
     } else {

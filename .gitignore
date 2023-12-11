@@ -47,4 +47,4 @@ app.*.map.json
 lib/core/encryption.dart
 **/android/key.properties
 **/android/app/upload-keystore.jks
-**/android/app/google-service.json
+**/android/app/google-services.json
