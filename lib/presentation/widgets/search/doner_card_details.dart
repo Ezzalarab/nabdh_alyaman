@@ -23,10 +23,12 @@ class DonerCardDetails extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Wrap(
               children: [
-                const Text("الاسم  : "),
+                const Text("الاسم  : ",
+                  style: const TextStyle(fontWeight: FontWeight.normal),
+                ),
                 Text(
                   donerName,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.normal),
                 )
               ],
             ),
@@ -36,7 +38,9 @@ class DonerCardDetails extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Wrap(
               children: [
-                const Text("المنطقة  : "),
+                const Text("المنطقة  : ",
+                  style: const TextStyle(fontWeight: FontWeight.normal),
+                ),
                 Text(donerCity),
               ],
             ),

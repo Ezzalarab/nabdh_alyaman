@@ -73,6 +73,7 @@ class _SearchResultState extends State<SearchResult>
                       ),
                       child: TabBar(
                         controller: tabController,
+                        indicatorSize: TabBarIndicatorSize.tab,
                         indicator: BoxDecoration(
                           color: Theme.of(context).primaryColor,
                           borderRadius: const BorderRadius.all(
@@ -94,99 +95,105 @@ class _SearchResultState extends State<SearchResult>
                         physics: const NeverScrollableScrollPhysics(),
                         controller: tabController,
                         children: [
-                          FutureBuilder(builder: (context, snapshot) {
-                            return SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  const Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                          "الفصائل المناسبة للتبرع للفصيلة المختارة"),
+                          FutureBuilder(
+                            future: null,
+                            builder: (context, snapshot) {
+                              return SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    const Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text(
+                                            "الفصائل المناسبة للتبرع للفصيلة المختارة"),
+                                      ),
                                     ),
-                                  ),
-                                  MediaQuery(
-                                      data: MediaQuery.of(context)
-                                          .copyWith(textScaleFactor: 1.0),
-                                      child: const ResultTabs()),
-                                  (compatibleDonors.isEmpty)
-                                      ? SizedBox(
-                                          height: 200,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              const Text(
-                                                  'لا يوجد متبرعين بهذه الفصيلة'),
-                                              const SizedBox(height: 20),
-                                              if (state.donors.isNotEmpty)
+                                    MediaQuery(
+                                        data: MediaQuery.of(context)
+                                            .copyWith(textScaleFactor: 1.0),
+                                        child: const ResultTabs()),
+                                    (compatibleDonors.isEmpty)
+                                        ? SizedBox(
+                                            height: 200,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
                                                 const Text(
-                                                    'قد يوجد متبرع مناسب من فصيلة أخرى'),
-                                            ],
-                                          ),
-                                        )
-                                      : MyExpansionPanelList.radio(
-                                          expansionCallback:
-                                              (int index, bool isExpanded) {
-                                            setState(() => state.donors[index]
-                                                .isExpanded = !isExpanded);
-                                          },
-                                          expandedHeaderPadding:
-                                              EdgeInsets.zero,
-                                          elevation: 0,
-                                          dividerColor: ColorManager.white,
-                                          children: compatibleDonors
-                                              .map<ExpansionPanel>(
-                                                  (Donor donor) {
-                                            return ExpansionPanelRadio(
-                                              value:
-                                                  state.donors.indexOf(donor),
-                                              backgroundColor:
-                                                  const Color.fromARGB(
-                                                      0, 0, 0, 0),
-                                              canTapOnHeader: true,
-                                              headerBuilder: (BuildContext ctx,
-                                                  bool isExpanded) {
-                                                return ListTile(
-                                                  leading: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            3.0),
-                                                    child: CircleAvatar(
-                                                      backgroundColor:
-                                                          Theme.of(context)
-                                                              .primaryColor,
-                                                      radius: 25,
-                                                      child: Text(
-                                                        donor.bloodType,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .titleLarge,
+                                                    'لا يوجد متبرعين بهذه الفصيلة'),
+                                                const SizedBox(height: 20),
+                                                if (state.donors.isNotEmpty)
+                                                  const Text(
+                                                      'قد يوجد متبرع مناسب من فصيلة أخرى'),
+                                              ],
+                                            ),
+                                          )
+                                        : MyExpansionPanelList.radio(
+                                            expansionCallback:
+                                                (int index, bool isExpanded) {
+                                              setState(() => state.donors[index]
+                                                  .isExpanded = !isExpanded);
+                                            },
+                                            expandedHeaderPadding:
+                                                EdgeInsets.zero,
+                                            elevation: 0,
+                                            dividerColor: ColorManager.white,
+                                            children: compatibleDonors
+                                                .map<ExpansionPanel>(
+                                                    (Donor donor) {
+                                              return ExpansionPanelRadio(
+                                                value:
+                                                    state.donors.indexOf(donor),
+                                                backgroundColor:
+                                                    const Color.fromARGB(
+                                                        0, 0, 0, 0),
+                                                canTapOnHeader: true,
+                                                headerBuilder:
+                                                    (BuildContext ctx,
+                                                        bool isExpanded) {
+                                                  return ListTile(
+                                                    leading: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              3.0),
+                                                      child: CircleAvatar(
+                                                        backgroundColor:
+                                                            Theme.of(context)
+                                                                .primaryColor,
+                                                        radius: 25,
+                                                        child: Text(
+                                                          donor.bloodType,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleLarge,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  title: DonerCardDetails(
-                                                    donerName: donor.name,
-                                                    donerCity:
-                                                        donor.neighborhood,
-                                                    donerPhone: donor.phone,
-                                                  ),
-                                                );
-                                              },
-                                              body: DonerCardBody(
-                                                phone: donor.phone,
-                                              ),
-                                            );
-                                          }).toList(),
-                                        ),
-                                ],
-                              ),
-                            );
-                          }),
+                                                    title: DonerCardDetails(
+                                                      donerName: donor.name,
+                                                      donerCity:
+                                                          donor.neighborhood,
+                                                      donerPhone: donor.phone,
+                                                    ),
+                                                  );
+                                                },
+                                                body: DonerCardBody(
+                                                  phone: donor.phone,
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                           FutureBuilder(
+                            future: null,
                             builder: (context, snapshot) => (state
                                     .centers.isEmpty)
                                 ? const Center(
@@ -369,8 +376,12 @@ class _SearchResultState extends State<SearchResult>
                   const SizedBox(height: 20),
                   const Align(
                     alignment: Alignment.centerRight,
-                    child:
-                        Text("يرجى التواصل مع المركز للتأكد من الكمية الفعلية"),
+                    child: Text(
+                      "يرجى التواصل مع المركز للتأكد من الكمية الفعلية",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                   ),
                 ],
               ),

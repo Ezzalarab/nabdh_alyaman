@@ -19,13 +19,13 @@ class SearchPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('البحث عن دم'),
-        backgroundColor: ColorManager.grey0,
+        backgroundColor: ColorManager.primaryBg,
         elevation: 0,
         systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: ColorManager.grey0,
+          statusBarColor: ColorManager.primaryBg,
         ),
       ),
-      backgroundColor: ColorManager.grey0,
+      backgroundColor: ColorManager.primaryBg,
       body: Column(
         children: <Widget>[
           SizedBox(

@@ -16,7 +16,7 @@ class ResultTabs extends StatelessWidget {
         if (state is SearchSuccess) {
           return Container(
             width: double.infinity,
-            height: 70,
+            height: 75,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
@@ -44,7 +44,7 @@ class ResultTabs extends StatelessWidget {
                         duration: const Duration(milliseconds: 300),
                         margin: const EdgeInsets.all(5),
                         width: state.selectedTabIndex == index ? 75 : 65,
-                        height: 50,
+                        height: 60,
                         decoration: BoxDecoration(
                           color: state.selectedTabIndex == index
                               ? Theme.of(context).primaryColor

@@ -152,6 +152,7 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                                 // margin: const EdgeInsets.symmetric(horizontal: 20),
                                 child: CSCPicker(
                                   layout: Layout.vertical,
+                                  bgColor: ColorManager.primaryBg,
                                   showStates: true,
                                   showCities: true,
                                   flagState: CountryFlag.SHOW_IN_DROP_DOWN_ONLY,

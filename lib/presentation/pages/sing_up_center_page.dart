@@ -146,6 +146,7 @@ class _SignUpCenterState extends State<SignUpCenter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: ColorManager.primaryBg,
         appBar: AppBar(
           title: const Text('إنشاء حساب مركز طبي'),
           centerTitle: true,
@@ -369,6 +370,7 @@ class _SignUpCenterState extends State<SignUpCenter> {
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: CSCPicker(
                   layout: Layout.vertical,
+                  bgColor: ColorManager.primaryBg,
                   showStates: true,
                   showCities: true,
                   flagState: CountryFlag.SHOW_IN_DROP_DOWN_ONLY,

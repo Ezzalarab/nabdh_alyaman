@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/blood_types.dart';
 import '../../cubit/search_cubit/search_cubit.dart';
+import '../../resources/color_manageer.dart';
 import '../../resources/style.dart';
 import '../common/csc_picker.dart';
 import '../forms/my_dropdown_button_form_field.dart';
@@ -34,6 +35,7 @@ class SearchOptions extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CSCPicker(
                 layout: Layout.horizontal,
+                bgColor: ColorManager.primaryBg,
                 showStates: true,
                 showCities: true,
                 flagState: CountryFlag.SHOW_IN_DROP_DOWN_ONLY,

@@ -156,12 +156,13 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorManager.primaryBg,
       appBar: AppBar(
         title: const Text(AppStrings.signInAppBarTitle),
         elevation: AppSize.s0,
-        backgroundColor: ColorManager.grey0,
+        backgroundColor: ColorManager.primaryBg,
         systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: ColorManager.grey0,
+          statusBarColor: ColorManager.primaryBg,
         ),
       ),
       body: GestureDetector(
@@ -169,7 +170,6 @@ class _SignInPageState extends State<SignInPage> {
         child: BlocConsumer<SignInCubit, SignInState>(
           listener: (context, state) async {
             if (state is SignInSuccess) {
-              // CheckActive.checkActiveUser();
               Utils.showSuccessSnackBar(
                   context: context, msg: AppStrings.signInSuccessMessage);
               Navigator.of(context).pushReplacement(
@@ -358,13 +358,14 @@ class _SignInPageState extends State<SignInPage> {
   MyButton _buildSignUpButton() {
     return MyButton(
       title: AppStrings.signInSignUpButton,
-      color: ColorManager.grey1,
+      color: ColorManager.white,
       onPressed: _moveToSignUp,
       minWidth: AppSize.s300,
       titleStyle: TextStyle(
         color: Theme.of(context).primaryColor,
         fontSize: FontSize.s14,
         fontFamily: FontConstants.fontFamily,
+        fontWeight: FontWeight.bold,
       ),
     );
   }

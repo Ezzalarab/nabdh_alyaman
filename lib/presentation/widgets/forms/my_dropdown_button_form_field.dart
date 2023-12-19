@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nabdh_alyaman/presentation/resources/color_manageer.dart';
 
 class MyDropdownButtonFormField extends StatelessWidget {
   const MyDropdownButtonFormField({
@@ -31,6 +32,7 @@ class MyDropdownButtonFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
+      dropdownColor: ColorManager.primaryBg,
       validator: validator,
       style: style,
       alignment: Alignment.center,

@@ -202,11 +202,12 @@ class Stepper extends StatefulWidget {
     this.margin,
     this.svgPictureAsset,
     this.iconColor,
+    this.bgColor,
   })  : assert(0 <= currentStep && currentStep < steps.length),
         super(key: key);
 
   final String? svgPictureAsset;
-  final Color? iconColor;
+  final Color? iconColor, bgColor;
 
   /// The steps of the stepper whose titles, subtitles, icons always get shown.
   ///
@@ -595,7 +596,8 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
               child: TextButton(
                 onPressed: widget.onStepCancel,
                 style: TextButton.styleFrom(
-                  foregroundColor: cancelColor, padding: buttonPadding,
+                  foregroundColor: cancelColor,
+                  padding: buttonPadding,
                   shape: buttonShape,
                 ),
                 child: Text(localizations.cancelButtonLabel),
@@ -827,6 +829,7 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
     return Column(
       children: <Widget>[
         Material(
+          color: const Color(0xFFFAFAFA),
           elevation: widget.elevation ?? 2,
           child: Container(
             margin: const EdgeInsets.only(top: 20, left: 24, right: 24),

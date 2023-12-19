@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/data_sources/local_data.dart';
@@ -23,9 +24,13 @@ class _AboutPageState extends State<AboutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: ColorManager.primaryBg,
         title: const Text("حول التطبيق"),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: ColorManager.primaryBg,
+        ),
       ),
-      backgroundColor: ColorManager.white,
+      backgroundColor: ColorManager.primaryBg,
       body: SingleChildScrollView(
         child: Column(
           children: [

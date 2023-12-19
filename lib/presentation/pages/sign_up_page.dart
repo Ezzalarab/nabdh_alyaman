@@ -281,11 +281,12 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorManager.primaryBg,
       appBar: AppBar(
-        backgroundColor: ColorManager.grey0,
+        backgroundColor: ColorManager.primaryBg,
         title: const Text(AppStrings.signUpAppBarTitle),
         systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: ColorManager.grey0,
+          statusBarColor: ColorManager.primaryBg,
         ),
       ),
       body: BlocConsumer<SignUpCubit, SignUpState>(
@@ -639,6 +640,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: CSCPicker(
+                  bgColor: ColorManager.primaryBg,
                   layout: Layout.vertical,
                   showStates: true,
                   showCities: true,

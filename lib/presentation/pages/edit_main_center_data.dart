@@ -148,6 +148,7 @@ class _EditMainCenterDataPageState extends State<EditMainCenterDataPage> {
                                   layout: Layout.vertical,
                                   showStates: true,
                                   showCities: true,
+                                  bgColor: ColorManager.primaryBg,
                                   flagState: CountryFlag.SHOW_IN_DROP_DOWN_ONLY,
                                   dropdownDecoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(

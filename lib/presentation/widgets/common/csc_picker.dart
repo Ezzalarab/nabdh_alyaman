@@ -52,6 +52,7 @@ class CSCPicker extends StatefulWidget {
     this.countryDropdownLabel = "Country",
     this.stateDropdownLabel = "State",
     this.cityDropdownLabel = "City",
+    this.bgColor,
   }) : super(key: key);
 
   final ValueChanged<String>? onCountryChanged;
@@ -84,6 +85,8 @@ class CSCPicker extends StatefulWidget {
   final String countryDropdownLabel;
   final String stateDropdownLabel;
   final String cityDropdownLabel;
+
+  final Color? bgColor;
 
   @override
   CSCPickerState createState() => CSCPickerState();
@@ -379,6 +382,7 @@ class CSCPickerState extends State<CSCPicker> {
       label: widget.countrySearchPlaceholder,
       padding: widget.dropDownPadding,
       margin: widget.dropDownMargin,
+      bgColor: widget.bgColor,
       items: _country.map((String? dropDownStringItem) {
         return dropDownStringItem;
       }).toList(),
@@ -413,6 +417,7 @@ class CSCPickerState extends State<CSCPicker> {
       selected: _selectedState,
       padding: widget.dropDownPadding,
       margin: widget.dropDownMargin,
+      bgColor: widget.bgColor,
       icon: Icon(
         Icons.location_city_outlined,
         color: Colors.black45,
@@ -447,6 +452,7 @@ class CSCPickerState extends State<CSCPicker> {
       selected: _selectedCity,
       padding: widget.dropDownPadding,
       margin: widget.dropDownMargin,
+      bgColor: widget.bgColor,
       icon: Icon(
         Icons.location_on_outlined,
         color: Colors.black45,

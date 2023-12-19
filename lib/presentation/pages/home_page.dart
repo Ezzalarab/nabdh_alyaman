@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -123,10 +124,15 @@ class _HomePageState extends State<HomePage> {
     return firstTimeState
         ? const IntroductionPage()
         : Scaffold(
+            backgroundColor: ColorManager.primaryBg,
             appBar: AppBar(
-              // title: const Text(AppStrings.homeAppBarTitle),
               centerTitle: true,
               elevation: AppSize.s0,
+              backgroundColor: ColorManager.primaryBg,
+              surfaceTintColor: Colors.transparent,
+              systemOverlayStyle: const SystemUiOverlayStyle(
+                statusBarColor: ColorManager.primaryBg,
+              ),
               leadingWidth: 90,
               actions: [
                 Stack(
@@ -172,7 +178,6 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(width: 20),
               ],
             ),
-            backgroundColor: ColorManager.white,
             body: const SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
