@@ -37,7 +37,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   Future<void> checkCanSignUpWithPhone() async {
     emit(SignUpLoading());
     String today = Utils.getCurrentDate();
-    bool areUsers40Today = true;
+    bool areUsers45Today = true;
     try {
       await _fireStore
           .collection("users_per_day")
@@ -51,7 +51,7 @@ class SignUpCubit extends Cubit<SignUpState> {
             print(usersCount);
           }
           if (usersCount >= 45) {
-            areUsers40Today = false;
+            areUsers45Today = false;
           }
         } else {
           await FirebaseFirestore.instance
@@ -63,11 +63,11 @@ class SignUpCubit extends Cubit<SignUpState> {
         }
       });
       if (kDebugMode) {
-        print('areUsers40Today');
-        print(areUsers40Today);
+        print('areUsers45Today');
+        print(areUsers45Today);
       }
-      canSignUpWithPhone = areUsers40Today;
-      emit(SignUpInitial(canSignUpWithPhone: areUsers40Today));
+      canSignUpWithPhone = areUsers45Today;
+      emit(SignUpInitial(canSignUpWithPhone: areUsers45Today));
     } catch (e, s) {
       if (kDebugMode) {
         print(e);
