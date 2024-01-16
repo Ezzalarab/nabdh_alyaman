@@ -53,6 +53,7 @@ class CSCPicker extends StatefulWidget {
     this.stateDropdownLabel = "State",
     this.cityDropdownLabel = "City",
     this.bgColor,
+    this.iconColor = Colors.black54,
   }) : super(key: key);
 
   final ValueChanged<String>? onCountryChanged;
@@ -87,6 +88,7 @@ class CSCPicker extends StatefulWidget {
   final String cityDropdownLabel;
 
   final Color? bgColor;
+  final Color iconColor;
 
   @override
   CSCPickerState createState() => CSCPickerState();
@@ -181,8 +183,8 @@ class CSCPickerState extends State<CSCPicker> {
             .map((item) => item.state)
             .toList();
     var states = takeState as List;
-    states.forEach((f) {
-      if (!mounted) return;
+    for (var f in states) {
+      if (!mounted) continue;
       setState(() {
         var name = f.map((item) => item.name).toList();
         for (var stateName in name) {
@@ -190,7 +192,7 @@ class CSCPickerState extends State<CSCPicker> {
           _states.add(stateName.toString());
         }
       });
-    });
+    }
     _states.sort((a, b) => a!.compareTo(b!));
     return _states;
   }
@@ -213,7 +215,7 @@ class CSCPickerState extends State<CSCPicker> {
             .map((item) => item.state)
             .toList();
     var cities = takeCity as List;
-    cities.forEach((f) {
+    for (var f in cities) {
       var name = f.where((item) => item.name == _selectedState);
       var cityName = name.map((item) => item.city).toList();
       cityName.forEach((ci) {
@@ -226,7 +228,7 @@ class CSCPickerState extends State<CSCPicker> {
           }
         });
       });
-    });
+    }
     _cities.sort((a, b) => a!.compareTo(b!));
     return _cities;
   }
@@ -420,7 +422,7 @@ class CSCPickerState extends State<CSCPicker> {
       bgColor: widget.bgColor,
       icon: Icon(
         Icons.location_city_outlined,
-        color: Colors.black45,
+        color: widget.iconColor,
       ),
       label: widget.stateSearchPlaceholder,
       //onChanged: (value) => _onSelectedState(value),
@@ -455,7 +457,7 @@ class CSCPickerState extends State<CSCPicker> {
       bgColor: widget.bgColor,
       icon: Icon(
         Icons.location_on_outlined,
-        color: Colors.black45,
+        color: widget.iconColor,
       ),
       label: widget.citySearchPlaceholder,
       //onChanged: (value) => _onSelectedCity(value),

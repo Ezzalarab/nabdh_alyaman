@@ -8,7 +8,7 @@ class ColorManager {
       Color(0xfff2494c);
   static const Color lightPrimary = Color(0xFFFF9696);
   static const Color darkPrimary = Color(0xFF640000);
-  static const Color secondary = Color(0xff2A3990);
+  static const Color secondary = Color(0xff3A49A0);
   static const Color lightSecondary = Color(0xFF788CFF);
   static const Color darkSecondary = Color(0xff050590);
 

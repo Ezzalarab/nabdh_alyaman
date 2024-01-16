@@ -45,7 +45,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _firstFormState = GlobalKey<FormState>(),
       _secondFormState = GlobalKey<FormState>(),
       _thirdFormState = GlobalKey<FormState>();
-  // _fourthFormState = GlobalKey<FormState>();
 
   final TextEditingController emailController = TextEditingController(),
       passwordController = TextEditingController(),
@@ -63,8 +62,14 @@ class _SignUpPageState extends State<SignUpPage> {
   String? smsCode;
 
   // To Get Location Point
-  final location = loc.Location();
+  late loc.Location location;
   String lon = "", lat = "";
+
+  @override
+  void initState() {
+    location = loc.Location();
+    super.initState();
+  }
 
   Future<void> _submit() async {
     FocusScope.of(context).unfocus();
@@ -177,7 +182,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 style: TextStyle(
                   color: ColorManager.darkGrey,
                   fontWeight: FontWeight.bold,
-                  height: 1.2,
+                  height: 1.3,
                 ),
               ),
             ),
@@ -498,6 +503,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     focusBorderColor: ColorManager.lightSecondary,
                     fillColor: ColorManager.white,
                     validator: _phoneNumberValidator,
+                    suffixIcon: false,
                     icon: const Icon(Icons.phone_android),
                     keyBoardType: TextInputType.number,
                   ),
@@ -512,7 +518,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     focusBorderColor: ColorManager.lightSecondary,
                     fillColor: ColorManager.white,
                     validator: _emailValidator,
-                    icon: const Icon(Icons.email),
+                    suffixIcon: false,
+                    icon: const Icon(
+                      Icons.email,
+                      color: ColorManager.secondary,
+                    ),
                     keyBoardType: TextInputType.emailAddress,
                   ),
                 ),
@@ -527,6 +537,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   focusBorderColor: ColorManager.lightSecondary,
                   fillColor: ColorManager.white,
                   validator: _passwordValidator,
+                  suffixIcon: false,
                   icon: IconButton(
                     icon: _buildPasswordIcon(),
                     onPressed: _toggleIsPasswordVisible,
@@ -568,8 +579,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   blurrBorderColor: ColorManager.lightGrey,
                   focusBorderColor: ColorManager.lightSecondary,
                   fillColor: ColorManager.white,
+                  suffixIcon: false,
                   validator: _nameValidator,
-                  icon: const Icon(Icons.person),
+                  icon: const Icon(
+                    Icons.person,
+                    color: ColorManager.secondary,
+                  ),
                 ),
               ),
               if (BlocProvider.of<SignUpCubit>(context).canSignUpWithPhone)
@@ -590,7 +605,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     focusBorderColor: ColorManager.lightSecondary,
                     fillColor: ColorManager.white,
                     validator: _phoneNumberValidator,
-                    icon: const Icon(Icons.phone_android),
+                    suffixIcon: false,
+                    icon: const Icon(
+                      Icons.phone_android,
+                      color: ColorManager.secondary,
+                    ),
                     keyBoardType: TextInputType.number,
                   ),
                 ),
@@ -606,7 +625,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   blurrBorderColor: ColorManager.lightGrey,
                   focusBorderColor: ColorManager.lightSecondary,
                   fillColor: ColorManager.white,
-                  icon: const Icon(Icons.bloodtype_outlined),
+                  icon: const Icon(
+                    Icons.bloodtype_outlined,
+                    color: ColorManager.secondary,
+                  ),
                   onChange: (value) => setState(() => bloodType = value!),
                 ),
               ),
@@ -644,6 +666,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   layout: Layout.vertical,
                   showStates: true,
                   showCities: true,
+                  iconColor: ColorManager.secondary,
                   flagState: CountryFlag.SHOW_IN_DROP_DOWN_ONLY,
                   dropdownDecoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -683,12 +706,16 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
                 child: MyTextFormField(
+                  suffixIcon: false,
                   hint: AppStrings.signUpNeighborhoodHint,
                   controller: neighborhoodController,
                   blurrBorderColor: ColorManager.lightGrey,
                   focusBorderColor: ColorManager.lightSecondary,
                   fillColor: ColorManager.white,
-                  icon: const Icon(Icons.my_location_outlined),
+                  icon: const Icon(
+                    Icons.my_location_outlined,
+                    color: ColorManager.secondary,
+                  ),
                   validator: _neighborhoodValidator,
                 ),
               ),
@@ -815,9 +842,12 @@ class _SignUpPageState extends State<SignUpPage> {
   //     !value! ? AppStrings.signUpYouHaveToConfirm : null;
 
   Icon _buildPasswordIcon() {
-    return Icon(isPasswordHidden
-        ? Icons.visibility_outlined
-        : Icons.visibility_off_outlined);
+    return Icon(
+      isPasswordHidden
+          ? Icons.visibility_outlined
+          : Icons.visibility_off_outlined,
+      color: ColorManager.secondary,
+    );
   }
 
   Wrap buildDonorDetail({

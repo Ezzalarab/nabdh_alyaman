@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MyTextFormField extends StatelessWidget {
   const MyTextFormField({
-    Key? key,
+    super.key,
     this.hint,
     this.style,
     this.icon,
@@ -22,7 +22,7 @@ class MyTextFormField extends StatelessWidget {
     this.controller,
     this.initialValue,
     this.validationMode = AutovalidateMode.onUserInteraction,
-  }) : super(key: key);
+  });
 
   final TextInputType keyBoardType;
   final TextStyle? style;
@@ -59,11 +59,7 @@ class MyTextFormField extends StatelessWidget {
       style: style,
       autofocus: autofocus,
       decoration: InputDecoration(
-        prefixIcon: suffixIcon
-            ? null
-            : icon != null
-                ? icon!
-                : null,
+        prefixIcon: suffixIcon ? null : icon,
         suffixIcon: suffixIcon ? icon : null,
         hintText: hint,
         hintStyle: hintStyle,

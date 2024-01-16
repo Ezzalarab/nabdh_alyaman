@@ -84,7 +84,7 @@ ThemeData getApplicationTheme() {
       ),
       titleMedium: getRegularStyle(
         color: ColorManager.darkGrey,
-        fontSize: FontSize.s14,
+        fontSize: FontSize.s16,
       ),
       headlineMedium: getSemiBoldStyle(
         color: ColorManager.darkGrey,
@@ -102,7 +102,9 @@ ThemeData getApplicationTheme() {
         color: ColorManager.darkGrey,
         fontSize: FontSize.s16,
       ),
-      bodySmall: getRegularStyle(color: ColorManager.grey),
+      bodySmall: getRegularStyle(
+        color: ColorManager.grey,
+      ),
     ),
 
     // input decorarion theme(text form field)
