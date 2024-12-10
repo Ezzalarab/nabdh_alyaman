@@ -26,7 +26,7 @@ import 'search_page.dart';
 import 'setting_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
   static const String routeName = "/home";
 
   @override

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../domain/entities/home_statistics.dart';
 
 class IndicatorWidget extends StatelessWidget {
-  const IndicatorWidget({Key? key}) : super(key: key);
+  const IndicatorWidget({super.key});
 
   @override
   Widget build(BuildContext context) => Column(

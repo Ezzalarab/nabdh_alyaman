@@ -12,7 +12,7 @@ import '../../presentation/widgets/common/dialog_lottie.dart';
 import '../resources/assets_manager.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
   static const String routeName = "splash_screen";
 
   @override

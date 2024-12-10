@@ -13,7 +13,7 @@ import 'home_drawer_menu_item.dart';
 import 'home_drower_body.dart';
 
 class HomeDrower extends StatefulWidget {
-  const HomeDrower({Key? key}) : super(key: key);
+  const HomeDrower({super.key});
 
   @override
   State<HomeDrower> createState() => _HomeDrowerState();

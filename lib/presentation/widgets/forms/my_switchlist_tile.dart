@@ -4,13 +4,13 @@ import '../../resources/style.dart';
 
 class MySwitchListTile extends StatelessWidget {
   const MySwitchListTile({
-    Key? key,
+    super.key,
     required this.title,
     this.subTitle,
     required this.onChange,
     this.style,
     this.onchangValue = false,
-  }) : super(key: key);
+  });
   final String title;
   final String? subTitle;
   final bool onchangValue;

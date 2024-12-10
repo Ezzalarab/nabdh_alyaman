@@ -34,7 +34,7 @@ import 'home_page.dart';
 import 'sing_up_center_page.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
   static const String routeName = "/sign-up";
 
   @override

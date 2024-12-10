@@ -189,7 +189,7 @@ class Stepper extends StatefulWidget {
   ///
   /// The [steps], [type], and [currentStep] arguments must not be null.
   const Stepper({
-    Key? key,
+    super.key,
     required this.steps,
     this.physics,
     this.type = StepperType.vertical,
@@ -203,8 +203,7 @@ class Stepper extends StatefulWidget {
     this.svgPictureAsset,
     this.iconColor,
     this.bgColor,
-  })  : assert(0 <= currentStep && currentStep < steps.length),
-        super(key: key);
+  })  : assert(0 <= currentStep && currentStep < steps.length);
 
   final String? svgPictureAsset;
   final Color? iconColor, bgColor;
@@ -404,7 +403,7 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
           ? (widget.iconColor != null)
               ? widget.iconColor!
               : colorScheme.secondary
-          : colorScheme.background;
+          : colorScheme.surface;
     }
   }
 
@@ -455,7 +454,7 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
           ? Colors.red
           : colorScheme.onSurface.withOpacity(0.38);
     } else {
-      return widget.steps[index].isActive ? Colors.red : colorScheme.background;
+      return widget.steps[index].isActive ? Colors.red : colorScheme.surface;
     }
   }
 
@@ -571,23 +570,23 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
             TextButton(
               onPressed: widget.onStepContinue,
               style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
-                  return states.contains(MaterialState.disabled)
+                foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
+                  return states.contains(WidgetState.disabled)
                       ? null
                       : (_isDark()
                           ? colorScheme.onSurface
                           : colorScheme.onPrimary);
                 }),
-                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
-                  return _isDark() || states.contains(MaterialState.disabled)
+                backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
+                  return _isDark() || states.contains(WidgetState.disabled)
                       ? null
                       : colorScheme.primary;
                 }),
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
                     buttonPadding),
-                shape: MaterialStateProperty.all<OutlinedBorder>(buttonShape),
+                shape: WidgetStateProperty.all<OutlinedBorder>(buttonShape),
               ),
               child: Text(localizations.continueButtonLabel),
             ),

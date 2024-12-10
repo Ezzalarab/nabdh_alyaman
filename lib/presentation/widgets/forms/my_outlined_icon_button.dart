@@ -7,8 +7,8 @@ class MyOutlinedIconButton extends StatelessWidget {
     this.icon,
     this.borderWidth = 2,
     this.borderColor = Colors.blue,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final double borderWidth;
   final Color borderColor;
@@ -20,7 +20,7 @@ class MyOutlinedIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton.icon(
       style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
             side: BorderSide(
@@ -29,7 +29,7 @@ class MyOutlinedIconButton extends StatelessWidget {
             ),
           ),
         ),
-        padding: MaterialStateProperty.all<EdgeInsets>(
+        padding: WidgetStateProperty.all<EdgeInsets>(
           const EdgeInsets.symmetric(vertical: 15),
         ),
       ),

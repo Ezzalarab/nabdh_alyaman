@@ -9,8 +9,8 @@ import '../../common/loading_widget.dart';
 class CarouselItem extends StatelessWidget {
   const CarouselItem({
     required this.item,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final String item;
 
   @override

@@ -5,8 +5,8 @@ class HomeDrawerMenuItem extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.onTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String title;
   final IconData icon;

@@ -6,9 +6,9 @@ import 'package:url_launcher_platform_interface/url_launcher_platform_interface.
 class DonerCardBody extends StatelessWidget {
   final String phone;
   DonerCardBody({
-    Key? key,
+    super.key,
     required this.phone,
-  }) : super(key: key);
+  });
   final UrlLauncherPlatform launcher = UrlLauncherPlatform.instance;
 
   @override

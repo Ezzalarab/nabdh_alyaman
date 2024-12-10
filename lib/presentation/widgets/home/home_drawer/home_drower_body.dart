@@ -13,8 +13,8 @@ import 'home_drawer_menu_item.dart';
 
 class HomeDrawerBody extends StatelessWidget {
   const HomeDrawerBody({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

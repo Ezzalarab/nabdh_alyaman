@@ -5,11 +5,11 @@ class DonerCardDetails extends StatelessWidget {
   final String donerCity;
   final String donerPhone;
   const DonerCardDetails({
-    Key? key,
+    super.key,
     required this.donerName,
     required this.donerCity,
     required this.donerPhone,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class DonerCardDetails extends StatelessWidget {
             child: Wrap(
               children: [
                 const Text("الاسم  : ",
-                  style: const TextStyle(fontWeight: FontWeight.normal),
+                  style: TextStyle(fontWeight: FontWeight.normal),
                 ),
                 Text(
                   donerName,
@@ -39,7 +39,7 @@ class DonerCardDetails extends StatelessWidget {
             child: Wrap(
               children: [
                 const Text("المنطقة  : ",
-                  style: const TextStyle(fontWeight: FontWeight.normal),
+                  style: TextStyle(fontWeight: FontWeight.normal),
                 ),
                 Text(donerCity),
               ],

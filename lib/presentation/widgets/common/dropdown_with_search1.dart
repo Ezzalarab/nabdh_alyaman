@@ -18,7 +18,7 @@ class DropdownWithSearch<T> extends StatelessWidget {
   final Function onChanged;
 
   const DropdownWithSearch(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.placeHolder,
       required this.items,
@@ -33,8 +33,7 @@ class DropdownWithSearch<T> extends StatelessWidget {
       this.searchBarRadius,
       this.dialogRadius,
       required this.label,
-      this.disabled = false})
-      : super(key: key);
+      this.disabled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -102,15 +101,14 @@ class SearchDialog extends StatefulWidget {
   final double? dialogRadius;
 
   const SearchDialog(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.placeHolder,
       required this.items,
       this.titleStyle,
       this.searchInputRadius,
       this.dialogRadius,
-      this.itemStyle})
-      : super(key: key);
+      this.itemStyle});
 
   @override
   _SearchDialogState createState() => _SearchDialogState();
@@ -258,14 +256,14 @@ class CustomDialog extends StatelessWidget {
   ///
   /// Typically used in conjunction with [showDialog].
   const CustomDialog({
-    Key? key,
+    super.key,
     this.child,
     this.insetAnimationDuration = const Duration(milliseconds: 100),
     this.insetAnimationCurve = Curves.decelerate,
     this.shape,
     this.constraints = const BoxConstraints(
         minWidth: 280.0, minHeight: 280.0, maxHeight: 400.0, maxWidth: 400.0),
-  }) : super(key: key);
+  });
 
   /// The widget below this widget in the tree.
   ///

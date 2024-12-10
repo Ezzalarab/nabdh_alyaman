@@ -24,7 +24,7 @@ import 'home_page.dart';
 import 'sign_up_page.dart';
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key}) : super(key: key);
+  const SignInPage({super.key});
   static const String routeName = "/sign-in";
 
   @override

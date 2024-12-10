@@ -18,7 +18,7 @@ import '../forms/my_button.dart';
 import 'doner_card_body.dart';
 
 class SearchResult extends StatefulWidget {
-  const SearchResult({Key? key}) : super(key: key);
+  const SearchResult({super.key});
 
   @override
   State<SearchResult> createState() => _SearchResultState();
@@ -111,7 +111,7 @@ class _SearchResultState extends State<SearchResult>
                                     ),
                                     MediaQuery(
                                         data: MediaQuery.of(context)
-                                            .copyWith(textScaleFactor: 1.0),
+                                            .copyWith(textScaler: const TextScaler.linear(1.0)),
                                         child: const ResultTabs()),
                                     (compatibleDonors.isEmpty)
                                         ? SizedBox(

@@ -13,7 +13,7 @@ import 'setting_page.dart';
 
 class IntroductionPage extends StatelessWidget {
   static const String routeName = "onboarding_page";
-  const IntroductionPage({Key? key}) : super(key: key);
+  const IntroductionPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -8,15 +8,15 @@ import 'carousel_item.dart';
 
 class HomeCarousel extends StatefulWidget {
   const HomeCarousel({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<HomeCarousel> createState() => _HomeCarouselState();
 }
 
 class _HomeCarouselState extends State<HomeCarousel> {
-  final CarouselController _controller = CarouselController();
+  final CarouselSliderController _controller = CarouselSliderController();
 
   List<String> imgList = [
     ImageAssets.bloodHeart,

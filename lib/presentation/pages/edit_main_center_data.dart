@@ -19,8 +19,8 @@ ProfileCenterData? profileCenterData;
 
 class EditMainCenterDataPage extends StatefulWidget {
   const EditMainCenterDataPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   static const String routeName = "edit_main_center_data";
 
   @override

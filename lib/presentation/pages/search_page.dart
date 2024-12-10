@@ -10,7 +10,7 @@ import '../widgets/search/search_result.dart';
 import 'search_map_page.dart';
 
 class SearchPage extends StatelessWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  const SearchPage({super.key});
   static const String routeName = 'search';
 
   @override

@@ -13,7 +13,7 @@ import '../resources/color_manageer.dart';
 import '../widgets/common/loading_widget.dart';
 
 class SearchMapPage extends StatefulWidget {
-  const SearchMapPage({Key? key}) : super(key: key);
+  const SearchMapPage({super.key});
   static const String routeName = "search_map";
 
   @override

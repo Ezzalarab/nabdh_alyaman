@@ -11,8 +11,8 @@ import '../forms/my_dropdown_button_form_field.dart';
 
 class SearchOptions extends StatelessWidget {
   SearchOptions({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final GlobalKey<FormState> searchFormState = GlobalKey<FormState>();
   @override

@@ -3,7 +3,7 @@ import 'package:nabdh_alyaman/presentation/resources/color_manageer.dart';
 
 class MyDropdownButtonFormField extends StatelessWidget {
   const MyDropdownButtonFormField({
-    Key? key,
+    super.key,
     required this.value,
     required this.onChange,
     required this.items,
@@ -16,7 +16,7 @@ class MyDropdownButtonFormField extends StatelessWidget {
     this.style,
     this.raduis = 10,
     this.validator,
-  }) : super(key: key);
+  });
 
   final String hint;
   final String? value;

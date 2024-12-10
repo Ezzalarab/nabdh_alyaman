@@ -9,7 +9,7 @@ import '../common/loading_widget.dart';
 
 class EventCard extends StatelessWidget {
   final EventCardData eventData;
-  const EventCard({Key? key, required this.eventData}) : super(key: key);
+  const EventCard({super.key, required this.eventData});
 
   @override
   Widget build(BuildContext context) {

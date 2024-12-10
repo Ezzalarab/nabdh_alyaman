@@ -18,8 +18,8 @@ import '../widgets/common/loading_widget.dart';
 class ProfileCenterPage extends StatefulWidget {
   static const String routeName = "profileCenter";
   const ProfileCenterPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ProfileCenterPage> createState() => _ProfileCenterPageState();
@@ -157,8 +157,7 @@ ProfileCenterData? profileCenterData;
 
 // ignore: must_be_immutable
 class PrfileCenterBloodTypeCard extends StatefulWidget {
-  PrfileCenterBloodTypeCard({Key? key, required this.bloodType})
-      : super(key: key);
+  PrfileCenterBloodTypeCard({super.key, required this.bloodType});
 
   String bloodType;
 
@@ -318,10 +317,10 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
 
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(ColorManager.primary),
-                        elevation: MaterialStateProperty.all(AppSize.s5),
+                            WidgetStateProperty.all(ColorManager.primary),
+                        elevation: WidgetStateProperty.all(AppSize.s5),
                         shadowColor:
-                            MaterialStateProperty.all(ColorManager.primary),
+                            WidgetStateProperty.all(ColorManager.primary),
                       ),
                       // icon: Icon(Icons.plus_one)
                       child: const Icon(Icons.add),
@@ -380,11 +379,11 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
                       },
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(ColorManager.primary),
+                            WidgetStateProperty.all(ColorManager.primary),
                         alignment: Alignment.topCenter,
-                        elevation: MaterialStateProperty.all(AppSize.s5),
+                        elevation: WidgetStateProperty.all(AppSize.s5),
                         shadowColor:
-                            MaterialStateProperty.all(ColorManager.primary),
+                            WidgetStateProperty.all(ColorManager.primary),
                       ),
                       // icon: Icon(Icons.plus_one)
                       child: const Icon(Icons.minimize),

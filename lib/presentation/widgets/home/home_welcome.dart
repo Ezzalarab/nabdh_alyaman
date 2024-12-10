@@ -15,7 +15,7 @@ import '../forms/my_button.dart';
 import '../forms/my_text_form_field.dart';
 
 class HomeWelcome extends StatefulWidget {
-  const HomeWelcome({Key? key}) : super(key: key);
+  const HomeWelcome({super.key});
 
   @override
   State<HomeWelcome> createState() => _HomeWelcomeState();

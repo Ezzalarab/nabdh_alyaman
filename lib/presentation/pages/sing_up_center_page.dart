@@ -23,7 +23,7 @@ import '../widgets/common/my_stepper.dart' as my_stepper;
 import '../widgets/forms/my_text_form_field.dart';
 
 class SignUpCenter extends StatefulWidget {
-  const SignUpCenter({Key? key}) : super(key: key);
+  const SignUpCenter({super.key});
   static const String routeName = "sign-up-center";
 
   @override

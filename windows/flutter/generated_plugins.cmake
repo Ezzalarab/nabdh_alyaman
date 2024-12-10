@@ -8,8 +8,8 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_auth
   firebase_core
   firebase_storage
+  flutter_localization
   geolocator_windows
-  modal_progress_hud_nsn
   permission_handler_windows
   rive_common
   share_plus

@@ -20,8 +20,8 @@ ProfileLocalData? profileLocalData;
 
 class EditMainDataPage extends StatefulWidget {
   const EditMainDataPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   static const String routeName = "edit_main_data";
 
   @override

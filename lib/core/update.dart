@@ -97,7 +97,7 @@ class Updating {
             child: ElevatedButton(
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all(Theme.of(context).primaryColor),
+                    WidgetStateProperty.all(Theme.of(context).primaryColor),
               ),
               child: const Text("تحديث"),
               onPressed: () {

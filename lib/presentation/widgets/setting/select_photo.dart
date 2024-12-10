@@ -7,11 +7,11 @@ class SelectPhoto extends StatelessWidget {
   final void Function()? onTap;
 
   const SelectPhoto({
-    Key? key,
+    super.key,
     required this.textLabel,
     required this.icon,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

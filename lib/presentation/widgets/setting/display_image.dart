@@ -9,10 +9,10 @@ class DisplayImage extends StatefulWidget {
 
   // Constructor
   DisplayImage({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   State<DisplayImage> createState() => _DisplayImageState();

@@ -15,9 +15,9 @@ import '../forms/my_text_form_field.dart';
 
 class ProfileBody extends StatefulWidget {
   const ProfileBody({
-    Key? key,
+    super.key,
     required this.donor,
-  }) : super(key: key);
+  });
   final Donor? donor;
   @override
   State<ProfileBody> createState() => _ProfileBodyState();
@@ -167,8 +167,8 @@ class _ProfileBodyState extends State<ProfileBody> {
 
 class EditBasicData extends StatelessWidget {
   const EditBasicData({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

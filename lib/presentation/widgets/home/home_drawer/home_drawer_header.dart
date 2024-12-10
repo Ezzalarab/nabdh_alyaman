@@ -8,8 +8,8 @@ import '../../../resources/values_manager.dart';
 
 class HomeDrawerHeader extends StatelessWidget {
   const HomeDrawerHeader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

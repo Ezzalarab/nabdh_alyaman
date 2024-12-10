@@ -7,7 +7,7 @@ import '../../../presentation/resources/color_manageer.dart';
 import '../../cubit/search_cubit/search_cubit.dart';
 
 class ResultTabs extends StatelessWidget {
-  const ResultTabs({Key? key}) : super(key: key);
+  const ResultTabs({super.key});
 
   @override
   Widget build(BuildContext context) {
