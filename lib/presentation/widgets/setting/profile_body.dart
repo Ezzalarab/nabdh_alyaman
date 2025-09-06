@@ -14,10 +14,7 @@ import '../forms/my_switchlist_tile.dart';
 import '../forms/my_text_form_field.dart';
 
 class ProfileBody extends StatefulWidget {
-  const ProfileBody({
-    super.key,
-    required this.donor,
-  });
+  const ProfileBody({super.key, required this.donor});
   final Donor? donor;
   @override
   State<ProfileBody> createState() => _ProfileBodyState();
@@ -48,36 +45,37 @@ class _ProfileBodyState extends State<ProfileBody> {
     fillProfileLocalData();
   }
 
-  fillProfileLocalData() {
+  void fillProfileLocalData() {
     profileLocalData = ProfileLocalData(
-        date: widget.donor!.brithDate,
-        isShown: widget.donor!.isShown,
-        isGpsOn: widget.donor!.isGpsOn,
-        isShownPhone: widget.donor!.isShownPhone);
+      date: widget.donor!.brithDate,
+      isShown: widget.donor!.isShown,
+      isGpsOn: widget.donor!.isGpsOn,
+      isShownPhone: widget.donor!.isShownPhone,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Column(children: [
-      const SizedBox(
-        height: 10,
+      child: Column(
+        children: [
+          const SizedBox(height: 10),
+          const EditBasicData(),
+          valueListenableBuilder(widget.donor!),
+        ],
       ),
-      const EditBasicData(),
-      valueListenableBuilder(widget.donor!),
-    ]));
+    );
   }
 
-  valueListenableBuilder(Donor donor) {
+  Column valueListenableBuilder(Donor donor) {
     return Column(
       children: [
         MySwitchListTile(
           title: AppStrings.profileSwitchSubTitle1,
           subTitle: "",
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge!
-              .copyWith(fontSize: AppSize.s16),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge!.copyWith(fontSize: AppSize.s16),
           onChange: (val) {
             setState(() {
               profileLocalData!.isShown = val == true ? "1" : "0";
@@ -98,10 +96,9 @@ class _ProfileBodyState extends State<ProfileBody> {
         MySwitchListTile(
           title: AppStrings.profileSwitchSubTitle3,
           subTitle: "",
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge!
-              .copyWith(fontSize: AppSize.s16),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge!.copyWith(fontSize: AppSize.s16),
           onChange: (val) {
             setState(() {
               profileLocalData!.isGpsOn = val == true ? "1" : "0";
@@ -112,7 +109,9 @@ class _ProfileBodyState extends State<ProfileBody> {
         const SizedBox(height: AppSize.s24),
         Padding(
           padding: const EdgeInsets.symmetric(
-              horizontal: AppPadding.p30, vertical: AppPadding.p10),
+            horizontal: AppPadding.p30,
+            vertical: AppPadding.p10,
+          ),
           child: Column(
             children: [
               MyTextFormField(
@@ -124,10 +123,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                 suffixIcon: true,
                 blurrBorderColor: ColorManager.grey,
                 focusBorderColor: eSecondColor,
-                icon: const Icon(
-                  Icons.calendar_month,
-                  color: eSecondColor,
-                ),
+                icon: const Icon(Icons.calendar_month, color: eSecondColor),
                 readOnly: true,
                 onTap: () {
                   showDateTimePicker(context).then((value) {
@@ -148,8 +144,9 @@ class _ProfileBodyState extends State<ProfileBody> {
           minWidth: MediaQuery.of(context).size.width * 0.85,
           onPressed: (() {
             if (profileLocalData != null) {
-              BlocProvider.of<ProfileCubit>(context)
-                  .sendDataProfileSectionOne(profileLocalData!);
+              BlocProvider.of<ProfileCubit>(
+                context,
+              ).sendDataProfileSectionOne(profileLocalData!);
             } else {
               Utils.showSnackBar(
                 context: context,
@@ -166,19 +163,14 @@ class _ProfileBodyState extends State<ProfileBody> {
 }
 
 class EditBasicData extends StatelessWidget {
-  const EditBasicData({
-    super.key,
-  });
+  const EditBasicData({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       trailing: IconButton(
         onPressed: () {},
-        icon: const Icon(
-          Icons.keyboard_arrow_left,
-          size: AppSize.s30,
-        ),
+        icon: const Icon(Icons.keyboard_arrow_left, size: AppSize.s30),
       ),
       title: Text(
         AppStrings.profileEditMainDataPageTitle,
@@ -187,8 +179,11 @@ class EditBasicData extends StatelessWidget {
       onTap: () {
         // di.initProfile();
         BlocProvider.of<ProfileCubit>(context).getDataToProfilePage();
-        Navigator.of(context).push(MaterialPageRoute<void>(
-            builder: (BuildContext context) => const EditMainDataPage()));
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => const EditMainDataPage(),
+          ),
+        );
       },
     );
   }

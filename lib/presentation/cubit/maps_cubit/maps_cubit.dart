@@ -53,13 +53,10 @@ class MapsCubit extends Cubit<MapsState> {
       points: listPoints,
       distanceKm: 5.0,
     );
-    emit(MapsSuccess(
-      nearbyDonors: listPoints,
-      position: currentPosition,
-    ));
+    emit(MapsSuccess(nearbyDonors: listPoints, position: currentPosition));
   }
 
-  checkGps() async {
+  Future<void> checkGps() async {
     servicestatus = await location.serviceEnabled();
     if (servicestatus) {
       permission = await Geolocator.checkPermission();
@@ -92,9 +89,10 @@ class MapsCubit extends Cubit<MapsState> {
     }
   }
 
-  getLocation() async {
+  Future<void> getLocation() async {
     currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      desiredAccuracy: LocationAccuracy.high,
+    );
     if (kDebugMode) {
       print(currentPosition.longitude);
       print(currentPosition.latitude);
@@ -107,11 +105,12 @@ class MapsCubit extends Cubit<MapsState> {
       distanceFilter: 100,
     );
     StreamSubscription<Position> positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((Position position) {
-      long = position.longitude.toString();
-      lat = position.latitude.toString();
-    });
+        Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+          (Position position) {
+            long = position.longitude.toString();
+            lat = position.latitude.toString();
+          },
+        );
     if (kDebugMode) {
       print(positionStream);
     }
@@ -123,19 +122,23 @@ class MapsCubit extends Cubit<MapsState> {
   }) {
     List<DonorPoint> points = [];
     List<Donor> suitableDonors = stateDonors
-        .where((donor) =>
-            BloodTypes.canReceiveFrom(bloodType: selectedBloodType)
-                .contains(donor.bloodType))
+        .where(
+          (donor) => BloodTypes.canReceiveFrom(
+            bloodType: selectedBloodType,
+          ).contains(donor.bloodType),
+        )
         .toList();
     for (var donor in suitableDonors) {
-      points.add(DonorPoint(
-        lat: double.tryParse(donor.lat) ?? 0.0,
-        lon: double.tryParse(donor.lon) ?? 0.0,
-        name: donor.name,
-        phone: donor.phone,
-        bloodType: donor.bloodType,
-        token: donor.token,
-      ));
+      points.add(
+        DonorPoint(
+          lat: double.tryParse(donor.lat) ?? 0.0,
+          lon: double.tryParse(donor.lon) ?? 0.0,
+          name: donor.name,
+          phone: donor.phone,
+          bloodType: donor.bloodType,
+          token: donor.token,
+        ),
+      );
     }
     return points;
   }
@@ -159,14 +162,15 @@ class MapsCubit extends Cubit<MapsState> {
     return nearPoints;
   }
 
-  getDistanceFromLatLonInKM({
+  double getDistanceFromLatLonInKM({
     required DonorPoint point1,
     required DonorPoint point2,
   }) {
     var R = 6371; // Radius of the earth in km
     var dLat = deg2rad(point2.lat - point1.lat); // deg2rad function
     var dLon = deg2rad(point2.lon - point1.lon);
-    var a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+    var a =
+        math.sin(dLat / 2) * math.sin(dLat / 2) +
         math.cos(deg2rad(point1.lat)) *
             math.cos(deg2rad(point2.lat)) *
             math.sin(dLon / 2) *
@@ -176,31 +180,24 @@ class MapsCubit extends Cubit<MapsState> {
     return d;
   }
 
-  deg2rad(deg) {
+  dynamic deg2rad(deg) {
     return deg * (math.pi / 180);
   }
 
-  refreshDeviceLocation() async {
-    location.getLocation().then(
-      (location) {
-        location = location;
-      },
-    );
+  Future<void> refreshDeviceLocation() async {
+    location.getLocation().then((location) {
+      location = location;
+    });
     GoogleMapController googleMapController = await _mapcontroller.future;
-    location.onLocationChanged.listen(
-      (newLoc) {
-        googleMapController.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              zoom: 13.5,
-              target: LatLng(
-                newLoc.latitude!,
-                newLoc.longitude!,
-              ),
-            ),
+    location.onLocationChanged.listen((newLoc) {
+      googleMapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            zoom: 13.5,
+            target: LatLng(newLoc.latitude!, newLoc.longitude!),
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
   }
 }

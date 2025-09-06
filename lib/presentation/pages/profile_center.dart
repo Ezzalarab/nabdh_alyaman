@@ -17,9 +17,7 @@ import '../widgets/common/loading_widget.dart';
 
 class ProfileCenterPage extends StatefulWidget {
   static const String routeName = "profileCenter";
-  const ProfileCenterPage({
-    super.key,
-  });
+  const ProfileCenterPage({super.key});
 
   @override
   State<ProfileCenterPage> createState() => _ProfileCenterPageState();
@@ -28,7 +26,7 @@ class ProfileCenterPage extends StatefulWidget {
 class _ProfileCenterPageState extends State<ProfileCenterPage> {
   // ProfileCenterData? profileCenterDataa;
 
-  getProfileCenterData() async {
+  Future<void> getProfileCenterData() async {
     di.initSignIn();
     await BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
   }
@@ -45,14 +43,15 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
         listener: (context, state) {
           if (state is ProfileGetCenterData) {
             profileCenterData = ProfileCenterData(
-                aPlus: state.bloodCenter.aPlus,
-                aMinus: state.bloodCenter.aMinus,
-                abPlus: state.bloodCenter.abPlus,
-                abMinus: state.bloodCenter.abMinus,
-                oPlus: state.bloodCenter.oPlus,
-                oMinus: state.bloodCenter.oMinus,
-                bPlus: state.bloodCenter.bPlus,
-                bMinus: state.bloodCenter.bMinus);
+              aPlus: state.bloodCenter.aPlus,
+              aMinus: state.bloodCenter.aMinus,
+              abPlus: state.bloodCenter.abPlus,
+              abMinus: state.bloodCenter.abMinus,
+              oPlus: state.bloodCenter.oPlus,
+              oMinus: state.bloodCenter.oMinus,
+              bPlus: state.bloodCenter.bPlus,
+              bMinus: state.bloodCenter.bMinus,
+            );
           } else if (state is ProfileFailure) {
             Utils.showSnackBar(
               context: context,
@@ -67,31 +66,28 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
             );
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
-                builder: (_) => const HomePage(),
-              ),
+              MaterialPageRoute(builder: (_) => const HomePage()),
             );
           }
         },
         builder: (context, state) {
           if (state is ProfileLoadingBeforFetch) {
-            return const Center(
-              child: LoadingWidget(),
-            );
+            return const Center(child: LoadingWidget());
           }
           if (state is ProfileLoading) {
             return const Center(child: LoadingWidget());
           }
           if (state is ProfileGetCenterData) {
             profileCenterData = ProfileCenterData(
-                aPlus: state.bloodCenter.aPlus,
-                aMinus: state.bloodCenter.aMinus,
-                abPlus: state.bloodCenter.abPlus,
-                abMinus: state.bloodCenter.abMinus,
-                oPlus: state.bloodCenter.oPlus,
-                oMinus: state.bloodCenter.oMinus,
-                bPlus: state.bloodCenter.bPlus,
-                bMinus: state.bloodCenter.bMinus);
+              aPlus: state.bloodCenter.aPlus,
+              aMinus: state.bloodCenter.aMinus,
+              abPlus: state.bloodCenter.abPlus,
+              abMinus: state.bloodCenter.abMinus,
+              oPlus: state.bloodCenter.oPlus,
+              oMinus: state.bloodCenter.oMinus,
+              bPlus: state.bloodCenter.bPlus,
+              bMinus: state.bloodCenter.bMinus,
+            );
 
             return Center(
               child: SingleChildScrollView(
@@ -104,9 +100,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                         style: Theme.of(context).textTheme.headlineLarge,
                       ),
                     ),
-                    const SizedBox(
-                      height: AppSize.s10,
-                    ),
+                    const SizedBox(height: AppSize.s10),
                     PrfileCenterBloodTypeCard(
                       bloodType: BloodCenterFields.aPlus,
                     ),
@@ -114,26 +108,31 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                       bloodType: BloodCenterFields.aMinus,
                     ),
                     PrfileCenterBloodTypeCard(
-                        bloodType: BloodCenterFields.abPlus),
-                    PrfileCenterBloodTypeCard(
-                        bloodType: BloodCenterFields.abMinus),
-                    PrfileCenterBloodTypeCard(
-                        bloodType: BloodCenterFields.bPlus),
-                    PrfileCenterBloodTypeCard(
-                        bloodType: BloodCenterFields.bMinus),
-                    PrfileCenterBloodTypeCard(
-                        bloodType: BloodCenterFields.oPlus),
-                    PrfileCenterBloodTypeCard(
-                        bloodType: BloodCenterFields.oMinus),
-                    const SizedBox(
-                      height: AppSize.s20,
+                      bloodType: BloodCenterFields.abPlus,
                     ),
+                    PrfileCenterBloodTypeCard(
+                      bloodType: BloodCenterFields.abMinus,
+                    ),
+                    PrfileCenterBloodTypeCard(
+                      bloodType: BloodCenterFields.bPlus,
+                    ),
+                    PrfileCenterBloodTypeCard(
+                      bloodType: BloodCenterFields.bMinus,
+                    ),
+                    PrfileCenterBloodTypeCard(
+                      bloodType: BloodCenterFields.oPlus,
+                    ),
+                    PrfileCenterBloodTypeCard(
+                      bloodType: BloodCenterFields.oMinus,
+                    ),
+                    const SizedBox(height: AppSize.s20),
                     MyButton(
                       title: AppStrings.profileButtonSave,
                       titleStyle: Theme.of(context).textTheme.titleLarge,
                       onPressed: () {
-                        BlocProvider.of<ProfileCubit>(context)
-                            .sendProfileCenterData(profileCenterData!);
+                        BlocProvider.of<ProfileCubit>(
+                          context,
+                        ).sendProfileCenterData(profileCenterData!);
                       },
                       minWidth: AppSize.s300,
                       color: ColorManager.secondary,
@@ -143,9 +142,7 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
               ),
             );
           } else {
-            return const Center(
-              child: Text('خطأ غير معروف'),
-            );
+            return const Center(child: Text('خطأ غير معروف'));
           }
         },
       ),
@@ -172,8 +169,9 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
   void initState() {
     super.initState();
     _controller.text = ProfileCenterData.getProfileCenterDataBlodTyeb(
-            widget.bloodType, profileCenterData!)
-        .toString();
+      widget.bloodType,
+      profileCenterData!,
+    ).toString();
   }
 
   @override
@@ -182,19 +180,26 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
     super.dispose();
   }
 
-//----------------------------
+  //----------------------------
   int counter = 0;
   bool ontap = false;
 
-  subtract() async {
+  Future<void> subtract() async {
     await Future.delayed(const Duration(milliseconds: 100));
     setState(() {
-      int repoSetory = ProfileCenterData.getProfileCenterDataBlodTyeb(
-          widget.bloodType, profileCenterData!);
+      int? repoSetory =
+          ProfileCenterData.getProfileCenterDataBlodTyeb(
+            widget.bloodType,
+            profileCenterData!,
+          ) ??
+          0;
       if (repoSetory >= 1) {
         --repoSetory;
         ProfileCenterData.incressProfileCenterDataBlodTyeb(
-            widget.bloodType, profileCenterData!, repoSetory);
+          widget.bloodType,
+          profileCenterData!,
+          repoSetory,
+        );
         _controller.text = repoSetory.toString();
         // BlocProvider.of<ProfileCubit>(context)
         //     .sendProfileCenterData(profileCenterData!);
@@ -205,19 +210,26 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
     }
   }
 
-  addcounter() async {
+  Future<void> addcounter() async {
     await Future.delayed(const Duration(milliseconds: 100));
 
     setState(() {
-      int repoSetory = ProfileCenterData.getProfileCenterDataBlodTyeb(
-          widget.bloodType, profileCenterData!);
+      int repoSetory =
+          ProfileCenterData.getProfileCenterDataBlodTyeb(
+            widget.bloodType,
+            profileCenterData!,
+          ) ??
+          0;
       // print(repoSetory);
       // print(widget.bloodType);
       // print("adddddddddddddddddddddddd");
 
       ++repoSetory;
       ProfileCenterData.incressProfileCenterDataBlodTyeb(
-          widget.bloodType, profileCenterData!, repoSetory);
+        widget.bloodType,
+        profileCenterData!,
+        repoSetory,
+      );
       _controller.text = repoSetory.toString();
       // print(widget.profileCenterData.aPlus);
     });
@@ -230,9 +242,7 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(
-          height: AppSize.s20,
-        ),
+        const SizedBox(height: AppSize.s20),
         Container(
           color: ColorManager.white,
           child: Wrap(
@@ -241,19 +251,20 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
                 width: AppSize.s65,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      top: AppSize.s16, right: AppSize.s10),
+                    top: AppSize.s16,
+                    right: AppSize.s10,
+                  ),
                   child: Text(
                     widget.bloodType,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: AppSize.s24,
-                        color: ColorManager.primary),
+                      fontWeight: FontWeight.bold,
+                      fontSize: AppSize.s24,
+                      color: ColorManager.primary,
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(
-                width: AppSize.s30,
-              ),
+              const SizedBox(width: AppSize.s30),
               Padding(
                 padding: const EdgeInsets.only(
                   top: AppSize.s10,
@@ -281,6 +292,7 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
                       onPressed: () {
                         addcounter();
                       },
+
                       // onLongPress: () {
                       //   setState(() {
                       //     int repoSetory =
@@ -314,13 +326,14 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
                       //   });
                       // }
                       // ,
-
                       style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateProperty.all(ColorManager.primary),
+                        backgroundColor: WidgetStateProperty.all(
+                          ColorManager.primary,
+                        ),
                         elevation: WidgetStateProperty.all(AppSize.s5),
-                        shadowColor:
-                            WidgetStateProperty.all(ColorManager.primary),
+                        shadowColor: WidgetStateProperty.all(
+                          ColorManager.primary,
+                        ),
                       ),
                       // icon: Icon(Icons.plus_one)
                       child: const Icon(Icons.add),
@@ -329,8 +342,11 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(top: 10.0, left: 15, right: 10.0),
+                padding: const EdgeInsets.only(
+                  top: 10.0,
+                  left: 15,
+                  right: 10.0,
+                ),
                 child: SizedBox(
                   width: 80,
                   height: 35,
@@ -378,12 +394,14 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
                         subtract();
                       },
                       style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateProperty.all(ColorManager.primary),
+                        backgroundColor: WidgetStateProperty.all(
+                          ColorManager.primary,
+                        ),
                         alignment: Alignment.topCenter,
                         elevation: WidgetStateProperty.all(AppSize.s5),
-                        shadowColor:
-                            WidgetStateProperty.all(ColorManager.primary),
+                        shadowColor: WidgetStateProperty.all(
+                          ColorManager.primary,
+                        ),
                       ),
                       // icon: Icon(Icons.plus_one)
                       child: const Icon(Icons.minimize),
@@ -393,7 +411,7 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -430,8 +448,10 @@ class ProfileCenterData {
     this.state,
     this.neighborhood,
   });
-  static getProfileCenterDataBlodTyeb(
-      String bloodType, ProfileCenterData profileCenterData) {
+  static int? getProfileCenterDataBlodTyeb(
+    String bloodType,
+    ProfileCenterData profileCenterData,
+  ) {
     switch (bloodType) {
       case BloodCenterFields.aPlus:
         return profileCenterData.aPlus;
@@ -450,10 +470,14 @@ class ProfileCenterData {
       case BloodCenterFields.bMinus:
         return profileCenterData.bMinus;
     }
+    return null;
   }
 
-  static incressProfileCenterDataBlodTyeb(
-      String bloodType, ProfileCenterData profileCenterData, int value) {
+  static int? incressProfileCenterDataBlodTyeb(
+    String bloodType,
+    ProfileCenterData profileCenterData,
+    int value,
+  ) {
     switch (bloodType) {
       case BloodCenterFields.aPlus:
         {
@@ -496,6 +520,7 @@ class ProfileCenterData {
           return profileCenterData.bMinus;
         }
     }
+    return null;
   }
 
   // static IncOrDec(

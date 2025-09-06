@@ -64,18 +64,19 @@ class _SignInPageState extends State<SignInPage> {
     return null;
   }
 
-  _toggleIsPasswordVisible() {
+  void _toggleIsPasswordVisible() {
     setState(() => isPasswordVisible = !isPasswordVisible);
   }
 
-  _sendRestPassword() {
+  void _sendRestPassword() {
     if (_emailState.currentState!.validate()) {
-      BlocProvider.of<SignInCubit>(context)
-          .resetPassword(email: emailController.text);
+      BlocProvider.of<SignInCubit>(
+        context,
+      ).resetPassword(email: emailController.text);
     }
   }
 
-  _submitSignIn() async {
+  Future<void> _submitSignIn() async {
     FocusScope.of(context).unfocus();
     if (_emailState.currentState!.validate() &
         _formState.currentState!.validate()) {
@@ -90,66 +91,64 @@ class _SignInPageState extends State<SignInPage> {
   Function showVerificationDialog(BuildContext context) {
     final GlobalKey<FormState> verificationFormState = GlobalKey<FormState>();
     return () => AwesomeDialog(
-          headerAnimationLoop: false,
-          dialogType: DialogType.noHeader,
-          context: context,
-          body: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Form(
-              key: verificationFormState,
-              child: Column(
-                children: [
-                  const Text(
-                    "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
-                    style: TextStyle(
-                      height: 2,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  MyTextFormField(
-                    onChange: (value) => smsCode = value,
-                    hint: "اكتب رقم التأكيد",
-                    keyBoardType: TextInputType.number,
-                    blurrBorderColor: ColorManager.lightGrey,
-                    focusBorderColor: ColorManager.lightSecondary,
-                    fillColor: ColorManager.white,
-                    autofocus: true,
-                    validator: (value) => (value != null && value.length > 5)
-                        ? null
-                        : "يجب كتابة رمز التأكيد المكون من 6 أرقام",
-                  ),
-                  const SizedBox(height: 20),
-                  MyButton(
-                    title: "تأكيد",
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      if (verificationFormState.currentState!.validate()) {
-                        BlocProvider.of<SignInCubit>(context, listen: false)
-                            .verify(
-                          smsCode: smsCode!,
-                        );
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    color: ColorManager.primary,
-                  ),
-                ],
+      headerAnimationLoop: false,
+      dialogType: DialogType.noHeader,
+      context: context,
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Form(
+          key: verificationFormState,
+          child: Column(
+            children: [
+              const Text(
+                "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
+                style: TextStyle(height: 2),
+                textAlign: TextAlign.center,
               ),
-            ),
+              const SizedBox(height: 20),
+              MyTextFormField(
+                onChange: (value) => smsCode = value,
+                hint: "اكتب رقم التأكيد",
+                keyBoardType: TextInputType.number,
+                blurrBorderColor: ColorManager.lightGrey,
+                focusBorderColor: ColorManager.lightSecondary,
+                fillColor: ColorManager.white,
+                autofocus: true,
+                validator: (value) => (value != null && value.length > 5)
+                    ? null
+                    : "يجب كتابة رمز التأكيد المكون من 6 أرقام",
+              ),
+              const SizedBox(height: 20),
+              MyButton(
+                title: "تأكيد",
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  if (verificationFormState.currentState!.validate()) {
+                    BlocProvider.of<SignInCubit>(
+                      context,
+                      listen: false,
+                    ).verify(smsCode: smsCode!);
+                    Navigator.of(context).pop();
+                  }
+                },
+                color: ColorManager.primary,
+              ),
+            ],
           ),
-        ).show();
+        ),
+      ),
+    ).show();
   }
 
-  _moveToSignUp() {
+  void _moveToSignUp() {
     di.initSignUp();
-    BlocProvider.of<SignUpCubit>(context, listen: false)
-        .checkCanSignUpWithPhone();
+    BlocProvider.of<SignUpCubit>(
+      context,
+      listen: false,
+    ).checkCanSignUpWithPhone();
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => const SignUpPage(),
-      ),
+      MaterialPageRoute(builder: (_) => const SignUpPage()),
     );
   }
 
@@ -171,9 +170,12 @@ class _SignInPageState extends State<SignInPage> {
           listener: (context, state) async {
             if (state is SignInSuccess) {
               Utils.showSuccessSnackBar(
-                  context: context, msg: AppStrings.signInSuccessMessage);
+                context: context,
+                msg: AppStrings.signInSuccessMessage,
+              );
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const HomePage()));
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
             } else if (state is SignInFailure) {
               Utils.showSnackBar(
                 context: context,
@@ -231,8 +233,9 @@ class _SignInPageState extends State<SignInPage> {
                     color: ColorManager.grey2.withOpacity(0.5),
                   ),
                   Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: AppMargin.m20),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: AppMargin.m20,
+                    ),
                     height: 25,
                     child: const Text("أو"),
                   ),
@@ -244,7 +247,7 @@ class _SignInPageState extends State<SignInPage> {
                 ],
               ),
               _buildSignUpButton(),
-              const SizedBox(height: 20)
+              const SizedBox(height: 20),
             ],
           ),
         ],
@@ -291,10 +294,7 @@ class _SignInPageState extends State<SignInPage> {
           fillColor: ColorManager.white,
           validator: emailOrPhoneValidator,
           keyBoardType: TextInputType.emailAddress,
-          icon: const Icon(
-            Icons.phone_android,
-            color: ColorManager.primary,
-          ),
+          icon: const Icon(Icons.phone_android, color: ColorManager.primary),
         ),
       ),
     );
@@ -331,18 +331,20 @@ class _SignInPageState extends State<SignInPage> {
         onTap: _sendRestPassword,
         child: Text(
           AppStrings.signInForgetPasswordTextButton,
-          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: ColorManager.link,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium!.copyWith(color: ColorManager.link),
         ),
       ),
     );
   }
 
   Icon _buildPasswordIcon() {
-    return Icon(isPasswordVisible
-        ? Icons.visibility_outlined
-        : Icons.visibility_off_outlined);
+    return Icon(
+      isPasswordVisible
+          ? Icons.visibility_outlined
+          : Icons.visibility_off_outlined,
+    );
   }
 
   MyButton _buildSubmitButton(BuildContext context) {

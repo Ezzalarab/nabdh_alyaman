@@ -24,7 +24,7 @@ class SharedMethod {
   final UrlLauncherPlatform launcher = UrlLauncherPlatform.instance;
   var location = loc.Location();
 
-  checkGps() async {
+  Future checkGps() async {
     servicestatus = await location.serviceEnabled();
     if (kDebugMode) {
       print(servicestatus);
@@ -65,10 +65,11 @@ class SharedMethod {
     return false;
   }
 
-  getLocation() async {
+  Future<bool> getLocation() async {
     bool done = false;
     position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      desiredAccuracy: LocationAccuracy.high,
+    );
     if (kDebugMode) {
       print(position.longitude); //Output: 80.24599079
       print(position.latitude); //Output: 29.6593457
@@ -83,16 +84,17 @@ class SharedMethod {
       distanceFilter: 100, //minimum distance (measured in meters) a
     );
     StreamSubscription<Position> positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((Position position) {
-      if (kDebugMode) {
-        print(position.longitude);
-        print(position.latitude); //Output: 29.6593457
-      } //Output: 80.24599079
+        Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+          (Position position) {
+            if (kDebugMode) {
+              print(position.longitude);
+              print(position.latitude); //Output: 29.6593457
+            } //Output: 80.24599079
 
-      long = position.longitude.toString();
-      lat = position.latitude.toString();
-    });
+            long = position.longitude.toString();
+            lat = position.latitude.toString();
+          },
+        );
     if (kDebugMode) {
       print(positionStream);
     }
@@ -106,27 +108,29 @@ class SharedMethod {
       Fluttertoast.showToast(msg: message.notification!.body.toString());
     });
     await SharedMethod().checkGps();
-    position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high)
-        .then((value) {
-      if (kDebugMode) {
-        print(position.latitude);
-        print(position.longitude);
-      }
-      return value;
-    });
+    position =
+        await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high,
+        ).then((value) {
+          if (kDebugMode) {
+            print(position.latitude);
+            print(position.longitude);
+          }
+          return value;
+        });
 
     await FirebaseFirestore.instance
         .collection('donors')
         .doc(FirebaseAuth.instance.currentUser!.uid.toString())
         .update({
-      DonorFields.lat: position.latitude.toString(),
-      DonorFields.lon: position.longitude.toString()
-    }).then((value) {
-      if (kDebugMode) {
-        print("location updated");
-      }
-    });
+          DonorFields.lat: position.latitude.toString(),
+          DonorFields.lon: position.longitude.toString(),
+        })
+        .then((value) {
+          if (kDebugMode) {
+            print("location updated");
+          }
+        });
   }
 
   // For main funtion:
@@ -150,72 +154,72 @@ class SharedMethod {
   });
   */
 
-// const AndroidNotificationChannel channel = AndroidNotificationChannel(
-//     'high_importance_channel', // id
-//     'com.google.firebase.messaging.default_notification_channel_id',
-//     description: 'This channel is used for important notifications.',
-//     // title // description
-//     importance: Importance.high,
-//     playSound: true);
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
+  // const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  //     'high_importance_channel', // id
+  //     'com.google.firebase.messaging.default_notification_channel_id',
+  //     description: 'This channel is used for important notifications.',
+  //     // title // description
+  //     importance: Importance.high,
+  //     playSound: true);
+  // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  //     FlutterLocalNotificationsPlugin();
 
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   await Firebase.initializeApp();
-//   print('A bg message just showed up :  ${message.messageId}');
-//   await SharedMethod().getLocation();
-//   // position = await Geolocator.getCurrentPosition(
-//   //         desiredAccuracy: LocationAccuracy.high)
-//   //     .then((value) {
-//   //   print(position.latitude);
-//   //   print(position.longitude);
-//   //   Fluttertoast.showToast(msg: message.notification!.body.toString());
-//   //   return value;
-//   // });
-//   // Fluttertoast.showToast(msg: message.notification!.body.toString());
-//   RemoteNotification? notification = message.notification;
-//   // AndroidNotification? android = message.notification?.android;
-//   flutterLocalNotificationsPlugin.show(
-//       notification.hashCode,
-//       notification!.title,
-//       notification.body,
-//       NotificationDetails(
-//         android: AndroidNotificationDetails(
-//           channel.id,
-//           channel.name,
-//           color: Colors.blue,
-//           playSound: true,
-//           icon: '@mipmap/ic_launcher',
-//         ),
-//       ));
-// }
+  // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  //   await Firebase.initializeApp();
+  //   print('A bg message just showed up :  ${message.messageId}');
+  //   await SharedMethod().getLocation();
+  //   // position = await Geolocator.getCurrentPosition(
+  //   //         desiredAccuracy: LocationAccuracy.high)
+  //   //     .then((value) {
+  //   //   print(position.latitude);
+  //   //   print(position.longitude);
+  //   //   Fluttertoast.showToast(msg: message.notification!.body.toString());
+  //   //   return value;
+  //   // });
+  //   // Fluttertoast.showToast(msg: message.notification!.body.toString());
+  //   RemoteNotification? notification = message.notification;
+  //   // AndroidNotification? android = message.notification?.android;
+  //   flutterLocalNotificationsPlugin.show(
+  //       notification.hashCode,
+  //       notification!.title,
+  //       notification.body,
+  //       NotificationDetails(
+  //         android: AndroidNotificationDetails(
+  //           channel.id,
+  //           channel.name,
+  //           color: Colors.blue,
+  //           playSound: true,
+  //           icon: '@mipmap/ic_launcher',
+  //         ),
+  //       ));
+  // }
 
-// late Position position;
+  // late Position position;
 
-// const AndroidInitializationSettings _androidInitializationSettings =
-//     AndroidInitializationSettings('@mipmap/ic_launcher');
-// final DarwinInitializationSettings _darwinInitializationSettings =
-//     const DarwinInitializationSettings();
+  // const AndroidInitializationSettings _androidInitializationSettings =
+  //     AndroidInitializationSettings('@mipmap/ic_launcher');
+  // final DarwinInitializationSettings _darwinInitializationSettings =
+  //     const DarwinInitializationSettings();
 
-// void initialisendNotfications() async {
-//   InitializationSettings initializationSettings =
-//       const InitializationSettings(android: _androidInitializationSettings);
-//   flutterLocalNotificationsPlugin.initialize(initializationSettings);
-// }
+  // void initialisendNotfications() async {
+  //   InitializationSettings initializationSettings =
+  //       const InitializationSettings(android: _androidInitializationSettings);
+  //   flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  // }
 
-// Future updateLocation(RemoteMessage msg) async {
-//   print("==========onBackground==========");
-//   Fluttertoast.showToast(msg: "update location\n${msg.notification!.body}");
-//   await Firebase.initializeApp();
-//   print("=========update====location=======\n${msg.notification!.body}");
-//   await FirebaseFirestore.instance
-//       .collection("donors")
-//       .doc("H5PPBI8VBBNikBYvmifb")
-//       .update({
-//     "lan": 2.02121510,
-//     "lon": 2.42144775,
-//   }).then((value) {
-//     print("==========Done==========");
-//   });
-// }
+  // Future updateLocation(RemoteMessage msg) async {
+  //   print("==========onBackground==========");
+  //   Fluttertoast.showToast(msg: "update location\n${msg.notification!.body}");
+  //   await Firebase.initializeApp();
+  //   print("=========update====location=======\n${msg.notification!.body}");
+  //   await FirebaseFirestore.instance
+  //       .collection("donors")
+  //       .doc("H5PPBI8VBBNikBYvmifb")
+  //       .update({
+  //     "lan": 2.02121510,
+  //     "lon": 2.42144775,
+  //   }).then((value) {
+  //     print("==========Done==========");
+  //   });
+  // }
 }

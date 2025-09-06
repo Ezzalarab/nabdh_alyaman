@@ -20,7 +20,7 @@ ThemeData getApplicationTheme() {
         ColorScheme.fromSwatch().copyWith(secondary: ColorManager.secondary),
 
     // cardview theme
-    cardTheme: const CardTheme(
+    cardTheme: const CardThemeData(
       color: ColorManager.white,
       shadowColor: ColorManager.grey,
       elevation: AppSize.s4,

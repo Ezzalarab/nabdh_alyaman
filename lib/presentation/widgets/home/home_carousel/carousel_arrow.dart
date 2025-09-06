@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import '../../../resources/style.dart';
 
 class CarouselArrow extends StatelessWidget {
-  const CarouselArrow(
-      {Key? key,
-      required CarouselSliderController controller,
-      required this.icon})
-      : _controller = controller,
-        super(key: key);
+  const CarouselArrow({
+    super.key,
+    required CarouselSliderController controller,
+    required this.icon,
+  }) : _controller = controller;
 
   final CarouselSliderController _controller;
   final IconData icon;
@@ -28,11 +27,7 @@ class CarouselArrow extends StatelessWidget {
           ),
           child: SizedBox(
             height: 200,
-            child: Icon(
-              icon,
-              size: 40,
-              color: eSecondColor.withOpacity(0.4),
-            ),
+            child: Icon(icon, size: 40, color: eSecondColor.withOpacity(0.4)),
           ),
           onPressed: () {
             _controller.nextPage();

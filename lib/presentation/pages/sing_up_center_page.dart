@@ -77,13 +77,11 @@ class _SignUpCenterState extends State<SignUpCenter> {
         oPlus: 0,
         oMinus: 0,
       );
-      BlocProvider.of<SignUpCubit>(context).signUpCenter(
-        center: newCenter,
-      );
+      BlocProvider.of<SignUpCubit>(context).signUpCenter(center: newCenter);
     }
   }
 
-  checkGps() async {
+  Future<void> checkGps() async {
     bool haspermission = false;
     LocationPermission permission;
     if (await location.serviceEnabled()) {
@@ -119,9 +117,10 @@ class _SignUpCenterState extends State<SignUpCenter> {
     }
   }
 
-  getLocation() async {
+  Future<void> getLocation() async {
     Position currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      desiredAccuracy: LocationAccuracy.high,
+    );
     if (kDebugMode) {
       print(currentPosition.longitude);
       print(currentPosition.latitude);
@@ -146,23 +145,28 @@ class _SignUpCenterState extends State<SignUpCenter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ColorManager.primaryBg,
-        appBar: AppBar(
-          title: const Text('إنشاء حساب مركز طبي'),
-          centerTitle: true,
-        ),
-        body:
-            BlocConsumer<SignUpCubit, SignUpState>(listener: (context, state) {
+      backgroundColor: ColorManager.primaryBg,
+      appBar: AppBar(
+        title: const Text('إنشاء حساب مركز طبي'),
+        centerTitle: true,
+      ),
+      body: BlocConsumer<SignUpCubit, SignUpState>(
+        listener: (context, state) {
           if (state is SignUpSuccess) {
             Utils.showSuccessSnackBar(
-                context: context, msg: AppStrings.signUpSuccessMessage);
+              context: context,
+              msg: AppStrings.signUpSuccessMessage,
+            );
             BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (_) => const ProfileCenterPage()));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const ProfileCenterPage()),
+            );
           } else if (state is SignUpFailure) {
             Utils.showFalureSnackBar(context: context, msg: state.error);
           }
-        }, builder: (context, state) {
+        },
+        builder: (context, state) {
           if (state is SignUpSuccess) {
             return const Center(child: Text('تم إنشاء الحساب بنجاح'));
           } else {
@@ -179,14 +183,19 @@ class _SignUpCenterState extends State<SignUpCenter> {
                 onStepContinue: _onStepContinue,
                 onStepCancel: _onStepCancel,
                 onStepTapped: _onStepTapped,
-                controlsBuilder: (BuildContext context,
-                    my_stepper.ControlsDetails controls) {
-                  return _buildNavigationButtons(context, controls);
-                },
+                controlsBuilder:
+                    (
+                      BuildContext context,
+                      my_stepper.ControlsDetails controls,
+                    ) {
+                      return _buildNavigationButtons(context, controls);
+                    },
               ),
             );
           }
-        }));
+        },
+      ),
+    );
   }
 
   Container _buildNavigationButtons(
@@ -211,9 +220,7 @@ class _SignUpCenterState extends State<SignUpCenter> {
                     child: MyButton(
                       title: AppStrings.signUpPreviousButton,
                       color: ColorManager.grey1,
-                      titleStyle: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
+                      titleStyle: Theme.of(context).textTheme.titleLarge!
                           .copyWith(color: ColorManager.primary),
                       onPressed: controls.onStepCancel!,
                       icon: const Padding(
@@ -271,9 +278,9 @@ class _SignUpCenterState extends State<SignUpCenter> {
   }
 
   List<my_stepper.Step> stepList() => <my_stepper.Step>[
-        firstStep(),
-        secondStep(),
-      ];
+    firstStep(),
+    secondStep(),
+  ];
 
   my_stepper.Step firstStep() {
     return my_stepper.Step(
@@ -281,13 +288,14 @@ class _SignUpCenterState extends State<SignUpCenter> {
           ? my_stepper.StepState.editing
           : my_stepper.StepState.complete,
       isActive: _activeStepIndex >= 0,
-      title: Text(AppStrings.signUpFirstStepTitle,
-          style: _activeStepIndex >= 0
-              ? Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Theme.of(context).primaryColor)
-              : Theme.of(context).textTheme.bodySmall),
+      title: Text(
+        AppStrings.signUpFirstStepTitle,
+        style: _activeStepIndex >= 0
+            ? Theme.of(context).textTheme.bodySmall!.copyWith(
+                color: Theme.of(context).primaryColor,
+              )
+            : Theme.of(context).textTheme.bodySmall,
+      ),
       content: SizedBox(
         height: signUpStepHight,
         child: Form(
@@ -352,13 +360,14 @@ class _SignUpCenterState extends State<SignUpCenter> {
           ? my_stepper.StepState.editing
           : my_stepper.StepState.complete,
       isActive: _activeStepIndex >= 1,
-      title: Text(AppStrings.signUpThirdStepTitle,
-          style: _activeStepIndex >= 1
-              ? Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Theme.of(context).primaryColor)
-              : Theme.of(context).textTheme.bodySmall),
+      title: Text(
+        AppStrings.signUpThirdStepTitle,
+        style: _activeStepIndex >= 1
+            ? Theme.of(context).textTheme.bodySmall!.copyWith(
+                color: Theme.of(context).primaryColor,
+              )
+            : Theme.of(context).textTheme.bodySmall,
+      ),
       content: SizedBox(
         height: signUpStepHight + 50,
         child: Form(
@@ -377,20 +386,14 @@ class _SignUpCenterState extends State<SignUpCenter> {
                   dropdownDecoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     color: ColorManager.white,
-                    border: Border.all(
-                      color: ColorManager.lightGrey,
-                      width: 1,
-                    ),
+                    border: Border.all(color: ColorManager.lightGrey, width: 1),
                   ),
                   dropDownPadding: const EdgeInsets.all(AppPadding.p12),
                   spaceBetween: AppSize.s20,
                   disabledDropdownDecoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     color: ColorManager.grey1,
-                    border: Border.all(
-                      color: ColorManager.grey1,
-                      width: 1,
-                    ),
+                    border: Border.all(color: ColorManager.grey1, width: 1),
                   ),
                   countrySearchPlaceholder: "الدولة",
                   stateSearchPlaceholder: "المحافظة",
@@ -481,9 +484,11 @@ class _SignUpCenterState extends State<SignUpCenter> {
   }
 
   Icon _buildPasswordIcon() {
-    return Icon(isPasswordHidden
-        ? Icons.visibility_outlined
-        : Icons.visibility_off_outlined);
+    return Icon(
+      isPasswordHidden
+          ? Icons.visibility_outlined
+          : Icons.visibility_off_outlined,
+    );
   }
 
   Text buildDonorDetail(String detail) {
@@ -509,7 +514,7 @@ class _SignUpCenterState extends State<SignUpCenter> {
     }
   }
 
-  _toggleIsPasswordVisible() {
+  void _toggleIsPasswordVisible() {
     setState(() => isPasswordHidden = !isPasswordHidden);
   }
 
@@ -518,8 +523,8 @@ class _SignUpCenterState extends State<SignUpCenter> {
 
   String? _emailValidator(value) =>
       value != null && EmailValidator.validate(value)
-          ? null
-          : AppStrings.signUpEmailValidator;
+      ? null
+      : AppStrings.signUpEmailValidator;
 
   String? _passwordValidator(value) => (value!.length < minCharsOfPassword)
       ? AppStrings.firebasePasswordValidatorError

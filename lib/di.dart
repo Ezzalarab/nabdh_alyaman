@@ -35,7 +35,8 @@ final gi = GetIt.instance;
 Future<void> initApp() async {
   // Auth Repositories
   gi.registerLazySingleton<AuthRepo>(
-      () => AuthRepositoryImpl(networkInfo: gi()));
+    () => AuthRepositoryImpl(networkInfo: gi()),
+  );
 
   // Search Repositories
   gi.registerLazySingleton<SearchRepo>(() => SearchRepoImpl(networkInfo: gi()));
@@ -44,14 +45,15 @@ Future<void> initApp() async {
   gi.registerLazySingleton(() => SearchStateDonorsUC(searchRepository: gi()));
   gi.registerLazySingleton(() => SearchCentersUC(searchRepository: gi()));
   // Search Cubit
-  gi.registerLazySingleton(() => SearchCubit(
-        searchCentersUseCase: gi(),
-        searchStateDonorsUseCase: gi(),
-      ));
+  gi.registerLazySingleton(
+    () =>
+        SearchCubit(searchCentersUseCase: gi(), searchStateDonorsUseCase: gi()),
+  );
 
   // Profile Repositories
   gi.registerLazySingleton<ProfileRepository>(
-      () => ProfileReopsitoryImpl(networkInfo: gi()));
+    () => ProfileReopsitoryImpl(networkInfo: gi()),
+  );
 
   // Profile UseCases
   gi.registerLazySingleton(() => ProfileUseCase(profileRepository: gi()));
@@ -61,15 +63,18 @@ Future<void> initApp() async {
 
   // SendNotfication
   gi.registerLazySingleton<SendNotficationRepository>(
-      () => SendNotficationImpl(networkInfo: gi()));
+    () => SendNotficationImpl(networkInfo: gi()),
+  );
 
   // send Notfication  useCase
   gi.registerLazySingleton(
-      () => SendNotficationUseCase(sendNotificationRepository: gi()));
+    () => SendNotficationUseCase(sendNotificationRepository: gi()),
+  );
 
   // send Notfication  cubit
   gi.registerLazySingleton(
-      () => SendNotficationCubit(sendNotficationUseCase: gi()));
+    () => SendNotficationCubit(sendNotficationUseCase: gi()),
+  );
 
   // Global Data
 
@@ -80,9 +85,12 @@ Future<void> initApp() async {
   // gi.registerLazySingleton(() => LocalData.getInitialAppData());
 
   // global data  cubit
-  gi.registerLazySingleton(() => GlobalCubit(getGlobalDataUC: gi()
+  gi.registerLazySingleton(
+    () => GlobalCubit(
+      getGlobalDataUC: gi(),
       // , appData: gi()
-      ));
+    ),
+  );
 
   // global data repo
   gi.registerLazySingleton<GlobalRepo>(() => GlobalRepoImpl(networkInfo: gi()));
@@ -92,29 +100,35 @@ Future<void> initApp() async {
 
   // NetworkInfo
   gi.registerLazySingleton<NetworkInfo>(
-      () => NetworkInfoChecker(connectionChecker: gi()));
+    () => NetworkInfoChecker(connectionChecker: gi()),
+  );
 
   /// External
 
   // Internet Info Checker
-  gi.registerLazySingleton(() => InternetConnectionChecker.createInstance(
-      checkTimeout: const Duration(seconds: 15)));
+  gi.registerLazySingleton(
+    () => InternetConnectionChecker.createInstance(
+      checkTimeout: const Duration(seconds: 15),
+    ),
+  );
 }
 
-initSignIn() {
+void initSignIn() {
   if (!GetIt.I.isRegistered<SignInCubit>()) {
     // UseCases
     gi.registerFactory(() => SignInUseCase(authRepository: gi()));
 
     gi.registerFactory(
-        () => ResetPasswordUseCase(resetPasswordRepository: gi()));
+      () => ResetPasswordUseCase(resetPasswordRepository: gi()),
+    );
     // Cubits
     gi.registerFactory(
-        () => SignInCubit(signInUseCase: gi(), resetPasswordUseCase: gi()));
+      () => SignInCubit(signInUseCase: gi(), resetPasswordUseCase: gi()),
+    );
   }
 }
 
-initSignUp() {
+void initSignUp() {
   if (!GetIt.I.isRegistered<SignUpCubit>()) {
     // UseCases
     gi.registerFactory(() => SignUpDonorAuthUseCase(authRepository: gi()));
@@ -122,9 +136,12 @@ initSignUp() {
     gi.registerFactory(() => SignUpCenterUseCase(authRepository: gi()));
 
     // Cubits
-    gi.registerFactory(() => SignUpCubit(
+    gi.registerFactory(
+      () => SignUpCubit(
         signUpDonorAuthUseCase: gi(),
         signUpCenterUseCase: gi(),
-        saveDonorDataUC: gi()));
+        saveDonorDataUC: gi(),
+      ),
+    );
   }
 }

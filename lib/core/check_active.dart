@@ -13,7 +13,7 @@ class CheckActive {
   static final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  static checkActiveUser() async {
+  static Future<void> checkActiveUser() async {
     if (_auth.currentUser == null) {
       Hive.box(dataBoxName).put('user', "0");
     }

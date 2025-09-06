@@ -87,9 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
         lon: lon,
         lat: lat,
       );
-      BlocProvider.of<SignUpCubit>(context).saveDonorData(
-        donor: newDonor,
-      );
+      BlocProvider.of<SignUpCubit>(context).saveDonorData(donor: newDonor);
     }
   }
 
@@ -115,54 +113,51 @@ class _SignUpPageState extends State<SignUpPage> {
   Function buildVerificationDialog(BuildContext context) {
     final GlobalKey<FormState> verificationFormState = GlobalKey<FormState>();
     return () => AwesomeDialog(
-          headerAnimationLoop: false,
-          dialogType: DialogType.noHeader,
-          context: context,
-          body: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Form(
-              key: verificationFormState,
-              child: Column(
-                children: [
-                  const Text(
-                    "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
-                    style: TextStyle(
-                      height: 2,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  MyTextFormField(
-                    onChange: (value) => smsCode = value,
-                    hint: "اكتب رقم التأكيد",
-                    keyBoardType: TextInputType.number,
-                    blurrBorderColor: ColorManager.lightGrey,
-                    focusBorderColor: ColorManager.lightSecondary,
-                    fillColor: ColorManager.white,
-                    autofocus: true,
-                    validator: (value) => (value != null && value.length > 5)
-                        ? null
-                        : "يجب كتابة رمز التأكيد المكون من 6 أرقام",
-                  ),
-                  const SizedBox(height: 20),
-                  MyButton(
-                    title: "تأكيد",
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      if (verificationFormState.currentState!.validate()) {
-                        BlocProvider.of<SignUpCubit>(context).verify(
-                          context: context,
-                          smsCode: smsCode!,
-                        );
-                      }
-                    },
-                    color: ColorManager.primary,
-                  ),
-                ],
+      headerAnimationLoop: false,
+      dialogType: DialogType.noHeader,
+      context: context,
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Form(
+          key: verificationFormState,
+          child: Column(
+            children: [
+              const Text(
+                "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
+                style: TextStyle(height: 2),
+                textAlign: TextAlign.center,
               ),
-            ),
+              const SizedBox(height: 20),
+              MyTextFormField(
+                onChange: (value) => smsCode = value,
+                hint: "اكتب رقم التأكيد",
+                keyBoardType: TextInputType.number,
+                blurrBorderColor: ColorManager.lightGrey,
+                focusBorderColor: ColorManager.lightSecondary,
+                fillColor: ColorManager.white,
+                autofocus: true,
+                validator: (value) => (value != null && value.length > 5)
+                    ? null
+                    : "يجب كتابة رمز التأكيد المكون من 6 أرقام",
+              ),
+              const SizedBox(height: 20),
+              MyButton(
+                title: "تأكيد",
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  if (verificationFormState.currentState!.validate()) {
+                    BlocProvider.of<SignUpCubit>(
+                      context,
+                    ).verify(context: context, smsCode: smsCode!);
+                  }
+                },
+                color: ColorManager.primary,
+              ),
+            ],
           ),
-        ).show();
+        ),
+      ),
+    ).show();
   }
 
   Future<void> showGpsPermissionDialog() async {
@@ -224,7 +219,7 @@ class _SignUpPageState extends State<SignUpPage> {
     ).show();
   }
 
-  checkGps() async {
+  Future<void> checkGps() async {
     bool haspermission = false;
     LocationPermission permission;
     if (await location.serviceEnabled()) {
@@ -260,9 +255,10 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  getLocation() async {
+  Future<void> getLocation() async {
     Position currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      desiredAccuracy: LocationAccuracy.high,
+    );
     if (kDebugMode) {
       print(currentPosition.longitude);
       print(currentPosition.latitude);
@@ -301,7 +297,9 @@ class _SignUpPageState extends State<SignUpPage> {
             if (state is SignUpAuthVerifying) {
             } else if (state is SignUpDataSuccess) {
               Utils.showSuccessSnackBar(
-                  context: context, msg: AppStrings.signUpSuccessMessage);
+                context: context,
+                msg: AppStrings.signUpSuccessMessage,
+              );
               Navigator.of(context).pushReplacementNamed(HomePage.routeName);
             } else if (state is SignUpFailure) {
               Utils.showFalureSnackBar(context: context, msg: state.error);
@@ -330,8 +328,8 @@ class _SignUpPageState extends State<SignUpPage> {
               onStepTapped: _onStepTapped,
               controlsBuilder:
                   (BuildContext context, my_stepper.ControlsDetails controls) {
-                return buildNavigationButtons(context, controls);
-              },
+                    return buildNavigationButtons(context, controls);
+                  },
             ),
           );
         },
@@ -427,10 +425,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         onPressed: _moveToSignInPage,
                         child: Text(
                           AppStrings.signUpGoToSignIn,
-                          style:
-                              Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    color: ColorManager.link,
-                                  ),
+                          style: Theme.of(context).textTheme.labelMedium!
+                              .copyWith(color: ColorManager.link),
                         ),
                       ),
                     ),
@@ -441,10 +437,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         onPressed: _moveToSignUpAsCenter,
                         child: Text(
                           AppStrings.signUpAsCenterLink,
-                          style:
-                              Theme.of(context).textTheme.labelMedium!.copyWith(
-                                    color: ColorManager.link,
-                                  ),
+                          style: Theme.of(context).textTheme.labelMedium!
+                              .copyWith(color: ColorManager.link),
                         ),
                       ),
                     ),
@@ -457,11 +451,11 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   List<my_stepper.Step> stepList() => <my_stepper.Step>[
-        firstStep(),
-        secondSetp(),
-        thirdStep(),
-        // fourthStep(),
-      ];
+    firstStep(),
+    secondSetp(),
+    thirdStep(),
+    // fourthStep(),
+  ];
 
   my_stepper.Step firstStep() {
     return my_stepper.Step(
@@ -469,13 +463,14 @@ class _SignUpPageState extends State<SignUpPage> {
           ? my_stepper.StepState.editing
           : my_stepper.StepState.complete,
       isActive: _activeStepIndex >= 0,
-      title: Text(AppStrings.signUpFirstStepTitle,
-          style: _activeStepIndex >= 0
-              ? Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Theme.of(context).primaryColor)
-              : Theme.of(context).textTheme.bodySmall),
+      title: Text(
+        AppStrings.signUpFirstStepTitle,
+        style: _activeStepIndex >= 0
+            ? Theme.of(context).textTheme.bodySmall!.copyWith(
+                color: Theme.of(context).primaryColor,
+              )
+            : Theme.of(context).textTheme.bodySmall,
+      ),
       content: SizedBox(
         height: signUpStepHight,
         child: Form(
@@ -485,17 +480,14 @@ class _SignUpPageState extends State<SignUpPage> {
             children: [
               Text(
                 AppStrings.signUpFirstStepMotivationPhrase,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(color: ColorManager.lightSecondary),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: ColorManager.lightSecondary,
+                ),
               ),
               const SizedBox(height: AppSize.s40),
               if (BlocProvider.of<SignUpCubit>(context).canSignUpWithPhone)
                 Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: AppMargin.m20,
-                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
                   child: MyTextFormField(
                     hint: AppStrings.signUpPhoneHint,
                     controller: phoneController,
@@ -557,13 +549,14 @@ class _SignUpPageState extends State<SignUpPage> {
           ? my_stepper.StepState.editing
           : my_stepper.StepState.complete,
       isActive: _activeStepIndex >= 1,
-      title: Text(AppStrings.signUpSecondStepTitle,
-          style: _activeStepIndex >= 1
-              ? Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Theme.of(context).primaryColor)
-              : Theme.of(context).textTheme.bodySmall),
+      title: Text(
+        AppStrings.signUpSecondStepTitle,
+        style: _activeStepIndex >= 1
+            ? Theme.of(context).textTheme.bodySmall!.copyWith(
+                color: Theme.of(context).primaryColor,
+              )
+            : Theme.of(context).textTheme.bodySmall,
+      ),
       content: SizedBox(
         height: signUpStepHight,
         child: Form(
@@ -581,10 +574,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   fillColor: ColorManager.white,
                   suffixIcon: false,
                   validator: _nameValidator,
-                  icon: const Icon(
-                    Icons.person,
-                    color: ColorManager.secondary,
-                  ),
+                  icon: const Icon(Icons.person, color: ColorManager.secondary),
                 ),
               ),
               if (BlocProvider.of<SignUpCubit>(context).canSignUpWithPhone)
@@ -595,9 +585,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox()
               else
                 Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: AppMargin.m20,
-                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
                   child: MyTextFormField(
                     hint: AppStrings.signUpPhoneHint,
                     controller: phoneController,
@@ -645,13 +633,14 @@ class _SignUpPageState extends State<SignUpPage> {
           ? my_stepper.StepState.editing
           : my_stepper.StepState.complete,
       isActive: _activeStepIndex >= 2,
-      title: Text(AppStrings.signUpThirdStepTitle,
-          style: _activeStepIndex >= 2
-              ? Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Theme.of(context).primaryColor)
-              : Theme.of(context).textTheme.bodySmall),
+      title: Text(
+        AppStrings.signUpThirdStepTitle,
+        style: _activeStepIndex >= 2
+            ? Theme.of(context).textTheme.bodySmall!.copyWith(
+                color: Theme.of(context).primaryColor,
+              )
+            : Theme.of(context).textTheme.bodySmall,
+      ),
       content: SizedBox(
         height: signUpStepHight,
         child: Form(
@@ -671,20 +660,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   dropdownDecoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     color: ColorManager.white,
-                    border: Border.all(
-                      color: ColorManager.lightGrey,
-                      width: 1,
-                    ),
+                    border: Border.all(color: ColorManager.lightGrey, width: 1),
                   ),
                   dropDownPadding: const EdgeInsets.all(AppPadding.p12),
                   spaceBetween: signUpSpaceBetweenFields,
                   disabledDropdownDecoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     color: ColorManager.grey1,
-                    border: Border.all(
-                      color: ColorManager.grey1,
-                      width: 1,
-                    ),
+                    border: Border.all(color: ColorManager.grey1, width: 1),
                   ),
                   countrySearchPlaceholder: "الدولة",
                   stateSearchPlaceholder: "المحافظة",
@@ -850,34 +833,25 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Wrap buildDonorDetail({
-    required String key,
-    required String value,
-  }) {
+  Wrap buildDonorDetail({required String key, required String value}) {
     return Wrap(
       runSpacing: 5.0,
       children: [
-        Text(
-          "$key:  ",
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
+        Text("$key:  ", style: Theme.of(context).textTheme.titleMedium),
+        Text(value, style: Theme.of(context).textTheme.headlineLarge),
         const SizedBox(width: 30.0),
       ],
     );
   }
 
-  _toggleIsPasswordVisible() {
+  void _toggleIsPasswordVisible() {
     setState(() => isPasswordHidden = !isPasswordHidden);
   }
 
   String? _emailValidator(value) =>
       value != null && EmailValidator.validate(value)
-          ? null
-          : AppStrings.signUpEmailValidator;
+      ? null
+      : AppStrings.signUpEmailValidator;
 
   String? _passwordValidator(value) => (value!.length < minCharsOfPassword)
       ? AppStrings.firebasePasswordValidatorError
@@ -940,7 +914,9 @@ class _SignUpPageState extends State<SignUpPage> {
   void _moveToSignInPage() {
     di.initSignIn();
     Navigator.push(
-        context, MaterialPageRoute(builder: ((context) => const SignInPage())));
+      context,
+      MaterialPageRoute(builder: ((context) => const SignInPage())),
+    );
   }
 
   // void _moveToPrivacyPolicyPage() {}
