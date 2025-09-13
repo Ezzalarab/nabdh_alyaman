@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:nabdh_alyaman/firebase_options.dart';
 import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 
 import 'di.dart' as di;
@@ -31,7 +32,9 @@ String? version;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await Firebase.initializeApp();
   await di.initApp();
   await Hive.initFlutter();
   await Hive.openBox(dataBoxName);
@@ -42,19 +45,22 @@ void main() async {
     sound: true,
   );
 
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider(create: (BuildContext context) => di.gi<GlobalCubit>()),
-      BlocProvider(create: (BuildContext context) => di.gi<SignUpCubit>()),
-      BlocProvider(create: (BuildContext context) => di.gi<SignInCubit>()),
-      BlocProvider(create: (BuildContext context) => di.gi<SearchCubit>()),
-      BlocProvider(create: (BuildContext context) => di.gi<ProfileCubit>()),
-      BlocProvider(
-          create: (BuildContext context) => di.gi<SendNotficationCubit>()),
-      BlocProvider(create: (BuildContext context) => MapsCubit()),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (BuildContext context) => di.gi<GlobalCubit>()),
+        BlocProvider(create: (BuildContext context) => di.gi<SignUpCubit>()),
+        BlocProvider(create: (BuildContext context) => di.gi<SignInCubit>()),
+        BlocProvider(create: (BuildContext context) => di.gi<SearchCubit>()),
+        BlocProvider(create: (BuildContext context) => di.gi<ProfileCubit>()),
+        BlocProvider(
+          create: (BuildContext context) => di.gi<SendNotficationCubit>(),
+        ),
+        BlocProvider(create: (BuildContext context) => MapsCubit()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
