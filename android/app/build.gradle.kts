@@ -17,7 +17,7 @@ plugins {
 
 android {
     namespace = "com.ezzcode.nabdh_alyaman"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = maxOf(flutter.compileSdkVersion, 34)
     ndkVersion = "27.0.12077973"
 
     compileOptions {
