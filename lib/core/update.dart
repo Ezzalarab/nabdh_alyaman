@@ -22,10 +22,9 @@ class Updating {
     version = packageInfo.version;
     oldVersion = version.toString();
     try {
-      FirebaseFirestore.instance
-          .collection("updating")
-          .snapshots()
-          .listen((event) {
+      FirebaseFirestore.instance.collection("updating").snapshots().listen((
+        event,
+      ) {
         // print(event.docs.first);
         if (event.docs.isNotEmpty) {
           showDialog = event.docs[0].data()['show_dialog'];
@@ -74,30 +73,21 @@ class Updating {
       body: Column(
         children: [
           const SizedBox(height: 20),
-          const Center(
-            child: Text(
-              "يتوفر اصدار جديد",
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
+          const Center(child: Text("يتوفر اصدار جديد")),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.all(18.0),
-            child: Center(
-              child: Text(errorMessage!),
-            ),
+            child: Center(child: Text(errorMessage!)),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           Container(
             padding: const EdgeInsets.all(10.0),
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
               style: ButtonStyle(
-                backgroundColor:
-                    WidgetStateProperty.all(Theme.of(context).primaryColor),
+                backgroundColor: WidgetStateProperty.all(
+                  Theme.of(context).primaryColor,
+                ),
               ),
               child: const Text("تحديث"),
               onPressed: () {
@@ -113,7 +103,10 @@ class Updating {
 
   void launchAppStore(String updateLink) async {
     if (await canLaunchUrl(Uri.parse(updateLink))) {
-      await launchUrl(Uri.parse(updateLink));
+      await launchUrl(
+        Uri.parse(updateLink),
+        mode: LaunchMode.externalApplication,
+      );
     }
   }
 }

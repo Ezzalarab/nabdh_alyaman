@@ -39,8 +39,8 @@ class _HomeDrowerState extends State<HomeDrower> {
             userType == "1"
                 ? const HomeDrawerDonorBody()
                 : userType == "2"
-                    ? const HomeDrawerCenterBody()
-                    : const HomeDrawerBody(),
+                ? const HomeDrawerCenterBody()
+                : const HomeDrawerBody(),
             BlocBuilder<GlobalCubit, GlobalState>(
               builder: (context, state) {
                 if (state is GlobalStateSuccess) {
@@ -52,7 +52,7 @@ class _HomeDrowerState extends State<HomeDrower> {
                   icon: Icons.warning_amber_rounded,
                   onTap: () {
                     final url = Uri.parse(reportProblemLink);
-                    launchUrl(url);
+                    launchUrl(url, mode: LaunchMode.externalApplication);
                   },
                 );
               },
