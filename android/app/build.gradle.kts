@@ -18,7 +18,7 @@ plugins {
 android {
     namespace = "com.ezzcode.nabdh_alyaman"
     compileSdk = maxOf(flutter.compileSdkVersion, 34)
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "29.0.13846066"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
