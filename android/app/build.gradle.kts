@@ -17,7 +17,7 @@ plugins {
 
 android {
     namespace = "com.ezzcode.nabdh_alyaman"
-    compileSdk = maxOf(flutter.compileSdkVersion, 34)
+    compileSdk = 36
     ndkVersion = "29.0.13846066"
 
     compileOptions {
@@ -44,7 +44,7 @@ android {
     defaultConfig {
         applicationId = "com.ezzcode.nabdh_alyaman"
         minSdk = maxOf(flutter.minSdkVersion, 23)
-        targetSdk = maxOf(flutter.targetSdkVersion, 34)
+        targetSdk = 35
         multiDexEnabled = true
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -54,11 +54,7 @@ android {
         getByName("release") {
             // استخدم توقيع release (وليس debug)
             signingConfig = signingConfigs.getByName("release")
-            // أثناء الضبط الأولي يمكنك تعطيل التصغير إن شئت:
-            // isMinifyEnabled = false
-            // isShrinkResources = false
         }
-        // getByName("debug") { ... }  // الإعداد الافتراضي كافٍ عادةً
     }
 }
 

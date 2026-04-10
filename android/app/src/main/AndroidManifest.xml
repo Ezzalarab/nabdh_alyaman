@@ -8,14 +8,9 @@
    <application
         android:label="نبض اليمن"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
-        <service
-            android:name="com.ezzcode.nabdh_alyaman.MyFirebaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+        android:icon="@mipmap/launcher_icon"
+        android:extractNativeLibs="false">
+
         <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/launcher_icon" />
         <meta-data
              android:name="com.google.android.geo.API_KEY"
@@ -41,6 +36,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <property android:name="android.pageSizeCompat" android:value="false"/>
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
