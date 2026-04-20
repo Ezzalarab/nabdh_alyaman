@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nabdh_alyaman/firebase_options.dart';
 import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
+import 'core/firebase_analyzer.dart';
 
 import 'di.dart' as di;
 import 'presentation/cubit/maps_cubit/maps_cubit.dart';
@@ -38,6 +39,9 @@ void main() async {
   await di.initApp();
   await Hive.initFlutter();
   await Hive.openBox(dataBoxName);
+
+  // فك تشفير هذا السطر عند الرغبة في تحليل هيكل بيانات Firestore في الـ Console
+  // await FirebaseAnalyzer.analyzeFirestoreStructure();
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
