@@ -78,7 +78,7 @@ nabdh-backend/
     migrations/         # ملفات الـ migrations (تُولَّد تلقائياً)
     seed/
       seed.ts           # سكربت استيراد شجرة المواقع
-  uploads/              # (خارج المشروع في الإنتاج: /var/www/nabdh-uploads/)
+  uploads/              # مجلد رفع الملفات (راجع UPLOADS_DIR في .env)
   .env                  # راجع env_variables.md للقائمة الكاملة
   .env.example          # نسخة من .env بدون القيم الحساسة
 ```

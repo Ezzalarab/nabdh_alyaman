@@ -11,24 +11,23 @@
 ```
 Client → POST /api/v1/auth/login { phone, password }
          ↓
-[Baackend]
-1. تنسيق رقم الهاتف (إضافة +967 إذا لزم)
-2. استخراج phoneHash = HMAC-SHA256(phone)
-3. البحث في DB: WHERE phoneHash = ?
+[Backend]
+1. تنسيق رقم الهاتف (+967...)
+2. البحث في DB: WHERE phone = نفس الرقم المنسق
    ↓
    [لم يُوجد] → 401 Unauthorized
          ↓
-4. مقارنة كلمة المرور: bcryptjs.compare(input, user.passwordHash)
+3. مقارنة كلمة المرور: bcryptjs.compare(input, user.passwordHash)
    ↓
    [خاطئة] → 401 Unauthorized
          ↓
-5. التحقق من حالة الحساب: user.status
+4. التحقق من حالة الحساب: user.status
    ↓
    [BLOCKED] → 403 Forbidden
    [PENDING] → 403 + رسالة "الحساب قيد المراجعة"
          ↓
-6. توليد JWT: { sub: user.id, role: user.role }
-7. إرجاع: { accessToken, role, profile }
+5. توليد JWT: { sub: user.id, role: user.role }
+6. إرجاع: { accessToken, role, profile }
 ```
 
 ### ب. حماية الـ Endpoints (Guard Flow)
@@ -47,12 +46,12 @@ RolesGuard → التحقق من role في الـ payload
 تنفيذ Handler المطلوب ✓
 ```
 
-### ج. إعادة ضبط كلمة المرور (Password Reset — لمستخدمي الهجرة)
+### ج. إعادة ضبط كلمة المرور (لمستخدمي الهجرة)
 
 ```
 Client → POST /api/v1/auth/reset-password { phone, newPassword }
          ↓
-1. التحقق من phoneHash في DB
+1. التحقق من وجود الهاتف في DB (WHERE phone = ?)
 2. إذا كان passwordHash == MIGRATION_PLACEHOLDER:
    → قبول الإعادة وتحديث الـ hash
 3. إذا كان passwordHash حقيقياً:

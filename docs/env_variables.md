@@ -26,19 +26,9 @@ JWT_SECRET="your_super_secret_key_minimum_32_characters_long"
 JWT_EXPIRES_IN="7d"
 # مدة صلاحية الـ Access Token
 
-# ====================================================
-# تشفير أرقام الهواتف (AES-256-GCM)
-# ====================================================
-ENCRYPTION_KEY="your_64_hex_characters_key_here"
-# يُولَّد عبر: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-# يجب أن يكون 64 حرف hex (= 32 byte)
-
-HMAC_KEY="your_hmac_secret_key_minimum_32_characters"
-# يُولَّد عبر: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-# يُستخدم لتوليد phoneHash (الفهرس الأعمى للبحث وتسجيل الدخول)
 
 # ====================================================
-# Firebase أو Admin SDK (للإشعارات FCM)
+# Firebase Admin SDK (للإشعارات FCM)
 # ====================================================
 FIREBASE_PROJECT_ID="your-firebase-project-id"
 FIREBASE_CLIENT_EMAIL="firebase-adminsdk-xxxxx@your-project.iam.gserviceaccount.com"
@@ -59,8 +49,7 @@ APP_URL="http://localhost:3000"
 # تخزين الملفات
 # ====================================================
 UPLOADS_DIR="/var/www/nabdh-uploads"
-# في التطوير المحلي: "./uploads"
-# في الإنتاج: المسار الكامل على السيرفر
+# المسار الذي تُحفظ فيه الملفات المرفوعة
 
 MAX_FILE_SIZE_MB=5
 # الحد الأقصى لحجم الملف المرفوع (بالميغابايت)
@@ -87,10 +76,7 @@ MIGRATION_PLACEHOLDER_HASH="MIGRATED_ACCOUNT_NEEDS_RESET"
 ## كيفية توليد المفاتيح السرية
 
 ```bash
-# توليد JWT_SECRET أو HMAC_KEY (32 byte = 64 hex)
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-
-# توليد ENCRYPTION_KEY (نفس الأمر)
+# توليد JWT_SECRET (32 byte = 64 hex)
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
@@ -103,8 +89,6 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 | `DATABASE_URL` | الاتصال بـ PostgreSQL | ✅ نعم | ✅ نعم |
 | `JWT_SECRET` | توقيع الـ JWT | ✅ نعم | ✅ نعم |
 | `JWT_EXPIRES_IN` | مدة صلاحية التوكن | ✅ نعم | ✅ نعم |
-| `ENCRYPTION_KEY` | تشفير أرقام الهواتف | ✅ نعم | ✅ نعم |
-| `HMAC_KEY` | توليد phoneHash | ✅ نعم | ✅ نعم |
 | `FIREBASE_PROJECT_ID` | FCM الإشعارات | ⚠️ للاختبار فقط | ✅ نعم |
 | `FIREBASE_CLIENT_EMAIL` | FCM الإشعارات | ⚠️ للاختبار فقط | ✅ نعم |
 | `FIREBASE_PRIVATE_KEY` | FCM الإشعارات | ⚠️ للاختبار فقط | ✅ نعم |
@@ -116,4 +100,4 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ---
 
 > [!NOTE]
-> في بيئة الإنتاج، يُفضَّل تخزين المتغيرات الحساسة (`ENCRYPTION_KEY`، `FIREBASE_PRIVATE_KEY`) في Secrets Manager أو كـ Environment Variables مباشرة على السيرفر بدلاً من ملف `.env`.
+> في بيئة الإنتاج، يُفضَّل تخزين المتغيرات الحساسة (`FIREBASE_PRIVATE_KEY` و `JWT_SECRET`) في Secrets Manager أو كـ Environment Variables مباشرة على السيرفر بدلاً من ملف `.env`.

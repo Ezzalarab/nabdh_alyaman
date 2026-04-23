@@ -27,9 +27,8 @@ npm install -D @types/passport-jwt @types/bcryptjs
 # الحماية والتحقق من المدخلات
 npm install @nestjs/throttler class-validator class-transformer
 
-# التشفير (AES-256-GCM لأرقام الهواتف)
-# مدمج في Node.js — لا حاجة لحزمة خارجية
-# نستخدم: import { createCipheriv, createDecipheriv, randomBytes, createHmac } from 'crypto'
+# المهام المجدولة (Cron Jobs)
+npm install @nestjs/schedule
 
 # FCM (إشعارات Firebase)
 npm install firebase-admin
@@ -79,42 +78,7 @@ const isValid = await bcryptjs.compare(plainPassword, passwordHash);
 
 > **ملاحظة**: Bcryptjs تم اختياره لسهولة التوافق مع بيانات Firebase المهاجرة مستقبلاً عند إعادة ضبط كلمات المرور.
 
-### ب. تشفير أرقام الهواتف (AES-256-GCM)
-```typescript
-import { createCipheriv, createDecipheriv, randomBytes, createHmac } from 'crypto';
-
-const ENCRYPTION_KEY = Buffer.from(process.env.ENCRYPTION_KEY, 'hex'); // 32 byte = 64 hex chars
-const HMAC_KEY = process.env.HMAC_KEY;
-
-// تشفير الرقم قبل الحفظ في قاعدة البيانات
-export function encryptPhone(phone: string): string {
-  const iv = randomBytes(12); // 12 bytes لـ GCM
-  const cipher = createCipheriv('aes-256-gcm', ENCRYPTION_KEY, iv);
-  let encrypted = cipher.update(phone, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
-  const authTag = cipher.getAuthTag().toString('hex');
-  // تخزين: iv:authTag:ciphertext
-  return `${iv.toString('hex')}:${authTag}:${encrypted}`;
-}
-
-// فك التشفير عند عرض الرقم للمشرف
-export function decryptPhone(stored: string): string {
-  const [ivHex, authTagHex, encrypted] = stored.split(':');
-  const iv = Buffer.from(ivHex, 'hex');
-  const decipher = createDecipheriv('aes-256-gcm', ENCRYPTION_KEY, iv);
-  decipher.setAuthTag(Buffer.from(authTagHex, 'hex'));
-  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
-}
-
-// استخراج الفهرس الأعمى للبحث وتسجيل الدخول
-export function hashPhone(phone: string): string {
-  return createHmac('sha256', HMAC_KEY).update(phone).digest('hex');
-}
-```
-
-### ج. حماية الـ API (Rate Limiting)
+### ب. حماية الـ API (Rate Limiting)
 ```typescript
 // app.module.ts
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -141,7 +105,7 @@ ThrottlerModule.forRoot([{
 ```typescript
 interface JwtPayload {
   sub: string;  // user.id
-  role: Role;   // DONOR | CENTER | ADMIN | SUPER_ADMIN
+  role: Role;   // DONOR | CENTER | ADMIN
   iat: number;
   exp: number;
 }
@@ -151,7 +115,7 @@ interface JwtPayload {
 ```typescript
 // حماية بالدور — مثال على Endpoint خاص بالمشرف فقط
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.ADMIN, Role.SUPER_ADMIN)
+@Roles(Role.ADMIN)
 @Get('admin/dashboard')
 getDashboard() { ... }
 ```
@@ -338,10 +302,45 @@ DATABASE_URL="postgresql://user:pass@localhost:5432/nabdh_db?connection_limit=5"
 
 ---
 
-## 10. ملاحظات مستقبلية
+## 10. المهام المجدولة (Cron Jobs)
+
+`@nestjs/schedule` يعمل **داخل نفس عملية NestJS** التي يُديرها PM2 — لا يحتاج برنامج إضافي على السيرفر، واستهلاكه للذاكرة لا يكاد يذكر.
+
+```typescript
+// مثال: تشغيل كل ساعة لإنهاء طلبات الاستغاثة المنتهية
+import { Cron } from '@nestjs/schedule';
+
+@Cron('0 * * * *') // كل ساعة
+async expireOldRequests() {
+  await this.prisma.bloodRequest.updateMany({
+    where: {
+      status: RequestStatus.OPEN,
+      expiresAt: { lt: new Date() },
+    },
+    data: { status: RequestStatus.EXPIRED },
+  });
+}
+```
+
+التفعيل في `AppModule`:
+```typescript
+import { ScheduleModule } from '@nestjs/schedule';
+
+@Module({
+  imports: [
+    ScheduleModule.forRoot(), // يضاف مرة واحدة
+    // ... باقي الوحدات
+  ]
+})
+```
+
+---
+
+## 11. ملاحظات مستقبلية
 
 - **نظام التحقق الطبي**: منع التبرع إذا مرّ أقل من 90 يوماً (يعتمد على جدول `Donation`).
 - **لوحة تحكم ويب**: مؤجلة — التركيز الآن على استقرار تطبيق الموبايل.
+- **تشفير أرقام الهواتف**: مؤجل لمرحلة نضج المشروع واستقراره.
 
 ---
 

@@ -14,7 +14,6 @@ enum Role {
   DONOR
   CENTER
   ADMIN
-  SUPER_ADMIN
 }
 
 enum Status {
@@ -58,8 +57,7 @@ enum Urgency {
 model User {
   id              String   @id @default(uuid())
   email           String?  @unique
-  phone           String   // رقم الهاتف مشفر (AES-256-GCM)
-  phoneHash       String   @unique // فهرس أعمى (HMAC-SHA256) للبحث وتسجيل الدخول
+  phone           String   @unique // رقم الهاتف — مخزن كنص عادي
   passwordHash    String
   role            Role     @default(DONOR)
   status          Status   @default(ACTIVE)
@@ -126,10 +124,10 @@ model CenterProfile {
   lon        Float?
   lastUpdate DateTime @default(now())
 
-  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  location   Location      @relation(fields: [locationId], references: [id])
-  bloodStock BloodStock[]
-  stockLogs  StockTransaction[]
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  location     Location           @relation(fields: [locationId], references: [id])
+  bloodStock   BloodStock[]
+  stockLogs    StockTransaction[]
 }
 ```
 
@@ -165,6 +163,8 @@ model StockTransaction {
   change    Int      // قيمة موجبة (+5) للإضافة، سالبة (-3) للخصم
   reason    String?  // مثال: "تبرع جديد"، "صرف لمريض"
   createdAt DateTime @default(now())
+
+  center    CenterProfile @relation(fields: [centerId], references: [userId])
 }
 ```
 
@@ -223,6 +223,7 @@ model BloodRequest {
   updatedAt    DateTime      @updatedAt
 
   requester    User          @relation(fields: [requesterId], references: [id])
+  location     Location      @relation(fields: [locationId], references: [id])
 }
 ```
 
@@ -307,10 +308,9 @@ model AppConfig {
 
 | البيانات | الأسلوب | التفاصيل |
 |---|---|---|
-| كلمات المرور | `Argon2id` | لا تُخزن أبداً كـ Plain text |
-| أرقام الهواتف | `AES-256-GCM` | التشفير قبل الحفظ في الـ DB |
-| البحث بالهاتف | `HMAC-SHA256` | حقل `phoneHash` للمقارنة فقط |
-| JWT | `RS256` أو `HS256` | مدة الصلاحية: 7 أيام، مع Refresh Token |
+| كلمات المرور | `Bcrypt` (cost=12) | لا تُخزن أبداً كـ Plain text |
+| أرقام الهواتف | نص عادي + `@unique` | البحث المباشر بالرقم |
+| JWT | `HS256` | مدة الصلاحية: 7 أيام |
 
 ---
 

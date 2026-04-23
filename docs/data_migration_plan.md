@@ -34,7 +34,7 @@
 |---|---|---|---|
 | `id` | `User` | `id` | استخدام UUID جديد (عدم الاعتماد على Firebase UID) |
 | `email` | `User` | `email` | مباشر |
-| `phone` | `User` | `phone` (مشفر) + `phoneHash` | تشفير AES-256-GCM + HMAC للبحث |
+| `phone` | `User` | `phone` (نص عادي، @unique) | تنسيق الرقم (+967) ثم حفظه مباشرةً |
 | `password` | `User` | `passwordHash` | **راجع قسم 3-ج** |
 | `token` | `User` | `fcmToken` | مباشر |
 | `status` | `User` | `status` | تحويل: `"ACTIVE"` → `Status.ACTIVE` |
@@ -58,7 +58,7 @@
 |---|---|---|---|
 | `id` | `User` | `id` | UUID جديد |
 | `email` | `User` | `email` | مباشر |
-| `phone` | `User` | `phone` + `phoneHash` | تشفير |
+| `phone` | `User` | `phone` (نص عادي، @unique) | تنسيق +967 ثم حفظه مباشرةً |
 | `password` | `User` | `passwordHash` | راجع قسم 3-ج |
 | `token` | `User` | `fcmToken` | مباشر |
 | `name` | `CenterProfile` | `name` | مباشر |
@@ -151,14 +151,13 @@ if (donor.lat && donor.lon) {
 
 > **مصدر إحداثيات مراكز المديريات**: موثق في ملف `seed_locations.md`.
 
-### الخطوة 5: تشفير أرقام الهواتف
+### الخطوة 5: تنسيق أرقام الهواتف
 ```typescript
 // تنسيق الرقم أولاً (إضافة +967 إذا لم يكن موجوداً)
 const formatted = formatYemeniPhone(donor.phone); // مثلاً: 0777... → +967777...
 
-// تشفير
-const phone = encryptPhone(formatted);
-const phoneHash = hashPhone(formatted);
+// حفظه مباشرةً كنص عادي
+const phone = formatted;
 ```
 
 ### الخطوة 6: فحص التكرار (De-duplication)
