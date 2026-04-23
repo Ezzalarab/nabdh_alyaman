@@ -1,0 +1,117 @@
+
+
+🚀 بدء تحليل هيكل بيانات Firebase Firestore
+W/DynamiteModule( 5045): Local module descriptor class for com.google.android.gms.providerinstaller.dynamite not found.
+I/DynamiteModule( 5045): Considering local module com.google.android.gms.providerinstaller.dynamite:0 and remote module com.google.android.gms.providerinstaller.dynamite:0
+I/OpenGLRenderer( 5045): Davey! duration=713ms; Flags=1, FrameTimelineVsyncId=18669, IntendedVsync=483034408550, Vsync=483317741872, InputEventId=0, HandleInputStart=483329370770, AnimationStart=483329372604, PerformTraversalsStart=483329373479, DrawStart=483438555187, FrameDeadline=483051075216, FrameInterval=483328288187, FrameStartTime=16666666, SyncQueued=483470017729, SyncStart=483477904312, IssueDrawCommandsStart=483484972437, SwapBuffers=483739831104, FrameCompleted=483755940062, DequeueBufferDuration=2632584, QueueBufferDuration=2052125, GpuCompleted=483753154812, SwapBuffersCompleted=483755940062, DisplayPresentTime=0, CommandSubmissionCompleted=483739831104, 
+D/EGL_emulation( 5045): app_time_stats: avg=171.56ms min=9.16ms max=466.06ms count=6
+D/EGL_emulation( 5045): app_time_stats: avg=31.90ms min=2.33ms max=676.15ms count=33
+W/WindowOnBackDispatcher( 5045): OnBackInvokedCallback is not enabled for the application.
+W/ProviderInstaller( 5045): Failed to load providerinstaller module: No acceptable module com.google.android.gms.providerinstaller.dynamite found. Local version is 0 and remote version is 0.
+D/nativeloader( 5045): Configuring clns-8 for other apk /system/framework/com.android.media.remotedisplay.jar. target_sdk_version=33, uses_libraries=ALL, library_path=/product/priv-app/PrebuiltGmsCore/lib/arm64:/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+D/nativeloader( 5045): Configuring clns-9 for other apk /system/framework/com.android.location.provider.jar. target_sdk_version=33, uses_libraries=ALL, library_path=/product/priv-app/PrebuiltGmsCore/lib/arm64:/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+D/ApplicationLoaders( 5045): Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+D/ApplicationLoaders( 5045): Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+D/nativeloader( 5045): InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-aarch64-android.so:libclang_rt.hwasan-aarch64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+D/nativeloader( 5045): Configuring product-clns-10 for unbundled product apk /product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk. target_sdk_version=33, uses_libraries=, library_path=/product/priv-app/PrebuiltGmsCore/lib/arm64:/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/arm64-v8a:/product/lib64:/system/product/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms:/product/lib64:/system/product/lib64
+D/nativeloader( 5045): InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+W/ProviderInstaller( 5045): Failed to report request stats: java.lang.NoSuchMethodException: com.google.android.gms.common.security.ProviderInstallerImpl.reportRequestStats2 [class android.content.Context, long, long]
+V/NativeCrypto( 5045): Registering com/google/android/gms/org/conscrypt/NativeCrypto's 295 native methods...
+W/e.nabdh_alyaman( 5045): Accessing hidden method Ljava/security/spec/ECParameterSpec;->getCurveName()Ljava/lang/String; (unsupported, reflection, allowed)
+I/ProviderInstaller( 5045): Installed default security provider GmsCore_OpenSSL
+D/TrafficStats( 5045): tagSocket(133) with statsTag=0xffffffff, statsUid=-1
+W/e.nabdh_alyaman( 5045): Accessing hidden field Ljava/net/Socket;->impl:Ljava/net/SocketImpl; (unsupported, reflection, allowed)
+W/e.nabdh_alyaman( 5045): Accessing hidden method Ljava/security/spec/ECParameterSpec;->setCurveName(Ljava/lang/String;)V (unsupported, reflection, allowed)
+📁 المجموعة: [donors]
+   📄 مُعرِّف الوثيقة: 1F8BvCfI5aVp48y0I9z5pgywK6z2
+   🛠️ الحقول والأنواع:
+     - image: String
+     - is_gps_on: String
+     - is_shown_phone: String
+     - brith_date: String
+     - created_at: Timestamp (Date)
+     - lon: String
+     - token: String
+     - password: String
+     - phone: String
+     - is_shown: String
+     - district: String
+     - blood_type: String
+     - name: String
+     - neighborhood: String
+     - state: String
+     - email: String
+     - lat: String
+     - status: String
+
+
+📁 المجموعة: [centers]
+   📄 مُعرِّف الوثيقة: JtDu1vm8OzNo2Xmej7FcSV48hrj2
+   🛠️ الحقول والأنواع:
+     - image: String
+     - B+: int
+     - lon: String
+     - AB+: int
+     - A+: int
+     - B-: int
+     - A-: int
+     - AB-: int
+     - token: String
+     - password: String
+     - phone: String
+     - district: String
+     - last_update: String
+     - name: String
+     - neighborhood: String
+     - state: String
+     - O+: int
+     - O-: int
+     - email: String
+     - lat: String
+     - status: String
+
+
+📁 المجموعة: [notifications] -> (لا توجد بيانات حالياً)
+I/e.nabdh_alyaman( 5045): Background young concurrent copying GC freed 46595(3117KB) AllocSpace objects, 0(0B) LOS objects, 33% free, 6003KB/9001KB, paused 61us,17us total 642.596ms
+📁 المجموعة: [search_logs]
+   📄 مُعرِّف الوثيقة: 01U31YH9ottZ2ipjCl9c
+     - donors_count: String
+     - user_type: String
+     - district: String
+     - blood_type: String
+     - state: String
+     - token: String
+
+
+📁 المجموعة: [updating]
+   📄 مُعرِّف الوثيقة: Tyxl1kxV8X0uq7N7Gkbb
+   🛠️ الحقول والأنواع:
+   🛠️ الحقول والأنواع:
+     - date: String
+     - waring_degree: String
+     - new_version: String
+     - message: String
+     - show_dialog: String
+     - update_link: String
+
+
+📁 المجموعة: [users_per_day]
+   📄 مُعرِّف الوثيقة: 2023-07-31
+   🛠️ الحقول والأنواع:
+     - users_count: int
+
+
+📁 المجموعة: [global_app_data]
+   📄 مُعرِّف الوثيقة: 2023-05-25
+   🛠️ الحقول والأنواع:
+     - app_name: String
+     - home_header: String
+     - about_app: String
+     - events_title: String
+     - events_cards_data: String
+     - info_titile: String
+     - home_slides: List (Array)
+     - info_list: String
+     - report_link: String
+
+✅ انتهى التحليل.
