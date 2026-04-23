@@ -1,70 +1,149 @@
 # دليل إعداد البيئة التطويرية (Mac M2 Setup)
 
-بالنسبة لجهازك **MacBook M2 Air**، فأنت تمتلك جهازاً قوياً جداً لمعمارية ARM. لا تحتاج لاستخدام XAMPP (الذي عفا عليه الزمن)، بل سنستخدم أدوات حديثة تناسب NestJS و PostgreSQL.
+بالنسبة لجهازك **MacBook M2 Air**، فأنت تمتلك جهازاً قوياً جداً لمعمارية ARM. سنستخدم أدوات حديثة وخفيفة تناسب NestJS و PostgreSQL.
 
 ---
 
 ## 1. الأدوات الأساسية (The Stack)
 
 ### أ. إدارة الحزم (Homebrew)
-إذا لم يكن مثبتًا، افتح الـ Terminal وقم بتثبيته:
-`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+إذا لم يكن مثبتاً:
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
-### ب. بيئة Node.js (عبر nvm)
-من الأفضل استخدام `nvm` للتحكم في إصدارات Node:
-`brew install nvm`
+### ب. بيئة Node.js v20 LTS (عبر nvm)
+```bash
+brew install nvm
 
-### ج. قاعدة البيانات (Native PostgreSQL) - *الخيار الأخف*
-بما أنك تفضل حلاً أخف من Docker لتوفير موارد الجهاز والسيرفر:
-- قم بتثبيت PostgreSQL مباشرة عبر Homebrew:
-  `brew install postgresql@16`
-- قم بتفعيل إضافة PostGIS:
-  `brew install postgis`
-- ابدأ الخدمة:
-  `brew services start postgresql@16`
+# إضافة nvm لملف الـ shell:
+echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
+echo '[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"' >> ~/.zshrc
+source ~/.zshrc
 
-### د. سكربت الإعداد السريع (Setup Script Template)
-يمكننا إنشاء ملف `setup.sh` يقوم بالتالي:
-1. التأكد من وجود Node.js.
-2. تثبيت PostgreSQL و PostGIS.
-3. إنشاء قاعدة بيانات المشروع.
-4. تثبيت مكتبات `npm`.
-5. تشغيل `npx prisma migrate dev`.
+# تثبيت Node.js v20 (LTS المعتمد في هذا المشروع)
+nvm install 20
+nvm use 20
+nvm alias default 20
+
+# التحقق
+node --version  # → v20.x.x
+npm --version   # → 10.x.x
+```
+
+### ج. قاعدة البيانات (PostgreSQL + PostGIS)
+```bash
+# تثبيت PostgreSQL 16
+brew install postgresql@16
+
+# إضافة PostgreSQL للـ PATH
+echo 'export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
+# تثبيت PostGIS (الإضافة الجغرافية)
+brew install postgis
+
+# تشغيل الخدمة
+brew services start postgresql@16
+
+# إنشاء قاعدة بيانات المشروع
+createdb nabdh_dev
+
+# تفعيل PostGIS على قاعدة البيانات
+psql nabdh_dev -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+
+# التحقق
+psql nabdh_dev -c "SELECT PostGIS_Version();"
+```
 
 ---
 
-## 2. كيف تتصفح البيانات (PostgreSQL GUIs)
-بما أنك قادم من phpMyAdmin، إليك البدائل الأفضل على الماك:
+## 2. هيكل مشروع الباكإند (NestJS)
 
-1.  **Prisma Studio (المدمج)**:
-    - الأفضل والأسهل مع NestJS.
-    - فقط اكتب `npx prisma studio` في مجلد المشروع، وسيخت لك واجهة ويب جميلة جداً لإدارة الجداول.
-2.  **TablePlus (نصيحة الخبراء)**:
-    - تطبيق Mac Native سريع جداً وجميل يدعم PostgreSQL.
-    - النسخة المجانية كافية جداً لعملك.
-3.  **pgAdmin 4**:
-    - هو البديل المباشر المصنعي لـ phpMyAdmin، ولكنه أثقل قليلاً من TablePlus.
+```
+nabdh-backend/
+  src/
+    auth/
+    donors/
+    donor-search/
+    centers/
+    locations/
+    blood-requests/
+    notifications/
+    files/
+    app-config/
+    prisma/
+  prisma/
+    schema.prisma       # مخطط قاعدة البيانات (راجع database_schema_spec.md)
+    migrations/         # ملفات الـ migrations (تُولَّد تلقائياً)
+    seed/
+      seed.ts           # سكربت استيراد شجرة المواقع
+  uploads/              # (خارج المشروع في الإنتاج: /var/www/nabdh-uploads/)
+  .env                  # راجع env_variables.md للقائمة الكاملة
+  .env.example          # نسخة من .env بدون القيم الحساسة
+```
 
 ---
 
 ## 3. تشغيل المشروع محلياً
-لا تختلف الطريقة عن أي مشروع Node.js:
-1. `npm install` لتحميل المكتبات.
-2. `npx prisma migrate dev` لإنشاء الجداول في قاعدة بياناتك المحلية.
-3. `npm run start:dev` لتشغيل السيرفر مع ميزة التحديث التلقائي عند الحفظ.
+
+```bash
+# 1. تحميل المكتبات
+npm install
+
+# 2. إنشاء ملف .env من المثال
+cp .env.example .env
+# ثم عدّل القيم في .env (راجع env_variables.md)
+
+# 3. إنشاء الجداول في قاعدة البيانات المحلية
+npx prisma migrate dev --name init
+
+# 4. تنفيذ استعلامات PostGIS اليدوية (مرة واحدة فقط)
+psql nabdh_dev -c "ALTER TABLE \"DonorProfile\" ADD COLUMN IF NOT EXISTS coords geography(Point, 4326);"
+psql nabdh_dev -c "CREATE INDEX IF NOT EXISTS idx_donor_coords ON \"DonorProfile\" USING GIST (coords);"
+
+# 5. استيراد شجرة المواقع (seed)
+npx ts-node prisma/seed/seed.ts
+
+# 6. تشغيل السيرفر مع التحديث التلقائي
+npm run start:dev
+# السيرفر يعمل على: http://localhost:3000
+```
 
 ---
 
-## 4. هيكلية المجلدات والأدوار (Simplified Structure)
-كما طلبتم، سنركز على تطبيق الموبايل لكافة الأدوار:
-- `lib/core`: يحتوي على منطق التشفير (Encryption) والتعامل مع التوقيت (UTC conversion).
-- `lib/features/donor`: واجهات المتبرع.
-- `lib/features/medical_center`: واجهات المركز الطبي.
-- `lib/features/admin`: واجهات المشرف.
+## 4. أدوات إدارة قاعدة البيانات (GUI Tools)
 
-هذا التقسيم يسهل عملية التوسع لاحقاً (Scalability) دون التأثير على أداء السيرفر.
+| الأداة | الوصف | التوصية |
+|---|---|---|
+| **Prisma Studio** | مدمج مع المشروع — `npx prisma studio` | ✅ الأسهل والأسرع |
+| **TablePlus** | تطبيق Mac Native سريع وجميل | ✅ مُوصى به |
+| **pgAdmin 4** | البديل الرسمي لـ phpMyAdmin | ⚠️ أثقل من TablePlus |
+
+---
+
+## 5. أوامر مفيدة للتطوير
+
+```bash
+# إنشاء وحدة NestJS جديدة
+nest generate module blood-requests
+nest generate controller blood-requests
+nest generate service blood-requests
+
+# إنشاء migration جديدة بعد تعديل schema.prisma
+npx prisma migrate dev --name "add_new_field"
+
+# تطبيق migrations على بيئة الإنتاج (لا تستخدم migrate dev في الإنتاج)
+npx prisma migrate deploy
+
+# فتح Prisma Studio
+npx prisma studio
+
+# الاطلاع على حالة الـ migrations
+npx prisma migrate status
+```
 
 ---
 
 > [!TIP]
-> جميع هذه الأدوات تعمل بشكل أصلي (Native) على معالج M2، مما يوفر لك سرعة خيالية واستهلاكاً منخفضاً جداً للبطارية مقارنة بـ XAMPP.
+> جميع هذه الأدوات تعمل بشكل أصلي (Native) على معالج M2، مما يوفر سرعة خيالية واستهلاكاً منخفضاً للبطارية. لا تحتاج لـ Docker أو XAMPP.
