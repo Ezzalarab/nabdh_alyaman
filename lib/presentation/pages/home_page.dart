@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../core/constants/storage_keys.dart';
+import '../../data/datasources/local/preferences_local_datasource.dart';
 import '../../core/notifications/fcm_service.dart';
 import '../../core/notifications/notification_router.dart';
 import '../../core/update.dart';
@@ -39,11 +38,24 @@ class _HomePageState extends State<HomePage> {
 
   final NotificationRouter _notificationRouter = NotificationRouter();
 
+  bool _onboardingChecked = false;
+  bool _showIntro = true;
+
   @override
   void initState() {
     super.initState();
     context.read<AppConfigBloc>().add(AppVersionCheckRequested());
     _bindFcm();
+    _loadOnboarding();
+  }
+
+  Future<void> _loadOnboarding() async {
+    final done = await di.gi<PreferencesLocalDataSource>().isOnboardingDone();
+    if (!mounted) return;
+    setState(() {
+      _showIntro = !done;
+      _onboardingChecked = true;
+    });
   }
 
   void _bindFcm() {
@@ -71,14 +83,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final firstTimeState = Hive.box(dataBoxName).get('introduction') ?? true;
+    if (!_onboardingChecked) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return BlocListener<AppConfigBloc, AppConfigState>(
       listener: (context, state) {
         if (state is AppUpdateRequired) {
           _updateDialog.showIfNeeded(context, state.policy);
         }
       },
-      child: firstTimeState
+      child: _showIntro
           ? const IntroductionPage()
           : Scaffold(
               backgroundColor: ColorManager.primaryBg,

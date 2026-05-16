@@ -1,12 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 
 import '../../../core/auth/auth_identifier.dart';
 import '../../../core/error/failures.dart';
 import '../../../core/session/session_lifecycle.dart';
-import '../../../domain/entities/auth_session.dart';
 import '../../../domain/repositories/auth_repo.dart';
-import '../../../core/constants/storage_keys.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -35,18 +32,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SessionLifecycle _sessionLifecycle;
   late final void Function() _expiredListener;
 
-  Future<void> _syncHiveUserMarker(AuthenticatedSession? session) async {
-    final box = Hive.box(dataBoxName);
-    if (session == null) {
-      await box.put('user', '0');
-      return;
-    }
-    await box.put(
-      'user',
-      session.role == 'CENTER' ? '2' : '1',
-    );
-  }
-
   Future<void> _onCheck(
     AuthCheckRequested event,
     Emitter<AuthState> emit,
@@ -54,11 +39,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     final session = await _authRepo.readPersistedSessionMeta();
     if (session == null) {
-      await _syncHiveUserMarker(null);
       emit(AuthUnauthenticated());
       return;
     }
-    await _syncHiveUserMarker(session);
     await _authRepo.registerDeviceIfPossible();
     emit(AuthAuthenticated(session));
   }
@@ -105,7 +88,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthUnauthenticated());
       },
       (session) async {
-        await _syncHiveUserMarker(session);
         await _authRepo.registerDeviceIfPossible();
         emit(AuthAuthenticated(session));
       },
@@ -124,7 +106,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthUnauthenticated());
       },
       (session) async {
-        await _syncHiveUserMarker(session);
         await _authRepo.registerDeviceIfPossible();
         emit(AuthAuthenticated(session));
       },
@@ -137,7 +118,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthLoading());
     await _authRepo.logout();
-    await _syncHiveUserMarker(null);
     emit(AuthUnauthenticated());
   }
 
@@ -212,7 +192,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     await _authRepo.logout();
-    await _syncHiveUserMarker(null);
     emit(AuthUnauthenticated());
   }
 

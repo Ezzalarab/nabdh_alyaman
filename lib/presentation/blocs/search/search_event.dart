@@ -1,24 +1,39 @@
 part of 'search_bloc.dart';
 
-abstract class SearchEvent {}
+abstract class SearchEvent extends Equatable {
+  const SearchEvent();
+
+  @override
+  List<Object?> get props => [];
+}
 
 class SearchFiltersChanged extends SearchEvent {
-  SearchFiltersChanged({this.bloodType, this.stateId, this.districtId});
+  const SearchFiltersChanged({this.bloodType, this.stateId, this.districtId});
 
   final String? bloodType;
   final int? stateId;
   final int? districtId;
+
+  @override
+  List<Object?> get props => [bloodType, stateId, districtId];
 }
 
 class SearchRequested extends SearchEvent {
-  SearchRequested({this.bloodType, this.stateId, this.districtId});
+  const SearchRequested({this.bloodType, this.stateId, this.districtId});
 
   final String? bloodType;
   final int? stateId;
   final int? districtId;
+
+  @override
+  List<Object?> get props => [bloodType, stateId, districtId];
 }
 
 class SearchTabChanged extends SearchEvent {
-  SearchTabChanged(this.tabIndex);
+  const SearchTabChanged(this.tabIndex);
+
   final int tabIndex;
+
+  @override
+  List<Object?> get props => [tabIndex];
 }

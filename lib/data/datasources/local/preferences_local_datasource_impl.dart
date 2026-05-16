@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../core/constants/storage_keys.dart';
 import 'preferences_local_datasource.dart';
 
 class PreferencesLocalDataSourceImpl implements PreferencesLocalDataSource {
@@ -20,4 +21,12 @@ class PreferencesLocalDataSourceImpl implements PreferencesLocalDataSource {
     await _prefs.setString(_deviceIdKey, id);
     return id;
   }
+
+  @override
+  Future<bool> isOnboardingDone() =>
+      Future.value(_prefs.getBool(StorageKeys.onboardingDone) ?? false);
+
+  @override
+  Future<void> setOnboardingDone(bool value) =>
+      _prefs.setBool(StorageKeys.onboardingDone, value);
 }

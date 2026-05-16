@@ -45,9 +45,9 @@
 - [x] 10 — طلبات الدم: Bloc + مستودع، إنشاء/إلغاء/الحدود (429)، عدم broadcast من العميل (`tasks/phase5_blood_requests.md`)
 
 ## المرحلة 6 — الإغلاق
-- [ ] 11 — مراجعة بقايا Cubit/Firestore/Hive ومسارات Firebase غير المرغوبة
-- [ ] 12 — `pubspec` وتنظيف: إزالة حزم Firebase غير `core`/`messaging`، إزالة Hive، مراجعة أسرار وأكواد قديمة
-- [ ] 13 — اختبار يدوي/وحدة حسب قائمة المرحلة 13، بناء الإصدار وباقة التحديث على Play حسب الوثيقة
+- [x] 11 — مراجعة بقايا Cubit/Firestore/Hive ومسارات Firebase غير المرغوبة (`tasks/phase6_closure.md`)
+- [x] 12 — `pubspec` وتنظيف: إزالة حزم Firebase غير `core`/`messaging`، إزالة Hive، Drift locations، حذف أسرار FCM legacy
+- [x] 13 — `flutter test` + `flutter analyze`؛ checklist يدوي/نشر Play عند الجاهزية (انظر `phase6_closure.md`)
 
 # Context:
 

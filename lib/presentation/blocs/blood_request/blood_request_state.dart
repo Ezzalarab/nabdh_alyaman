@@ -1,32 +1,53 @@
 part of 'blood_request_bloc.dart';
 
-sealed class BloodRequestState {}
+sealed class BloodRequestState extends Equatable {
+  const BloodRequestState();
 
-class BloodRequestInitial extends BloodRequestState {}
+  @override
+  List<Object?> get props => [];
+}
 
-class BloodRequestLoading extends BloodRequestState {}
+class BloodRequestInitial extends BloodRequestState {
+  const BloodRequestInitial();
+}
+
+class BloodRequestLoading extends BloodRequestState {
+  const BloodRequestLoading();
+}
 
 class BloodRequestListLoaded extends BloodRequestState {
-  BloodRequestListLoaded({required this.items});
+  const BloodRequestListLoaded({required this.items});
 
   final List<BloodRequest> items;
+
+  @override
+  List<Object?> get props => [items];
 }
 
 class BloodRequestDetailLoaded extends BloodRequestState {
-  BloodRequestDetailLoaded({required this.request});
+  const BloodRequestDetailLoaded({required this.request});
 
   final BloodRequest request;
+
+  @override
+  List<Object?> get props => [request];
 }
 
 class BloodRequestSuccess extends BloodRequestState {
-  BloodRequestSuccess({this.request, this.createdId});
+  const BloodRequestSuccess({this.request, this.createdId});
 
   final BloodRequest? request;
   final String? createdId;
+
+  @override
+  List<Object?> get props => [request, createdId];
 }
 
 class BloodRequestFailure extends BloodRequestState {
-  BloodRequestFailure(this.message);
+  const BloodRequestFailure(this.message);
 
   final String message;
+
+  @override
+  List<Object?> get props => [message];
 }

@@ -1,2 +1,4 @@
-/// Hive box name for legacy profile/role markers (phased out with REST migration).
-const String dataBoxName = 'dataProfile';
+/// Non-sensitive [SharedPreferences] keys.
+abstract final class StorageKeys {
+  static const onboardingDone = 'onboarding_done';
+}

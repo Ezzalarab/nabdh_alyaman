@@ -1,7 +1,10 @@
 # Nabdh Alyanam (نبض اليمن)
 
-Application of blood donation, Developed using Flutter
-The data is fetched using Firebase API. So, you need internet to use the app.
+Application of blood donation, developed using Flutter.
+
+Data is fetched from the REST API (`https://nabdh.telqaia.com/api/v1`). Internet is required for most features; location lists are cached locally (Drift).
+
+Migration plans: [`docs/restructure/README.md`](docs/restructure/README.md)
 
 <img src="https://github.com/Ezzalarab/nabdh_alyaman/blob/master/screenshots/main_view.png">
 

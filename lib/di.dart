@@ -11,6 +11,7 @@ import 'core/network/dio_api_client.dart';
 import 'core/network/network_info.dart';
 import 'core/session/session_lifecycle.dart';
 import 'data/datasources/local/locations_local_datasource.dart';
+import 'data/local/drift/app_database.dart';
 import 'data/datasources/local/preferences_local_datasource.dart';
 import 'data/datasources/local/preferences_local_datasource_impl.dart';
 import 'data/datasources/local/session_local_datasource.dart';
@@ -83,6 +84,7 @@ Future<void> initApp() async {
   gi.registerLazySingleton<SessionLocalDataSource>(
     () => SessionLocalDataSourceImpl(gi()),
   );
+  gi.registerLazySingleton<AppDatabase>(() => AppDatabase());
   gi.registerLazySingleton<LocationsLocalDataSource>(
     () => LocationsLocalDataSourceImpl(gi()),
   );

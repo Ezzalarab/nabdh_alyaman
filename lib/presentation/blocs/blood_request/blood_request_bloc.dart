@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/error/failures.dart';
@@ -10,7 +11,7 @@ part 'blood_request_state.dart';
 class BloodRequestBloc extends Bloc<BloodRequestEvent, BloodRequestState> {
   BloodRequestBloc({required BloodRequestUseCase useCase})
       : _useCase = useCase,
-        super(BloodRequestInitial()) {
+        super(const BloodRequestInitial()) {
     on<BloodRequestCreateSubmitted>(_onCreate);
     on<BloodRequestListLoadRequested>(_onListLoad);
     on<BloodRequestDetailLoadRequested>(_onDetailLoad);
@@ -23,7 +24,7 @@ class BloodRequestBloc extends Bloc<BloodRequestEvent, BloodRequestState> {
     BloodRequestCreateSubmitted event,
     Emitter<BloodRequestState> emit,
   ) async {
-    emit(BloodRequestLoading());
+    emit(const BloodRequestLoading());
     final result = await _useCase.create(event.params);
     result.fold(
       (failure) => emit(
@@ -39,7 +40,7 @@ class BloodRequestBloc extends Bloc<BloodRequestEvent, BloodRequestState> {
     BloodRequestListLoadRequested event,
     Emitter<BloodRequestState> emit,
   ) async {
-    emit(BloodRequestLoading());
+    emit(const BloodRequestLoading());
     final result = await _useCase.loadList(
       bloodType: event.bloodType,
       stateId: event.stateId,
@@ -56,7 +57,7 @@ class BloodRequestBloc extends Bloc<BloodRequestEvent, BloodRequestState> {
     BloodRequestDetailLoadRequested event,
     Emitter<BloodRequestState> emit,
   ) async {
-    emit(BloodRequestLoading());
+    emit(const BloodRequestLoading());
     final result = await _useCase.loadDetail(event.id);
     result.fold(
       (failure) => emit(BloodRequestFailure(getFailureMessage(failure))),
@@ -68,7 +69,7 @@ class BloodRequestBloc extends Bloc<BloodRequestEvent, BloodRequestState> {
     BloodRequestStatusUpdateSubmitted event,
     Emitter<BloodRequestState> emit,
   ) async {
-    emit(BloodRequestLoading());
+    emit(const BloodRequestLoading());
     final result = await _useCase.updateStatus(
       id: event.id,
       status: event.status,

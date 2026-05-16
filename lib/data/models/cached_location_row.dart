@@ -1,4 +1,4 @@
-/// Local row for governorates cached from `/locations` (Phase 0 — JSON in prefs until Drift codegen runs).
+/// Local row for governorates cached from `/locations` (Drift SQLite).
 class CachedLocationState {
   const CachedLocationState({required this.stateId, required this.nameAr});
 

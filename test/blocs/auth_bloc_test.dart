@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
 import 'package:nabdh_alyaman/core/error/failures.dart';
 import 'package:nabdh_alyaman/core/session/session_lifecycle.dart';
 import 'package:nabdh_alyaman/domain/entities/auth_session.dart';
 import 'package:nabdh_alyaman/domain/entities/donor_registration_params.dart';
-import 'package:nabdh_alyaman/core/constants/storage_keys.dart';
 import 'package:nabdh_alyaman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:nabdh_alyaman/presentation/blocs/auth/auth_event.dart';
 import 'package:nabdh_alyaman/presentation/blocs/auth/auth_state.dart';
@@ -17,13 +13,6 @@ import '../helpers/fake_auth_repo.dart';
 void main() {
   late FakeAuthRepo authRepo;
   late SessionLifecycle sessionLifecycle;
-
-  setUpAll(() async {
-    TestWidgetsFlutterBinding.ensureInitialized();
-    final dir = await Directory.systemTemp.createTemp('nabdh_hive_test');
-    Hive.init(dir.path);
-    await Hive.openBox(dataBoxName);
-  });
 
   setUp(() {
     authRepo = FakeAuthRepo();

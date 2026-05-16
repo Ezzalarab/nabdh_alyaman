@@ -1,19 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nabdh_alyaman/firebase_options.dart';
 
-import 'core/constants/storage_keys.dart';
+import 'core/bloc/app_bloc_observer.dart';
 import 'core/notifications/fcm_service.dart';
 import 'di.dart' as di;
 import 'presentation/blocs/app_config/app_config_bloc.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/auth/auth_state.dart';
-import 'presentation/blocs/center/center_bloc.dart';
 import 'presentation/blocs/blood_request/blood_request_bloc.dart';
+import 'presentation/blocs/center/center_bloc.dart';
 import 'presentation/blocs/notifications/notifications_bloc.dart';
 import 'presentation/blocs/profile/profile_bloc.dart';
 import 'presentation/blocs/search/search_bloc.dart';
@@ -44,10 +44,12 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  if (kDebugMode) {
+    Bloc.observer = AppBlocObserver();
+  }
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await di.initApp();
-  await Hive.initFlutter();
-  await Hive.openBox(dataBoxName);
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await di.gi<FcmService>().initialize();

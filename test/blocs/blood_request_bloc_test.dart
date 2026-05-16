@@ -80,7 +80,7 @@ void main() {
     setUp: () {
       repository.createResult = const Right(sample);
     },
-    act: (bloc) => bloc.add(BloodRequestCreateSubmitted(createParams)),
+    act: (bloc) => bloc.add(const BloodRequestCreateSubmitted(createParams)),
     expect: () => [
       isA<BloodRequestLoading>(),
       isA<BloodRequestSuccess>(),
@@ -95,7 +95,7 @@ void main() {
         ThrottledFailure(message: 'طلب مفتوح موجود'),
       );
     },
-    act: (bloc) => bloc.add(BloodRequestCreateSubmitted(createParams)),
+    act: (bloc) => bloc.add(const BloodRequestCreateSubmitted(createParams)),
     expect: () => [
       isA<BloodRequestLoading>(),
       predicate<BloodRequestFailure>(
@@ -110,7 +110,7 @@ void main() {
     setUp: () {
       repository.detailResult = const Right(sample);
     },
-    act: (bloc) => bloc.add(BloodRequestDetailLoadRequested(id: '42')),
+    act: (bloc) => bloc.add(const BloodRequestDetailLoadRequested(id: '42')),
     expect: () => [
       isA<BloodRequestLoading>(),
       isA<BloodRequestDetailLoaded>(),
@@ -136,7 +136,7 @@ void main() {
       );
     },
     act: (bloc) => bloc.add(
-      BloodRequestStatusUpdateSubmitted(id: '42', status: 'FULFILLED'),
+      const BloodRequestStatusUpdateSubmitted(id: '42', status: 'FULFILLED'),
     ),
     expect: () => [
       isA<BloodRequestLoading>(),

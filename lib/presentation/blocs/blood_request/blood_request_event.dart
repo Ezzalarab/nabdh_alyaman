@@ -1,15 +1,23 @@
 part of 'blood_request_bloc.dart';
 
-sealed class BloodRequestEvent {}
+sealed class BloodRequestEvent extends Equatable {
+  const BloodRequestEvent();
+
+  @override
+  List<Object?> get props => [];
+}
 
 class BloodRequestCreateSubmitted extends BloodRequestEvent {
-  BloodRequestCreateSubmitted(this.params);
+  const BloodRequestCreateSubmitted(this.params);
 
   final BloodRequestCreateParams params;
+
+  @override
+  List<Object?> get props => [params];
 }
 
 class BloodRequestListLoadRequested extends BloodRequestEvent {
-  BloodRequestListLoadRequested({
+  const BloodRequestListLoadRequested({
     this.bloodType,
     this.stateId,
     this.cursor,
@@ -20,20 +28,29 @@ class BloodRequestListLoadRequested extends BloodRequestEvent {
   final int? stateId;
   final String? cursor;
   final int limit;
+
+  @override
+  List<Object?> get props => [bloodType, stateId, cursor, limit];
 }
 
 class BloodRequestDetailLoadRequested extends BloodRequestEvent {
-  BloodRequestDetailLoadRequested({required this.id});
+  const BloodRequestDetailLoadRequested({required this.id});
 
   final String id;
+
+  @override
+  List<Object?> get props => [id];
 }
 
 class BloodRequestStatusUpdateSubmitted extends BloodRequestEvent {
-  BloodRequestStatusUpdateSubmitted({
+  const BloodRequestStatusUpdateSubmitted({
     required this.id,
     required this.status,
   });
 
   final String id;
   final String status;
+
+  @override
+  List<Object?> get props => [id, status];
 }
