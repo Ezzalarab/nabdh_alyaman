@@ -1,10 +1,23 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Dependency injection (legacy Firebase stack). BACKEND: new registrations must wire
 // ApiClient + REST repositories only — see docs/restructure/المرحلة-0-الأساس/03.
 
+import 'core/config/app_config.dart';
+import 'core/network/api_client.dart';
+import 'core/network/auth_refresh_interceptor.dart';
+import 'core/network/dio_api_client.dart';
 import 'core/network/network_info.dart';
+import 'core/session/session_lifecycle.dart';
+import 'data/datasources/local/locations_local_datasource.dart';
+import 'data/datasources/local/preferences_local_datasource.dart';
+import 'data/datasources/local/preferences_local_datasource_impl.dart';
+import 'data/datasources/local/session_local_datasource.dart';
+import 'data/datasources/local/session_local_datasource_impl.dart';
 import 'data/repositories/auth_repo_impl.dart';
 import 'data/repositories/global_repo_impl.dart';
 import 'data/repositories/profile_repository_impl.dart';
@@ -30,12 +43,37 @@ import 'presentation/cubit/global_cubit/global_cubit.dart';
 import 'presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'presentation/cubit/search_cubit/search_cubit.dart';
 import 'presentation/cubit/send_notfication/send_notfication_cubit.dart';
+import 'presentation/cubit/maps_cubit/maps_cubit.dart';
 import 'presentation/cubit/signin_cubit/signin_cubit.dart';
 import 'presentation/cubit/signup_cubit/signup_cubit.dart';
 
 final gi = GetIt.instance;
 
 Future<void> initApp() async {
+  /// Phase 0 — REST infra (Dio + session storage + locations DB).
+  final prefs = await SharedPreferences.getInstance();
+  gi.registerSingleton<SharedPreferences>(prefs);
+  gi.registerSingleton<AppConfig>(const AppConfig());
+  gi.registerLazySingleton<SessionLifecycle>(() => SessionLifecycle());
+  gi.registerLazySingleton<FlutterSecureStorage>(
+    () => const FlutterSecureStorage(),
+  );
+  gi.registerLazySingleton<PreferencesLocalDataSource>(
+    () => PreferencesLocalDataSourceImpl(gi()),
+  );
+  gi.registerLazySingleton<SessionLocalDataSource>(
+    () => SessionLocalDataSourceImpl(gi()),
+  );
+  gi.registerLazySingleton<LocationsLocalDataSource>(
+    () => LocationsLocalDataSourceImpl(gi()),
+  );
+  gi.registerLazySingleton<Dio>(
+    () => createAppDio(prefs: gi(), session: gi(), lifecycle: gi()),
+  );
+  gi.registerLazySingleton<ApiClient>(() => DioApiClient(gi()));
+
+  gi.registerLazySingleton<MapsCubit>(() => MapsCubit());
+
   // Auth Repositories
   gi.registerLazySingleton<AuthRepo>(
     () => AuthRepositoryImpl(networkInfo: gi()),
@@ -114,6 +152,10 @@ Future<void> initApp() async {
       checkTimeout: const Duration(seconds: 15),
     ),
   );
+
+  // Ensures auth/sign-up Cubits resolve from GetIt without late init_* from routes.
+  initSignIn();
+  initSignUp();
 }
 
 void initSignIn() {

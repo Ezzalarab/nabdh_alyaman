@@ -64,7 +64,7 @@ void main() async {
         BlocProvider(
           create: (BuildContext context) => di.gi<SendNotficationCubit>(),
         ),
-        BlocProvider(create: (BuildContext context) => MapsCubit()),
+        BlocProvider(create: (BuildContext context) => di.gi<MapsCubit>()),
       ],
       child: const MyApp(),
     ),

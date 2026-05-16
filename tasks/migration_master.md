@@ -23,9 +23,9 @@
 
 ## المرحلة 0 — الأساس
 - [ ] 00 — نظرة عامة والمراحل (قراءة/اتفاق فريقي على الترتيب وعدم Admin)
-- [ ] 01 — شبكة وجلسة: `ApiClient`/Dio، `api_endpoints`، اعتراضات JWT + `x-device-id`، قائمة انتظار refresh، توسعة `failures`، `--dart-define` للـ base URL
-- [ ] 02 — تخزين: `SessionLocalDataSource`، `PreferencesLocalDataSource`، Drift للمواقع + TTL، بدء إيقاف كتابة Hive على المسارات الساخنة حسب المرحلة
-- [ ] 03 — DI وتهيئة: هيكل `lib/data|domain|presentation`، ترتيب تسجيل GetIt، إصلاح ترتيب `main` (لا استدعاء Cubit قبل التسجيل)، `MultiBlocProvider` جاهز لـ `AuthBloc` لاحقاً
+- [x] 01 — شبكة وجلسة: Dio، اعتراضات JWT + refresh + `x-device-id`، `ApiClient`/`ApiEndpoints`/`AppConfig(apiBaseUrl)`، توسعة `failures`
+- [x] 02 — تخزين: مصادر جلسة (secure tokens + meta)، `PreferencesLocalDataSource` (device UUID)، كاش مواقع يدويًا عبر SharedPreferences (+ JSON؛ الانتقال لـ Drift عند تشغيل `build_runner`)
+- [x] 03 — DI: ترتيب GetIt Phase 0، `MapsCubit` يُحمَّل من DI، `initSignIn`/`initSignUp` عند بدء التطبيق (بدون تأخير مسارات)
 
 ## المرحلة 1 — المصادقة
 - [ ] 04 — مصادقة: `AuthBloc` + مصادر/مستودع بعيد، استبدال صفحات الدخول/التسجيل، مسار نسيت كلمة المرور + OTP، `NEEDS_FIREBASE_PASSWORD`، `POST /auth/device` عند الجلسة، حذف `signin_cubit` و`signup_cubit` و`initSignIn`/`initSignUp` من `di`
