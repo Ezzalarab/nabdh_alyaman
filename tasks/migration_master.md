@@ -42,7 +42,7 @@
 - [x] 09 — إشعارات FCM: `FcmService` + `onTokenRefresh`، `NotificationsBloc` + `/notifications`، حذف `SendNotficationCubit`/HTTP FCM، تنظيف `home_page`
 
 ## المرحلة 5 — ميزات جديدة
-- [ ] 10 — طلبات الدم: Bloc + مستودع، إنشاء/إلغاء/الحدود (429)، عدم broadcast من العميل
+- [x] 10 — طلبات الدم: Bloc + مستودع، إنشاء/إلغاء/الحدود (429)، عدم broadcast من العميل (`tasks/phase5_blood_requests.md`)
 
 ## المرحلة 6 — الإغلاق
 - [ ] 11 — مراجعة بقايا Cubit/Firestore/Hive ومسارات Firebase غير المرغوبة

@@ -6,6 +6,7 @@ import '../../../domain/entities/global_app_data.dart';
 import '../../blocs/app_config/app_config_bloc.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_state.dart';
+import '../../pages/blood_request/create_blood_request_page.dart';
 import '../../pages/search_page.dart';
 import '../../pages/sign_up_page.dart';
 import '../../resources/color_manageer.dart';
@@ -102,7 +103,20 @@ class HomeWelcome extends StatelessWidget {
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, session) {
                     if (session is AuthAuthenticated) {
-                      return const SizedBox();
+                      return MyButton(
+                        title: 'طلب استغاثة',
+                        color: ColorManager.secondary,
+                        height: AppSize.s45,
+                        titleStyle: Theme.of(context).textTheme.titleLarge,
+                        onPressed: () {
+                          Navigator.push<void>(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (_) => const CreateBloodRequestPage(),
+                            ),
+                          );
+                        },
+                      );
                     }
                     return MyButton(
                       title: 'إنشاء حساب متبرع',

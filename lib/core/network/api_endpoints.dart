@@ -47,4 +47,12 @@ class ApiEndpoints {
   static String notificationRead(int id) => '/notifications/$id/read';
 
   static const notificationsReadAll = '/notifications/read-all';
+
+  static const bloodRequests = '/blood-requests';
+
+  static const bloodRequestsMy = '/blood-requests/my';
+
+  static String bloodRequestById(String id) => '/blood-requests/$id';
+
+  static String bloodRequestStatus(String id) => '/blood-requests/$id/status';
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entities/app_notification.dart';
 import '../blocs/notifications/notifications_bloc.dart';
+import 'blood_request/blood_request_detail_page.dart';
 import '../resources/color_manageer.dart';
 import '../widgets/common/loading_widget.dart';
 
@@ -85,14 +86,26 @@ class _NotificationPageState extends State<NotificationPage> {
                     child: Center(child: LoadingWidget()),
                   );
                 }
+                final item = state.items[index];
                 return _NotificationTile(
-                  item: state.items[index],
+                  item: item,
                   onTap: () {
-                    final id = state.items[index].id;
-                    if (id > 0) {
+                    if (item.id > 0) {
                       context
                           .read<NotificationsBloc>()
-                          .add(NotificationMarkReadRequested(id));
+                          .add(NotificationMarkReadRequested(item.id));
+                    }
+                    final requestId = item.requestId;
+                    if (item.type == 'BLOOD_REQUEST' &&
+                        requestId != null &&
+                        requestId.isNotEmpty) {
+                      Navigator.push<void>(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (_) =>
+                              BloodRequestDetailPage(requestId: requestId),
+                        ),
+                      );
                     }
                   },
                 );

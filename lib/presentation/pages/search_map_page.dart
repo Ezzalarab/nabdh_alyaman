@@ -2,25 +2,31 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 
+import '../../domain/entities/blood_request.dart';
 import '../../domain/entities/blood_types.dart';
 import '../../domain/entities/donor.dart';
 import '../../domain/entities/donor_point.dart';
+import '../blocs/blood_request/blood_request_bloc.dart';
 import '../resources/color_manageer.dart';
 import '../widgets/common/loading_widget.dart';
+import 'blood_request/blood_request_detail_page.dart';
 
 class SearchMapPage extends StatefulWidget {
   const SearchMapPage({
     super.key,
     required this.stateDonors,
     required this.selectedBloodType,
+    this.stateId,
   });
 
   final List<Donor> stateDonors;
   final String selectedBloodType;
+  final int? stateId;
 
   static const String routeName = 'search_map';
 
@@ -31,7 +37,8 @@ class SearchMapPage extends StatefulWidget {
 class _SearchMapPageState extends State<SearchMapPage> {
   final UrlLauncherPlatform _launcher = UrlLauncherPlatform.instance;
   Position? _position;
-  List<DonorPoint> _nearby = [];
+  List<DonorPoint> _nearbyDonors = [];
+  List<BloodRequest> _nearbyRequests = [];
   bool _loading = true;
   String? _error;
 
@@ -42,6 +49,7 @@ class _SearchMapPageState extends State<SearchMapPage> {
   }
 
   Future<void> _loadMap() async {
+    final bloodRequestBloc = context.read<BloodRequestBloc>();
     try {
       final position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
@@ -77,11 +85,33 @@ class _SearchMapPageState extends State<SearchMapPage> {
           ),
         );
       }
-      final nearby = _filterNearby(base: me, points: points, distanceKm: 20);
+      final nearbyDonors =
+          _filterDonorPoints(base: me, points: points, distanceKm: 20);
+
+      List<BloodRequest> nearbyRequests = [];
+      bloodRequestBloc.add(
+        BloodRequestListLoadRequested(
+          bloodType: widget.selectedBloodType,
+          stateId: widget.stateId,
+          limit: 50,
+        ),
+      );
+      await bloodRequestBloc.stream.firstWhere(
+        (s) => s is BloodRequestListLoaded || s is BloodRequestFailure,
+      );
+      final listState = bloodRequestBloc.state;
+      if (listState is BloodRequestListLoaded) {
+        nearbyRequests = listState.items
+            .where((r) => r.isOpen && r.lat != 0 && r.lon != 0)
+            .where((r) => _distanceKm(me.lat, me.lon, r.lat, r.lon) < 20)
+            .toList(growable: false);
+      }
+
       if (!mounted) return;
       setState(() {
         _position = position;
-        _nearby = nearby;
+        _nearbyDonors = nearbyDonors;
+        _nearbyRequests = nearbyRequests;
         _loading = false;
       });
     } catch (e) {
@@ -93,23 +123,23 @@ class _SearchMapPageState extends State<SearchMapPage> {
     }
   }
 
-  List<DonorPoint> _filterNearby({
+  List<DonorPoint> _filterDonorPoints({
     required DonorPoint base,
     required List<DonorPoint> points,
     required double distanceKm,
   }) {
     return points
-        .where((p) => _distanceKm(base, p) < distanceKm)
+        .where((p) => _distanceKm(base.lat, base.lon, p.lat, p.lon) < distanceKm)
         .toList(growable: false);
   }
 
-  double _distanceKm(DonorPoint a, DonorPoint b) {
+  double _distanceKm(double lat1, double lon1, double lat2, double lon2) {
     const r = 6371.0;
-    final dLat = _deg2rad(b.lat - a.lat);
-    final dLon = _deg2rad(b.lon - a.lon);
+    final dLat = _deg2rad(lat2 - lat1);
+    final dLon = _deg2rad(lon2 - lon1);
     final x = math.sin(dLat / 2) * math.sin(dLat / 2) +
-        math.cos(_deg2rad(a.lat)) *
-            math.cos(_deg2rad(b.lat)) *
+        math.cos(_deg2rad(lat1)) *
+            math.cos(_deg2rad(lat2)) *
             math.sin(dLon / 2) *
             math.sin(dLon / 2);
     final c = 2 * math.atan2(math.sqrt(x), math.sqrt(1 - x));
@@ -119,12 +149,14 @@ class _SearchMapPageState extends State<SearchMapPage> {
   double _deg2rad(double deg) => deg * (math.pi / 180);
 
   Set<Marker> _buildMarkers() {
-    return Set<Marker>.from(
-      List<Marker>.generate(_nearby.length, (index) {
-        final p = _nearby[index];
-        return Marker(
-          markerId: MarkerId('donor_$index'),
+    final markers = <Marker>{};
+    for (var i = 0; i < _nearbyDonors.length; i++) {
+      final p = _nearbyDonors[i];
+      markers.add(
+        Marker(
+          markerId: MarkerId('donor_$i'),
           position: LatLng(p.lat, p.lon),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
           infoWindow: InfoWindow(
             title: p.bloodType,
             snippet: '${p.name} • 📞 ${p.phone}',
@@ -141,16 +173,47 @@ class _SearchMapPageState extends State<SearchMapPage> {
               );
             },
           ),
-        );
-      }),
-    );
+        ),
+      );
+    }
+    for (var i = 0; i < _nearbyRequests.length; i++) {
+      final r = _nearbyRequests[i];
+      markers.add(
+        Marker(
+          markerId: MarkerId('request_${r.id}'),
+          position: LatLng(r.lat, r.lon),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          infoWindow: InfoWindow(
+            title: 'طلب استغاثة • ${r.bloodType}',
+            snippet: r.hospitalName,
+            onTap: () {
+              Navigator.push<void>(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => BloodRequestDetailPage(requestId: r.id),
+                ),
+              );
+            },
+          ),
+          onTap: () {
+            Navigator.push<void>(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => BloodRequestDetailPage(requestId: r.id),
+              ),
+            );
+          },
+        ),
+      );
+    }
+    return markers;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('مواقع المتبرعين'),
+        title: const Text('الخريطة'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -162,16 +225,34 @@ class _SearchMapPageState extends State<SearchMapPage> {
                 ? Center(child: Text(_error!))
                 : _position == null
                     ? const Center(child: Text('لا يوجد موقع'))
-                    : GoogleMap(
-                        markers: _buildMarkers(),
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(
-                            _position!.latitude,
-                            _position!.longitude,
+                    : Stack(
+                        children: [
+                          GoogleMap(
+                            markers: _buildMarkers(),
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(
+                                _position!.latitude,
+                                _position!.longitude,
+                              ),
+                              zoom: 12,
+                            ),
+                            myLocationEnabled: true,
                           ),
-                          zoom: 12,
-                        ),
-                        myLocationEnabled: true,
+                          Positioned(
+                            left: 12,
+                            right: 12,
+                            bottom: 12,
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Text(
+                                  '🔵 متبرعون (${_nearbyDonors.length})  •  🔴 طلبات استغاثة (${_nearbyRequests.length})',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
       ),
     );

@@ -52,6 +52,7 @@ class SearchPage extends StatelessWidget {
                   builder: (_) => SearchMapPage(
                     stateDonors: state.stateDonors,
                     selectedBloodType: state.bloodType,
+                    stateId: state.stateId,
                   ),
                 ),
               );

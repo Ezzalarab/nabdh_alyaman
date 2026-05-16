@@ -23,22 +23,26 @@ import 'data/datasources/remote/locations_remote_datasource.dart';
 import 'core/notifications/fcm_service.dart';
 import 'data/datasources/remote/app_config_remote_datasource.dart';
 import 'data/datasources/remote/center_remote_datasource.dart';
+import 'data/datasources/remote/blood_request_remote_datasource.dart';
 import 'data/datasources/remote/notifications_remote_datasource.dart';
 import 'data/datasources/remote/search_remote_datasource.dart';
 import 'data/repositories/app_config_repository_impl.dart';
 import 'data/repositories/auth_repo_impl.dart';
 import 'data/repositories/center_repository_impl.dart';
+import 'data/repositories/blood_request_repository_impl.dart';
 import 'data/repositories/notifications_repository_impl.dart';
 import 'data/repositories/profile_repository_impl.dart';
 import 'data/repositories/search_repo_impl.dart';
 import 'domain/repositories/app_config_repository.dart';
 import 'domain/repositories/auth_repo.dart';
+import 'domain/repositories/blood_request_repository.dart';
 import 'domain/repositories/notifications_repository.dart';
 import 'domain/repositories/profile_repository.dart';
 import 'domain/repositories/center_repository.dart';
 import 'domain/repositories/search_repo.dart';
 import 'domain/usecases/center/center_use_case.dart';
 import 'domain/usecases/load_app_config_uc.dart';
+import 'domain/usecases/blood_request_use_case.dart';
 import 'domain/usecases/notifications_use_case.dart';
 import 'domain/usecases/profile_use_case.dart';
 import 'domain/usecases/search_centers_uc.dart';
@@ -46,6 +50,7 @@ import 'domain/usecases/search_donors_uc.dart';
 import 'presentation/blocs/app_config/app_config_bloc.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/center/center_bloc.dart';
+import 'presentation/blocs/blood_request/blood_request_bloc.dart';
 import 'presentation/blocs/notifications/notifications_bloc.dart';
 import 'presentation/blocs/profile/profile_bloc.dart';
 import 'presentation/blocs/search/search_bloc.dart';
@@ -107,6 +112,9 @@ Future<void> initApp() async {
   );
   gi.registerLazySingleton<NotificationsRemoteDataSource>(
     () => NotificationsRemoteDataSourceImpl(gi()),
+  );
+  gi.registerLazySingleton<BloodRequestRemoteDataSource>(
+    () => BloodRequestRemoteDataSourceImpl(gi()),
   );
   gi.registerLazySingleton<FileUrlResolver>(() => const FileUrlResolver());
   gi.registerLazySingleton<FcmService>(() => FcmService(authRepo: gi()));
@@ -173,4 +181,10 @@ Future<void> initApp() async {
   );
   gi.registerLazySingleton(() => NotificationsUseCase(repository: gi()));
   gi.registerLazySingleton(() => NotificationsBloc(notificationsUseCase: gi()));
+
+  gi.registerLazySingleton<BloodRequestRepository>(
+    () => BloodRequestRepositoryImpl(networkInfo: gi(), remote: gi()),
+  );
+  gi.registerLazySingleton(() => BloodRequestUseCase(repository: gi()));
+  gi.registerLazySingleton(() => BloodRequestBloc(useCase: gi()));
 }
