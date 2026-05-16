@@ -14,6 +14,8 @@
 2. **رابط Base URL الإنتاج في المشروع:** `https://nabdh.telqaia.com/api/v1` (في `restructure` و`.cursor/rules`) — بينما `backend_guide/api/README.md` يستخدم `https://api.<your-domain>/api/v1` كقالب؛ أضف سطر «مثال المشروع» هناك إن لزم.
 3. **مسار `متطلبات-الباكإند`:** فقط تحت `docs/restructure/` — الفجوات بين منطق العميل القديم والباكإند.
 
+4. **أي مجلد توثيق خارج الجدول أعلاه** (نسخ مسودّة أو أشجار قديمة بأسماء مثل `1-project` أو forks محلية) **ليس مصدراً رسمياً** ما لم يُدرَج صراحةً هنا ويُتوافَق على محتواه؛ مصدر الطبقات الثلاث هو `backend_guide` + `restructure` + `backend_docs`.
+
 ## للنماذج اللغوية (Cursor / فريق)
 
 - اسأل عن **ماذا تنفّذ في الكود؟** → `restructure/` + `tasks/migration_master.md`.
