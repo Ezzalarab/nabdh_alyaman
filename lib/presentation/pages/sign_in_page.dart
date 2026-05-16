@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
+import '../../core/auth/auth_identifier.dart';
 import '../../core/extensions/extension.dart';
 import '../../core/utils.dart';
-import '../../data/models/dialod_reset_password.dart';
-import '../../di.dart' as di;
-import '../cubit/signin_cubit/signin_cubit.dart';
-import '../cubit/signup_cubit/signup_cubit.dart';
+import '../blocs/auth/auth_bloc.dart';
+import '../blocs/auth/auth_event.dart';
+import '../blocs/auth/auth_state.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
 import '../resources/constatns.dart';
@@ -25,7 +25,7 @@ import 'sign_up_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
-  static const String routeName = "/sign-in";
+  static const String routeName = '/sign-in';
 
   @override
   State<SignInPage> createState() => _SignInPageState();
@@ -33,122 +33,213 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
-  final GlobalKey<FormState> _emailState = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
+  final GlobalKey<FormState> _idFormState = GlobalKey<FormState>();
+  final TextEditingController identifierController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   bool isPasswordVisible = true;
-  String? smsCode;
+  String? _pendingForgotPhone;
 
   @override
   void dispose() {
-    emailController.dispose();
+    identifierController.dispose();
     passwordController.dispose();
     super.dispose();
   }
 
-  String? emailOrPhoneValidator(value) {
-    String strValue = value?.toString() ?? "";
-    bool isPhone = (strValue.isValidPhone || strValue.isValidPhoneWithKeyCode);
-    if (value != null && (EmailValidator.validate(value) || isPhone)) {
-      return null;
-    } else if (!EmailValidator.validate(value!)) {
-      return AppStrings.signInEmailValidatorError;
-    }
-    return null;
+  String? identifierValidator(String? value) {
+    final str = value?.trim() ?? '';
+    if (str.isEmpty) return AppStrings.signInEmailValidatorError;
+    final isPhone = str.isValidPhone ||
+        str.isValidPhoneWithKeyCode ||
+        str.startsWith('+967');
+    if (EmailValidator.validate(str) || isPhone) return null;
+    return AppStrings.signInEmailValidatorError;
   }
 
-  String? passwordValidator(value) {
-    if (value!.length < minCharsOfPassword) {
+  String? passwordValidator(String? value) {
+    if (value == null || value.length < minCharsOfPassword) {
       return AppStrings.firebasePasswordValidatorError;
     }
     return null;
   }
 
-  void _toggleIsPasswordVisible() {
+  void _togglePassword() {
     setState(() => isPasswordVisible = !isPasswordVisible);
   }
 
-  void _sendRestPassword() {
-    if (_emailState.currentState!.validate()) {
-      BlocProvider.of<SignInCubit>(
-        context,
-      ).resetPassword(email: emailController.text);
-    }
-  }
-
-  Future<void> _submitSignIn() async {
+  void _submitLogin() {
     FocusScope.of(context).unfocus();
-    if (_emailState.currentState!.validate() &
-        _formState.currentState!.validate()) {
-      BlocProvider.of<SignInCubit>(context).signIn(
-        emailOrPhone: emailController.text,
-        password: passwordController.text,
-        onVerificationSent: showVerificationDialog(context),
-      );
+    if ((_idFormState.currentState?.validate() ?? false) &&
+        (_formState.currentState?.validate() ?? false)) {
+      context.read<AuthBloc>().add(
+            AuthLoginSubmitted(
+              identifier: identifierController.text.trim(),
+              password: passwordController.text,
+            ),
+          );
     }
   }
 
-  Function showVerificationDialog(BuildContext context) {
-    final GlobalKey<FormState> verificationFormState = GlobalKey<FormState>();
-    return () => AwesomeDialog(
-      headerAnimationLoop: false,
-      dialogType: DialogType.noHeader,
+  void _promptForgotPhone() {
+    final key = GlobalKey<FormState>();
+    final ctrl = TextEditingController();
+    AwesomeDialog(
       context: context,
+      dialogType: DialogType.noHeader,
+      btnOkText: 'متابعة',
+      btnCancelText: 'إلغاء',
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(12),
         child: Form(
-          key: verificationFormState,
+          key: key,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                "تم إرسال رسالة التأكيد إلى رقمك الذي أدخلته، قم بكتابته هنا:",
-                style: TextStyle(height: 2),
+                'أدخل رقم هاتفك اليمني',
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               MyTextFormField(
-                onChange: (value) => smsCode = value,
-                hint: "اكتب رقم التأكيد",
-                keyBoardType: TextInputType.number,
+                controller: ctrl,
+                hint: 'مثال: 771234567',
+                keyBoardType: TextInputType.phone,
                 blurrBorderColor: ColorManager.lightGrey,
                 focusBorderColor: ColorManager.lightSecondary,
                 fillColor: ColorManager.white,
-                autofocus: true,
-                validator: (value) => (value != null && value.length > 5)
-                    ? null
-                    : "يجب كتابة رمز التأكيد المكون من 6 أرقام",
-              ),
-              const SizedBox(height: 20),
-              MyButton(
-                title: "تأكيد",
-                onPressed: () {
-                  FocusScope.of(context).unfocus();
-                  if (verificationFormState.currentState!.validate()) {
-                    BlocProvider.of<SignInCubit>(
-                      context,
-                      listen: false,
-                    ).verify(smsCode: smsCode!);
-                    Navigator.of(context).pop();
+                validator: (v) {
+                  final n = normalizeAuthIdentifier(v ?? '');
+                  if (n == null || n.contains('@')) {
+                    return 'رقم هاتف يمني غير صالح';
                   }
+                  return null;
                 },
-                color: ColorManager.primary,
               ),
             ],
           ),
         ),
       ),
+      btnOkOnPress: () async {
+        if (key.currentState?.validate() != true) return;
+        final phone = normalizeAuthIdentifier(ctrl.text);
+        if (phone == null) return;
+        _pendingForgotPhone = phone;
+        if (!context.mounted) return;
+        context.read<AuthBloc>().add(AuthForgotPasswordSubmitted(phone));
+      },
+      btnCancelOnPress: () {},
+    ).show();
+  }
+
+  void _promptOtp() {
+    if (_pendingForgotPhone == null) return;
+    final key = GlobalKey<FormState>();
+    String? code;
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.noHeader,
+      btnOkText: 'تأكيد',
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Form(
+          key: key,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'أدخل رمز التحقق الذي وصل لهاتفك (إن وُجد)',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              MyTextFormField(
+                onChange: (v) => code = v,
+                hint: 'رمز من 6 أرقام',
+                keyBoardType: TextInputType.number,
+                autofocus: true,
+                blurrBorderColor: ColorManager.lightGrey,
+                focusBorderColor: ColorManager.lightSecondary,
+                fillColor: ColorManager.white,
+                validator: (v) =>
+                    (v != null && v.length >= 6) ? null : 'رمز غير صالح',
+              ),
+            ],
+          ),
+        ),
+      ),
+      btnOkOnPress: () {
+        if (key.currentState?.validate() != true || code == null) return;
+        context.read<AuthBloc>().add(
+              AuthOtpVerified(
+                phone: _pendingForgotPhone!,
+                code: code!,
+              ),
+            );
+      },
+    ).show();
+  }
+
+  void _promptNewPassword(String resetToken) {
+    final key = GlobalKey<FormState>();
+    final pass1 = TextEditingController();
+    final pass2 = TextEditingController();
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.noHeader,
+      dismissOnTouchOutside: false,
+      btnOkText: 'حفظ',
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Form(
+          key: key,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'اختر كلمة مرور جديدة',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              MyTextFormField(
+                controller: pass1,
+                hint: 'كلمة المرور',
+                isPassword: true,
+                blurrBorderColor: ColorManager.lightGrey,
+                focusBorderColor: ColorManager.lightSecondary,
+                fillColor: ColorManager.white,
+                validator: passwordValidator,
+              ),
+              const SizedBox(height: 8),
+              MyTextFormField(
+                controller: pass2,
+                hint: 'تأكيد كلمة المرور',
+                isPassword: true,
+                blurrBorderColor: ColorManager.lightGrey,
+                focusBorderColor: ColorManager.lightSecondary,
+                fillColor: ColorManager.white,
+                validator: (v) =>
+                    v == pass1.text ? null : 'غير متطابقة',
+              ),
+            ],
+          ),
+        ),
+      ),
+      btnOkOnPress: () {
+        if (key.currentState?.validate() != true) return;
+        context.read<AuthBloc>().add(
+              AuthPasswordResetSubmitted(
+                resetToken: resetToken,
+                newPassword: pass1.text,
+              ),
+            );
+      },
     ).show();
   }
 
   void _moveToSignUp() {
-    di.initSignUp();
-    BlocProvider.of<SignUpCubit>(
-      context,
-      listen: false,
-    ).checkCanSignUpWithPhone();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const SignUpPage()),
+      MaterialPageRoute<void>(builder: (_) => const SignUpPage()),
     );
   }
 
@@ -166,38 +257,115 @@ class _SignInPageState extends State<SignInPage> {
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: BlocConsumer<SignInCubit, SignInState>(
-          listener: (context, state) async {
-            if (state is SignInSuccess) {
+        child: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthAuthenticated) {
               Utils.showSuccessSnackBar(
                 context: context,
                 msg: AppStrings.signInSuccessMessage,
               );
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const HomePage()),
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute<void>(builder: (_) => const HomePage()),
+                (_) => false,
               );
-            } else if (state is SignInFailure) {
+            } else if (state is AuthFailure) {
+              if (state.needsForgotPasswordRedirect) {
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.warning,
+                  title: 'تعيين كلمة مرور محلية',
+                  desc: state.message,
+                  btnOkText: 'نسيت كلمة المرور',
+                  btnCancelOnPress: () {},
+                  btnOkOnPress: _promptForgotPhone,
+                ).show();
+              } else {
+                Utils.showSnackBar(
+                  context: context,
+                  msg: state.message,
+                  color: ColorManager.error,
+                );
+              }
+            } else if (state is AuthForgotSmsSentNotice) {
               Utils.showSnackBar(
                 context: context,
-                msg: state.error,
-                color: ColorManager.error,
+                msg: 'تم قبول الطلب.',
+                color: ColorManager.secondary,
               );
-            } else if (state is SignInSuccessResetPass) {
-              DialogResetPassWord.resetPasswordDialog(context);
+              _promptOtp();
+            } else if (state is AuthReadyToChooseNewPassword) {
+              _promptNewPassword(state.resetToken);
+            } else if (state is AuthPasswordResetFinishedNotice) {
+              Utils.showSuccessSnackBar(
+                context: context,
+                msg: 'تم تعيين كلمة المرور. يمكنك تسجيل الدخول.',
+              );
             }
           },
           builder: (context, state) {
             return ModalProgressHUD(
-              inAsyncCall: (state is SignInLoading),
+              inAsyncCall: state is AuthLoading,
               progressIndicator: const LoadingWidget(),
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const SizedBox(height: AppSize.s30),
                     _buildHeaderImage(),
                     const SizedBox(height: AppSize.s20),
-                    _buildSignInForm(context),
+                    Form(
+                      key: _formState,
+                      child: Column(
+                        children: [
+                          _buildIdentifierField(),
+                          const SizedBox(height: AppSize.s20),
+                          _buildPasswordField(),
+                          _buildForgotPasswordRow(),
+                          const SizedBox(height: AppSize.s30),
+                          MyButton(
+                            title: AppStrings.signInSubmitButton,
+                            color: Theme.of(context).primaryColor,
+                            titleStyle:
+                                Theme.of(context).textTheme.titleLarge,
+                            onPressed: _submitLogin,
+                            minWidth: AppSize.s300,
+                          ),
+                          const SizedBox(height: AppSize.s16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  color: ColorManager.grey2.withValues(alpha: 0.5),
+                                ),
+                              ),
+                              const Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: AppMargin.m20),
+                                child: Text('أو'),
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  color: ColorManager.grey2.withValues(alpha: 0.5),
+                                ),
+                              ),
+                            ],
+                          ),
+                          MyButton(
+                            title: AppStrings.signInSignUpButton,
+                            color: ColorManager.white,
+                            onPressed: _moveToSignUp,
+                            minWidth: AppSize.s300,
+                            titleStyle: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: FontSize.s14,
+                              fontFamily: FontConstants.fontFamily,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -208,91 +376,40 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Form _buildSignInForm(BuildContext context) {
-    return Form(
-      key: _formState,
-      child: Column(
-        children: [
-          _buildEmailField(context),
-          const SizedBox(height: AppSize.s20),
-          _buildPasswordField(context),
-          _buildResetPasswordTextButton(context),
-          const SizedBox(height: AppSize.s30),
-          Column(
-            children: [
-              const SizedBox(width: AppSize.s50),
-              _buildSubmitButton(context),
-              // const SizedBox(width: AppSize.s20),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 2.0,
-                    color: ColorManager.grey2.withOpacity(0.5),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: AppMargin.m20,
-                    ),
-                    height: 25,
-                    child: const Text("أو"),
-                  ),
-                  Container(
-                    width: 100,
-                    height: 2.0,
-                    color: ColorManager.grey2.withOpacity(0.5),
-                  ),
-                ],
-              ),
-              _buildSignUpButton(),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   Padding _buildHeaderImage() {
-    return const Padding(
-      padding: EdgeInsets.all(AppPadding.p10),
+    return Padding(
+      padding: const EdgeInsets.all(AppPadding.p10),
       child: Stack(
         children: [
           SizedBox(
             height: signInImageHight,
-            child: CircleAvatar(
+            child: const CircleAvatar(
               backgroundImage: AssetImage(ImageAssets.signInImage),
               radius: signInImageRadius,
             ),
           ),
-          Positioned(
+          const Positioned(
             bottom: AppSize.s8,
             right: AppSize.s0,
-            child: Icon(
-              Icons.add,
-              size: AppSize.s70,
-              color: ColorManager.white,
-            ),
+            child: Icon(Icons.add, size: AppSize.s70, color: ColorManager.white),
           ),
         ],
       ),
     );
   }
 
-  Container _buildEmailField(BuildContext context) {
+  Container _buildIdentifierField() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: AppMargin.m40),
       child: Form(
-        key: _emailState,
+        key: _idFormState,
         child: MyTextFormField(
           hint: AppStrings.signInEmailHint,
-          controller: emailController,
+          controller: identifierController,
           blurrBorderColor: ColorManager.lightGrey,
           focusBorderColor: ColorManager.secondary,
           fillColor: ColorManager.white,
-          validator: emailOrPhoneValidator,
+          validator: identifierValidator,
           keyBoardType: TextInputType.emailAddress,
           icon: const Icon(Icons.phone_android, color: ColorManager.primary),
         ),
@@ -300,7 +417,7 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Container _buildPasswordField(BuildContext context) {
+  Container _buildPasswordField() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 40),
       child: MyTextFormField(
@@ -312,15 +429,19 @@ class _SignInPageState extends State<SignInPage> {
         fillColor: ColorManager.white,
         validator: passwordValidator,
         icon: IconButton(
-          icon: _buildPasswordIcon(),
+          icon: Icon(
+            isPasswordVisible
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
+          ),
           color: ColorManager.primary,
-          onPressed: _toggleIsPasswordVisible,
+          onPressed: _togglePassword,
         ),
       ),
     );
   }
 
-  Container _buildResetPasswordTextButton(BuildContext context) {
+  Container _buildForgotPasswordRow() {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppPadding.p50,
@@ -328,76 +449,15 @@ class _SignInPageState extends State<SignInPage> {
       ),
       alignment: Alignment.centerRight,
       child: GestureDetector(
-        onTap: _sendRestPassword,
+        onTap: _promptForgotPhone,
         child: Text(
           AppStrings.signInForgetPasswordTextButton,
-          style: Theme.of(
-            context,
-          ).textTheme.labelMedium!.copyWith(color: ColorManager.link),
+          style: Theme.of(context)
+              .textTheme
+              .labelMedium!
+              .copyWith(color: ColorManager.link),
         ),
       ),
     );
   }
-
-  Icon _buildPasswordIcon() {
-    return Icon(
-      isPasswordVisible
-          ? Icons.visibility_outlined
-          : Icons.visibility_off_outlined,
-    );
-  }
-
-  MyButton _buildSubmitButton(BuildContext context) {
-    return MyButton(
-      title: AppStrings.signInSubmitButton,
-      color: Theme.of(context).primaryColor,
-      titleStyle: Theme.of(context).textTheme.titleLarge,
-      onPressed: _submitSignIn,
-      minWidth: AppSize.s300,
-    );
-  }
-
-  MyButton _buildSignUpButton() {
-    return MyButton(
-      title: AppStrings.signInSignUpButton,
-      color: ColorManager.white,
-      onPressed: _moveToSignUp,
-      minWidth: AppSize.s300,
-      titleStyle: TextStyle(
-        color: Theme.of(context).primaryColor,
-        fontSize: FontSize.s14,
-        fontFamily: FontConstants.fontFamily,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
 }
-
-// forget password onTap 
-// if (_formStateEmail.currentState!.validate()) {
-// _formStateEmail.currentState!.save();
-//   if (email!.isValidPhone) {
-//     BlocProvider.of<SingInCubit>(context)
-//         .isPhoneRegisterd(
-//             phone: email!, type: "forget");
-//   }
-
-// signin button onPress
-  // if (_formState.currentState!.validate() &&
-  //     _formStateEmail.currentState!
-  //         .validate()) {
-  //   _formState.currentState!.save();
-  //   _formStateEmail.currentState!.save();
-  //   if (email!.isValidPhone) {
-  //     BlocProvider.of<SingInCubit>(context)
-  //         .isPhoneRegisterd(
-  //             phone: email!,
-  //             type: "signin",
-  //             password: password!);
-  //   } else {
-  //     BlocProvider.of<SingInCubit>(context)
-  //         .signIn(
-  //             email: email!,
-  //             password: password!);
-  //   }
-  // }

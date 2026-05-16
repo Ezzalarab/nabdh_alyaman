@@ -1,25 +1,23 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../blocs/auth/auth_bloc.dart';
+import '../../../blocs/auth/auth_event.dart';
+import '../../../blocs/auth/auth_state.dart';
 import '../../../../core/urls.dart';
 import '../../../../core/utils.dart';
-import '../../../../presentation/cubit/profile_cubit/profile_cubit.dart';
-import '../../../../presentation/pages/about_page.dart';
-import '../../../../presentation/pages/edit_main_center_data.dart';
-import '../../../../presentation/pages/home_page.dart';
-import '../../../../presentation/pages/profile_center.dart';
-import '../../../../presentation/pages/setting_page.dart';
-import '../../../../presentation/pages/sign_in_page.dart';
-import '../../../../presentation/resources/strings_manager.dart';
+import '../../../cubit/profile_cubit/profile_cubit.dart';
+import '../../../pages/about_page.dart';
+import '../../../pages/edit_main_center_data.dart';
+import '../../../pages/home_page.dart';
+import '../../../pages/profile_center.dart';
+import '../../../pages/sign_in_page.dart';
+import '../../../resources/strings_manager.dart';
 import 'home_drawer_menu_item.dart';
 
 class HomeDrawerCenterBody extends StatelessWidget {
-  const HomeDrawerCenterBody({
-    super.key,
-  });
+  const HomeDrawerCenterBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,24 +30,25 @@ class HomeDrawerCenterBody extends StatelessWidget {
             title: AppStrings.homeDrawerUpdateBloodBank,
             icon: Icons.sync,
             onTap: () {
-              if (FirebaseAuth.instance.currentUser != null) {
-                // print("+0000");
+              final authed =
+                  context.read<AuthBloc>().state is AuthAuthenticated;
+              if (authed) {
                 Navigator.of(context).pop();
                 BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
-                // Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => const ProfileCenterPage()));
+                Navigator.push<void>(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (_) => const ProfileCenterPage(),
+                  ),
+                );
               } else {
                 Utils.showSnackBar(
                   context: context,
                   msg: AppStrings.homeDrawerSignInFirstToast,
                 );
-                // divide.initSignIn();
-                Navigator.push(
+                Navigator.push<void>(
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute<void>(
                     builder: (_) => const SignInPage(),
                   ),
                 );
@@ -60,22 +59,25 @@ class HomeDrawerCenterBody extends StatelessWidget {
             title: AppStrings.homeDrawerEditProfileCenter,
             icon: Icons.sync,
             onTap: () {
-              if (FirebaseAuth.instance.currentUser != null) {
+              final authed =
+                  context.read<AuthBloc>().state is AuthAuthenticated;
+              if (authed) {
                 BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
                 Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => const EditMainCenterDataPage()));
+                Navigator.push<void>(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (_) => const EditMainCenterDataPage(),
+                  ),
+                );
               } else {
                 Utils.showSnackBar(
                   context: context,
                   msg: AppStrings.homeDrawerSignInFirstToast,
                 );
-                // divide.initSignIn();
-                Navigator.push(
+                Navigator.push<void>(
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute<void>(
                     builder: (_) => const SignInPage(),
                   ),
                 );
@@ -84,13 +86,12 @@ class HomeDrawerCenterBody extends StatelessWidget {
           ),
           const Divider(color: Colors.black54),
           HomeDrawerMenuItem(
-            title: "مشاركة التطبيق",
+            title: 'مشاركة التطبيق',
             icon: Icons.share,
             onTap: () async {
-              String appUrl = Urls.googleStoreAppLink;
-              String message =
-                  'تطبيق (نبض اليمن) قد تكون سببًا في إنقاذ حياة\n\n$appUrl';
-              await Share.share(message);
+              final appUrl = Urls.googleStoreAppLink;
+              const messagePrefix = 'تطبيق (نبض اليمن) قد تكون سببًا في إنقاذ حياة';
+              await Share.share('$messagePrefix\n\n$appUrl');
             },
           ),
           HomeDrawerMenuItem(
@@ -98,21 +99,20 @@ class HomeDrawerCenterBody extends StatelessWidget {
             icon: Icons.info_outline,
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const AboutPage()));
+              Navigator.push<void>(
+                context,
+                MaterialPageRoute<void>(builder: (_) => const AboutPage()),
+              );
             },
           ),
           HomeDrawerMenuItem(
             title: AppStrings.homeDrawerLogOut,
             icon: Icons.logout_outlined,
-            onTap: () async {
-              Hive.box(dataBoxName).put('user', "0");
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const HomePage(),
-                ),
+            onTap: () {
+              context.read<AuthBloc>().add(AuthLogoutRequested());
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute<void>(builder: (_) => const HomePage()),
+                (_) => false,
               );
             },
           ),

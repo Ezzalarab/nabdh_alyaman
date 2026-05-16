@@ -8,4 +8,14 @@ class ApiEndpoints {
   static const authRegister = '/auth/register';
   static const authRefresh = '/auth/refresh';
   static const authLogout = '/auth/logout';
+  static const authDevice = '/auth/device';
+  static const authForgotPassword = '/auth/forgot-password';
+  static const authVerifyOtp = '/auth/verify-otp';
+  static const authResetPassword = '/auth/reset-password';
+
+  static String locationsDistricts(int stateId) =>
+      '/locations/$stateId/districts';
+
+  /// Public list under `/locations`.
+  static const locationsStates = '/locations';
 }

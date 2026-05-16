@@ -1,11 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/data_sources/local_data.dart';
-import '../../../di.dart' as di;
-import '../../../presentation/cubit/global_cubit/global_cubit.dart';
-import '../../cubit/signup_cubit/signup_cubit.dart';
+import '../../blocs/auth/auth_bloc.dart';
+import '../../blocs/auth/auth_state.dart';
+import '../../cubit/global_cubit/global_cubit.dart';
 import '../../pages/search_page.dart';
 import '../../pages/sign_up_page.dart';
 import '../../resources/color_manageer.dart';
@@ -47,21 +46,6 @@ class _HomeWelcomeState extends State<HomeWelcome> {
               },
             ),
             const SizedBox(height: AppSize.s30),
-            // AnimatedTextKit(
-            //   pause: const Duration(milliseconds: 10000),
-            //   isRepeatingAnimation: false,
-            //   stopPauseOnTap: false,
-            //   totalRepeatCount: 2,
-            //   animatedTexts: [
-            //     TyperAnimatedText(
-            //       'ومن أحياها\n فكأنما أحيا الناس جميعاً',
-            //       textStyle: Theme.of(context)
-            //           .textTheme
-            //           .displayLarge!
-            //           .copyWith(height: 1.5),
-            //     )
-            //   ],
-            // ),
             BlocBuilder<GlobalCubit, GlobalState>(
               builder: (context, state) {
                 String welcomeStatement = LocalData.initialAppData.homeHeader;
@@ -117,25 +101,25 @@ class _HomeWelcomeState extends State<HomeWelcome> {
               ),
             ),
             const SizedBox(height: AppSize.s10),
-            FirebaseAuth.instance.currentUser == null
-                ? MyButton(
-                    title: 'إنشاء حساب متبرع',
-                    color: Theme.of(context).primaryColor,
-                    height: AppSize.s45,
-                    titleStyle: Theme.of(context).textTheme.titleLarge,
-                    onPressed: () {
-                      di.initSignUp();
-                      BlocProvider.of<SignUpCubit>(context, listen: false)
-                          .checkCanSignUpWithPhone();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const SignUpPage(),
-                        ),
-                      );
-                    },
-                  )
-                : const SizedBox(),
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, session) {
+                if (session is AuthAuthenticated) return const SizedBox();
+                return MyButton(
+                  title: 'إنشاء حساب متبرع',
+                  color: Theme.of(context).primaryColor,
+                  height: AppSize.s45,
+                  titleStyle: Theme.of(context).textTheme.titleLarge,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SignUpPage(),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),

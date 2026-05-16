@@ -25,10 +25,10 @@
 - [ ] 00 — نظرة عامة والمراحل (قراءة/اتفاق فريقي على الترتيب وعدم Admin)
 - [x] 01 — شبكة وجلسة: Dio، اعتراضات JWT + refresh + `x-device-id`، `ApiClient`/`ApiEndpoints`/`AppConfig(apiBaseUrl)`، توسعة `failures`
 - [x] 02 — تخزين: مصادر جلسة (secure tokens + meta)، `PreferencesLocalDataSource` (device UUID)، كاش مواقع يدويًا عبر SharedPreferences (+ JSON؛ الانتقال لـ Drift عند تشغيل `build_runner`)
-- [x] 03 — DI: ترتيب GetIt Phase 0، `MapsCubit` يُحمَّل من DI، `initSignIn`/`initSignUp` عند بدء التطبيق (بدون تأخير مسارات)
+- [x] 03 — DI: ترتيب GetIt؛ `MapsCubit`؛ `AuthBloc lazySingleton`; بلا `initSignIn`/`initSignUp`.
 
 ## المرحلة 1 — المصادقة
-- [ ] 04 — مصادقة: `AuthBloc` + مصادر/مستودع بعيد، استبدال صفحات الدخول/التسجيل، مسار نسيت كلمة المرور + OTP، `NEEDS_FIREBASE_PASSWORD`، `POST /auth/device` عند الجلسة، حذف `signin_cubit` و`signup_cubit` و`initSignIn`/`initSignUp` من `di`
+- [x] 04 — مصادقة: `AuthBloc` + `AuthRemoteDataSource` + `AuthRepositoryImpl` (REST)، استبدال صفحات الدخول/التسجيل، مسار نسيت كلمة المرور + OTP، `NEEDS_FIREBASE_PASSWORD`، `POST /auth/device` بعد الدخول/استرداد الجلسة، حذف `signin_cubit`/`signup_cubit`.
 
 ## المرحلة 2 — المتبرع
 - [ ] 05 — ملف المتبرع: `ProfileBloc` (أو ما يعادله)، `GET/PATCH /donors/me`، رفع صورة عبر `/files`، إزالة اعتماد Hive للملف الشخصي
@@ -63,3 +63,5 @@
 - استبدال Cubit: **فوري** مع كل مرحلة — المرحلة 11 تدقيق فقط
 - تقليل منطق العميل (`عميل رفيع`): `docs/restructure/المرحلة-0-الأساس/عميل-رفيع-ومصدر-الحقيقة.md`
 - خريطة تعليقات `BACKEND` في الكود: `docs/restructure/نقاط-الربط-مع-الباكإند-في-الكود.md`
+- **تثبيت نطاق (قرار تنفيذي):** مزامنة مواقع كاملة مع **Drift** تؤجَّل إلى **المرحلة 2** (وثيقة 06) — المرحلة 0/1 تبقى كاش JSON/`SharedPreferences` + استدعاء `GET /locations` للتسجيل عند الحاجة.
+- **`GET /app-config` و Force-update:** تأجيل كامل إلى **المرحلة 4** (وثيقة 08) — الإبقاء حالياً على `GlobalCubit`/Firestore حيث لم تُستبدَل بعد.

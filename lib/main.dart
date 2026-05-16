@@ -6,15 +6,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nabdh_alyaman/firebase_options.dart';
 import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
-// import 'core/firebase_analyzer.dart';
 
 import 'di.dart' as di;
+import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/cubit/maps_cubit/maps_cubit.dart';
 import 'presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'presentation/cubit/search_cubit/search_cubit.dart';
 import 'presentation/cubit/send_notfication/send_notfication_cubit.dart';
-import 'presentation/cubit/signin_cubit/signin_cubit.dart';
-import 'presentation/cubit/signup_cubit/signup_cubit.dart';
 import 'presentation/pages/about_page.dart';
 import 'presentation/pages/edit_main_center_data.dart';
 import 'presentation/pages/home_page.dart';
@@ -29,23 +27,16 @@ import 'presentation/pages/sing_up_center_page.dart';
 import 'presentation/pages/splash_screen.dart';
 import 'presentation/resources/theme_manager.dart';
 
-/// App bootstrap. BACKEND migration: keep only `firebase_core` + `firebase_messaging` for
-/// push receipt; session + data via REST (`docs/restructure/README.md`). Hive here is
-/// replaced by secure storage + Drift per migration plan.
-
+/// App bootstrap — FCM receipt only; REST session via [AuthBloc].
 String? version;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // await Firebase.initializeApp();
   await di.initApp();
   await Hive.initFlutter();
   await Hive.openBox(dataBoxName);
-
-  // فك تشفير هذا السطر عند الرغبة في تحليل هيكل بيانات Firestore في الـ Console
-  // await FirebaseAnalyzer.analyzeFirestoreStructure();
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -56,15 +47,14 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (BuildContext context) => di.gi<GlobalCubit>()),
-        BlocProvider(create: (BuildContext context) => di.gi<SignUpCubit>()),
-        BlocProvider(create: (BuildContext context) => di.gi<SignInCubit>()),
-        BlocProvider(create: (BuildContext context) => di.gi<SearchCubit>()),
-        BlocProvider(create: (BuildContext context) => di.gi<ProfileCubit>()),
+        BlocProvider<AuthBloc>(create: (_) => di.gi<AuthBloc>()),
+        BlocProvider(create: (_) => di.gi<GlobalCubit>()),
+        BlocProvider(create: (_) => di.gi<SearchCubit>()),
+        BlocProvider(create: (_) => di.gi<ProfileCubit>()),
         BlocProvider(
-          create: (BuildContext context) => di.gi<SendNotficationCubit>(),
+          create: (_) => di.gi<SendNotficationCubit>(),
         ),
-        BlocProvider(create: (BuildContext context) => di.gi<MapsCubit>()),
+        BlocProvider(create: (_) => di.gi<MapsCubit>()),
       ],
       child: const MyApp(),
     ),
@@ -79,13 +69,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: getApplicationTheme(),
-      locale: const Locale("ar", "AE"),
+      locale: const Locale('ar', 'AE'),
       localizationsDelegates: const [
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: const [Locale("ar", "AE")],
+      supportedLocales: const [Locale('ar', 'AE')],
       initialRoute: SplashScreen.routeName,
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),

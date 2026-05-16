@@ -1,87 +1,30 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
-// BACKEND: Session + `ACTIVE` status must come from JWT and `GET .../me` responses,
-// not Firestore reads (`docs/backend_guide/api/authentication.md`, donors/centers docs).
-import '../../domain/entities/blood_center.dart';
-import '../../domain/entities/donor.dart';
-import '../../presentation/pages/setting_page.dart';
+import '../data/datasources/local/session_local_datasource.dart';
+import '../domain/entities/blood_center.dart';
+import '../domain/entities/donor.dart';
+import '../di.dart' as di;
+import '../presentation/pages/setting_page.dart';
 
+/// Legacy static holder for donor/center payloads (Firestore-backed). Prefer REST
+/// `GET …/me` in later phases — see `docs/backend_guide/api/authentication.md`.
 class CheckActive {
   static Donor? currentDonor;
   static BloodCenter? currentBloodCenter;
-  static final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static Future<void> checkActiveUser() async {
-    if (_auth.currentUser == null) {
-      Hive.box(dataBoxName).put('user', "0");
+    final session = di.gi<SessionLocalDataSource>();
+    final role = await session.getRole();
+    final box = Hive.box(dataBoxName);
+    if (role == null) {
+      await box.put('user', '0');
+      currentDonor = null;
+      currentBloodCenter = null;
+      return;
     }
-    String userType = Hive.box(dataBoxName).get('user') ?? "0";
-    if (userType == "1") {
-      await getDonorData().then((_) async {
-        if (currentDonor != null) {
-          if (currentDonor!.status != "ACTIVE") {
-            await _auth.signOut();
-            await Hive.box(dataBoxName).put('user', "0");
-          }
-        }
-      });
-    } else if (userType == "2") {
-      await getCenterData().then((_) async {
-        if (currentBloodCenter != null) {
-          if (currentBloodCenter!.status != "ACTIVE") {
-            await _auth.signOut();
-            await Hive.box(dataBoxName).put('user', "0");
-          }
-        }
-      });
-    }
-  }
-
-  static Future<void> getDonorData() async {
-    try {
-      if (_auth.currentUser != null) {
-        String uId = _auth.currentUser!.uid;
-        // print(uId);
-        // print("=============================uId");
-        await _fireStore.collection("donors").doc(uId).get().then((doc) async {
-          // print(doc.exists);
-          // print("===============doc.exists");
-          if (doc.exists) {
-            currentDonor = Donor.fromMap(doc.data()!);
-            // print("=================currentDonor============");
-            // print(currentDonor!.name);
-            // print(doc.data());
-          }
-        });
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-  }
-
-  static Future<void> getCenterData() async {
-    try {
-      if (_auth.currentUser != null) {
-        String uId = _auth.currentUser!.uid;
-        await _fireStore.collection("centers").doc(uId).get().then((doc) {
-          if (doc.exists) {
-            currentBloodCenter = BloodCenter.fromMap(doc.data()!);
-            // print("=================currentBloodCenter============");
-            // print(currentBloodCenter!.name);
-            // print(doc.data());
-          }
-        });
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
+    await box.put(
+      'user',
+      role == 'CENTER' ? '2' : '1',
+    );
   }
 }

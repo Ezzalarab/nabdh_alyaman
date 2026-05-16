@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/utils.dart';
-import '../../di.dart' as di;
 import '../../domain/entities/blood_center.dart';
 import '../../presentation/cubit/profile_cubit/profile_cubit.dart';
 import '../../presentation/pages/home_page.dart';
@@ -27,7 +26,6 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
   // ProfileCenterData? profileCenterDataa;
 
   Future<void> getProfileCenterData() async {
-    di.initSignIn();
     await BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
   }
 

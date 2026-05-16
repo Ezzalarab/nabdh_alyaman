@@ -1,286 +1,185 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
 
-// BACKEND (migration): Replace this entire implementation with REST calls documented in
-// `docs/backend_guide/api/authentication.md`. The server must own account creation,
-// role binding, and any post-login profile rows — do not write Firestore from the client.
-// Firebase Auth + Firestore here are legacy only.
-
-import '../../../presentation/pages/setting_page.dart';
-import '../../core/encryption.dart';
-import '../../core/error/exceptions.dart';
 import '../../core/error/failures.dart';
 import '../../core/network/network_info.dart';
+import '../../data/datasources/local/session_local_datasource.dart';
+import '../../data/datasources/remote/auth_remote_datasource.dart';
+import '../../data/models/auth_tokens_result.dart';
+import '../../domain/entities/auth_session.dart';
 import '../../domain/entities/blood_center.dart';
-import '../../domain/entities/donor.dart';
+import '../../domain/entities/donor_registration_params.dart';
 import '../../domain/repositories/auth_repo.dart';
 
 class AuthRepositoryImpl implements AuthRepo {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-  final NetworkInfo networkInfo;
   AuthRepositoryImpl({
-    required this.networkInfo,
-  });
+    required NetworkInfo networkInfo,
+    required AuthRemoteDataSource remote,
+    required SessionLocalDataSource sessionLocal,
+  })  : _networkInfo = networkInfo,
+        _remote = remote,
+        _sessionLocal = sessionLocal;
 
-  @override
-  Future<Either<Failure, UserCredential>> signInWithEmail(
-      {required String email, required String password}) async {
-    if (await networkInfo.isConnected) {
-      try {
-        return await _firebaseAuth
-            .signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        )
-            .then((userCredential) async {
-          if (userCredential.user != null) {
-            await saveUserTypeLocal(userCredential);
-            return Right(userCredential);
-          } else {
-            _firebaseAuth.signInWithPhoneNumber(email);
-            if (kDebugMode) {
-              print("no user");
-            }
-            return Left(UnknownFailure());
-          }
-        });
-      } on FirebaseException catch (fireError) {
-        // print("fireError.code");
-        // print(fireError.code);
-        if (fireError.code == 'user-not-found') {
-          return Left(WrongDataFailure());
-        } else if (fireError.code == 'wrong-password') {
-          return Left(WrongDataFailure());
-        } else if (fireError.code == 'too-many-request') {
-          return Left(ServerFailure());
-        } else {
-          return Left(UnknownFailure());
-        }
-      } on ServerException {
-        return Left(ServerFailure());
-      } catch (e) {
-        return Left(UnknownFailure());
+  final NetworkInfo _networkInfo;
+  final AuthRemoteDataSource _remote;
+  final SessionLocalDataSource _sessionLocal;
+
+  Future<Either<Failure, T>> _online<T>(Future<T> Function() run) async {
+    if (!(await _networkInfo.isConnected)) return Left(OffLineFailure());
+    try {
+      return Right(await run());
+    } catch (e) {
+      if (e is Failure) return Left(e);
+      if (kDebugMode) {
+        print(e);
       }
-    } else {
-      return Left(OffLineFailure());
+      return Left(UnknownFailure());
     }
   }
 
-  Future saveUserTypeLocal(UserCredential userCredential) async {
-    final box = Hive.box(dataBoxName);
-    String docId = userCredential.user!.uid;
-    if (kDebugMode) {
-      print(docId);
-    }
-    await _fireStore
-        .collection(BloodCenterFields.collectionName)
-        .doc(docId)
-        .get()
-        .then((value) async {
-      if (value.data() == null) {
-        await _fireStore
-            .collection(DonorFields.collectionName)
-            .doc(docId)
-            .get()
-            .then((value) async {
-          if (value.data() == null) {
-            box.put('user', "0");
-          } else {
-            box.put('user', "1");
-          }
-        });
-      } else {
-        box.put('user', "2");
-      }
+  Future<void> _persistSession(AuthTokensResult r) async {
+    await _sessionLocal.saveTokens(
+      accessToken: r.accessToken,
+      refreshToken: r.refreshToken,
+    );
+    await _sessionLocal.saveUserMeta(
+      userId: r.session.userId,
+      role: r.session.role,
+    );
+  }
+
+  @override
+  Future<Either<Failure, AuthenticatedSession>> login({
+    required String identifier,
+    required String password,
+  }) async {
+    return _online(() async {
+      final result = await _remote.login(
+        identifier: identifier,
+        password: password,
+      );
+      await _persistSession(result);
+      return result.session;
     });
-    if (kDebugMode) {
-      print(box.get("user") ?? "5");
-    }
   }
 
   @override
-  Future<Either<Failure, Unit>> resetPassword({required String email}) async {
-    if (await networkInfo.isConnected) {
+  Future<Either<Failure, AuthenticatedSession>> registerDonor(
+    DonorRegistrationParams params,
+  ) async {
+    return _online(() async {
+      final result = await _remote.registerDonor(params);
+      await _persistSession(result);
+      return result.session;
+    });
+  }
+
+  @override
+  Future<Either<Failure, Unit>> logout() async {
+    final refresh = await _sessionLocal.getRefreshToken();
+    String deviceToken = '';
+    try {
+      deviceToken = await FirebaseMessaging.instance.getToken() ?? '';
+    } catch (_) {}
+    if (refresh != null &&
+        refresh.isNotEmpty &&
+        await _networkInfo.isConnected) {
       try {
-        return await _firebaseAuth
-            .sendPasswordResetEmail(
-          email: email,
-        )
-            .then((userCredential) async {
-          return const Right(unit);
-        });
-      } on FirebaseException {
-        return Left(ServerFailure());
-      } catch (e) {
-        return Left(UnknownFailure());
+        await _remote.logout(
+          refreshToken: refresh,
+          deviceToken: deviceToken,
+        );
+      } catch (_) {
+        // Best-effort: still clear locally.
       }
-    } else {
-      return Left(OffLineFailure());
     }
+    await _sessionLocal.clearSession();
+    return const Right(unit);
   }
 
   @override
-  Future<Either<Failure, UserCredential>> signUpDonorAuth({
-    required Donor donor,
+  Future<Either<Failure, Unit>> forgotPassword({required String phone}) async {
+    return _online(() async {
+      await _remote.forgotPassword(phone: phone);
+      return unit;
+    });
+  }
+
+  @override
+  Future<Either<Failure, String>> verifyOtpForReset({
+    required String phone,
+    required String code,
   }) async {
-    if (await networkInfo.isConnected) {
-      try {
-        return await _firebaseAuth
-            .createUserWithEmailAndPassword(
-          email: donor.email,
-          password: donor.password,
-        )
-            .then((userCredential) async {
-          if (userCredential.user != null) {
-            return (Right(userCredential));
-          } else {
-            return left(WrongDataFailure());
-          }
-        });
-      } on FirebaseException catch (fireError) {
-        if (kDebugMode) {
-          print(fireError.code);
-        }
-        if (fireError.code == 'invalid-email') {
-          return Left(InvalidEmailFailure());
-        } else if (fireError.code == 'weak-password') {
-          return Left(WeekPasswordFailure());
-        } else if (fireError.code == 'email-already-in-use') {
-          return Left(EmailAlreadyRegisteredFailure());
-        } else if (fireError.code == 'unknown') {
-          return Left(FirebaseUnknownFailure());
-        } else if (fireError.code == 'too-many-request') {
-          return Left(ServerFailure());
-        } else {
-          return Left(UnknownFailure());
-        }
-      } on ServerException {
-        return Left(ServerFailure());
-      } catch (e) {
-        return Left(UnknownFailure());
-      }
-    } else {
-      return Left(OffLineFailure());
-    }
+    return _online(() async {
+      return await _remote.verifyOtp(phone: phone, code: code);
+    });
   }
 
   @override
-  Future<Either<Failure, Unit>> signUpDonorData({
-    required Donor donor,
-    required String uid,
+  Future<Either<Failure, Unit>> resetPasswordWithToken({
+    required String resetToken,
+    required String newPassword,
   }) async {
-    if (await networkInfo.isConnected) {
-      try {
-        if (uid != "") {
-          Map<String, dynamic> donorData = donor.toMap();
-          donorData['created_at'] = DateTime.now();
-          donorData['password'] = Encryption.encode(donorData['password']);
-          return await _fireStore
-              .collection('donors')
-              .doc(uid)
-              .set(donorData)
-              .then((_) async {
-            return const Right(unit);
-          });
-        } else {
-          if (kDebugMode) {
-            print("no current user");
-          }
-          return left(WrongDataFailure());
-        }
-      } on FirebaseException catch (fireError) {
-        if (fireError.code == 'unknown') {
-          return Left(FirebaseUnknownFailure());
-        } else if (fireError.code == 'too-many-request') {
-          return Left(ServerFailure());
-        } else {
-          if (kDebugMode) {
-            print("fireError.code");
-            print(fireError.code);
-          }
-          return Left(UnknownFailure());
-        }
-      } on ServerException {
-        return Left(ServerFailure());
-      } catch (e) {
-        if (kDebugMode) {
-          print("sign up failed");
-          print(e);
-        }
-        return Left(UnknownFailure());
-      }
-    } else {
-      return Left(OffLineFailure());
+    return _online(() async {
+      await _remote.resetPassword(
+        resetToken: resetToken,
+        newPassword: newPassword,
+      );
+      return unit;
+    });
+  }
+
+  @override
+  Future<Either<Failure, Unit>> registerDeviceIfPossible() async {
+    if (!(await _networkInfo.isConnected)) return const Right(unit);
+    try {
+      final token = await FirebaseMessaging.instance.getToken();
+      if (token == null || token.isEmpty) return const Right(unit);
+      final platform = switch (defaultTargetPlatform) {
+        TargetPlatform.iOS => 'ios',
+        TargetPlatform.android => 'android',
+        TargetPlatform.linux ||
+        TargetPlatform.macOS ||
+        TargetPlatform.windows ||
+        TargetPlatform.fuchsia =>
+          kIsWeb ? 'web' : 'android',
+      };
+      await _remote.registerDevice(token: token, platform: platform);
+    } catch (_) {}
+    return const Right(unit);
+  }
+
+  @override
+  Future<bool> hasPersistedSession() async {
+    final a = await _sessionLocal.getAccessToken();
+    final r = await _sessionLocal.getRefreshToken();
+    return a != null &&
+        a.isNotEmpty &&
+        r != null &&
+        r.isNotEmpty;
+  }
+
+  @override
+  Future<AuthenticatedSession?> readPersistedSessionMeta() async {
+    if (!await hasPersistedSession()) return null;
+    final id = await _sessionLocal.getUserId();
+    final role = await _sessionLocal.getRole();
+    if (id == null || id.isEmpty || role == null || role.isEmpty) {
+      return null;
     }
+    return AuthenticatedSession(userId: id, role: role);
   }
 
   @override
   Future<Either<Failure, Unit>> signUpCenter({
     required BloodCenter center,
   }) async {
-    if (await networkInfo.isConnected) {
-      try {
-        return await _firebaseAuth
-            .createUserWithEmailAndPassword(
-          email: center.email,
-          password: center.password,
-        )
-            .then((userCredential) async {
-          if (userCredential.user != null) {
-            try {
-              Map<String, dynamic> centerData = center.toMap();
-              centerData['password'] =
-                  Encryption.encode(centerData['password']);
-              return await _fireStore
-                  .collection('centers')
-                  .doc(userCredential.user!.uid)
-                  .set(centerData)
-                  .then((_) async {
-                Hive.box(dataBoxName).put('user', "2");
-                return const Right(unit);
-              });
-            } on FirebaseException catch (fireError) {
-              if (fireError.code == 'unknown') {
-                return Left(FirebaseUnknownFailure());
-              } else if (fireError.code == 'too-many-request') {
-                return Left(ServerFailure());
-              } else {
-                return Left(UnknownFailure());
-              }
-            } on ServerException {
-              return Left(ServerFailure());
-            } catch (e) {
-              return Left(UnknownFailure());
-            }
-          } else {
-            return left(WrongDataFailure());
-          }
-        });
-      } on FirebaseException catch (fireError) {
-        if (fireError.code == 'invalid-email') {
-          return Left(InvalidEmailFailure());
-        } else if (fireError.code == 'weak-password') {
-          return Left(WeekPasswordFailure());
-        } else if (fireError.code == 'email-already-in-use') {
-          return Left(EmailAlreadyRegisteredFailure());
-        } else if (fireError.code == 'unknown') {
-          return Left(FirebaseUnknownFailure());
-        } else if (fireError.code == 'too-many-request') {
-          return Left(ServerFailure());
-        } else {
-          return Left(UnknownFailure());
-        }
-      } on ServerException {
-        return Left(ServerFailure());
-      } catch (e) {
-        return Left(UnknownFailure());
-      }
-    } else {
-      return Left(OffLineFailure());
-    }
+    return Left(
+      ValidationFailure(
+        message:
+            'إنشاء حساب المركز يتم من الإدارة فقط. تواصل مع فريق نبض اليمن للحصول على بيانات الدخول.',
+      ),
+    );
   }
 }
