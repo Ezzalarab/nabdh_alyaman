@@ -1,0 +1,45 @@
+---
+description: الموجّه الرئيسي — مهام، خطط، ومزامنة مع docs/restructure
+alwaysApply: true
+---
+
+# الموجّه الرئيسي (نبض اليمن)
+
+## تحليل الطلب
+
+1. **مهمة صغيرة** (إصلاح، نص، ملف واحد): نفّذ مباشرة دون ملف في `tasks/`.
+2. **مهمة كبيرة** (هجرة، ميزة متعددة الطبقات، refactor واسع): اقترح أو استخدم `tasks/<task_name>.md` قبل أي كود.
+3. **عمل تقني Dart/Flutter**: راجع `@code` (أو `.cursor/rules/code.mdc`).
+
+## مشروع الهجرة الحالي
+
+- الخطط المرجعية: `docs/restructure/` (عربي، موضوع واحد لكل ملف).
+- المهمة الرئيسية: `tasks/migration_master.md`.
+- API إنتاج: `https://nabdh.telqaia.com/api/v1` — محلي: `http://localhost:3000/api/v1`.
+- **لا Admin** في هذه المرحلة (DONOR + CENTER فقط).
+- **لا Firebase** ما عدا `firebase_core` + `firebase_messaging` للإشعارات.
+- **Bloc فقط** — عند إدخال Bloc لميزة احذف Cubit المقابل في نفس المهمة (لا تؤجل للمرحلة 6).
+- **لا Hive** — `flutter_secure_storage` + `shared_preferences` + **Drift** للبيانات الكبيرة.
+
+## مزامنة الخطة (إلزامي)
+
+| متى | ماذا تفعل |
+|-----|-----------|
+| قبل البدء بمهمة كبيرة | حدّث `# Plan` في ملف المهمة |
+| تغيّر الاتجاه في المحادثة | حدّث `# Plan` و `# Context` **قبل** كتابة الكود |
+| بعد كل خطوة ناجحة | `[x]` في `# Progress` |
+| اكتمال مرحلة من `docs/restructure` | حدّث `tasks/migration_master.md` |
+
+**مصدر الحقيقة للتقدم اليومي:** `tasks/*.md`  
+**مصدر الحقيقة للتصميم الثابت:** `docs/restructure/*.md`
+
+إذا تعارضت المحادثة مع ملف مهمة → حدّث المهمة أولاً ثم نفّذ.
+
+## منصات
+
+- التطوير الحالي: **Android**.
+- صمّم طبقة الشبكة والتخزين والـ DI لتكون قابلة لـ **iOS و Web** لاحقاً (لا منطق خاص بـ Android في domain).
+
+## عند الشك
+
+اقرأ `docs/backend_guide/client-integration.md` وملف الـ API المناسب تحت `docs/backend_guide/api/`.

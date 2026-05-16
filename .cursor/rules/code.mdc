@@ -1,0 +1,59 @@
+---
+description: معايير Flutter — Bloc، Clean Architecture، API، تخزين
+globs: "**/*.{dart,yaml}"
+alwaysApply: false
+---
+
+# معايير الكود (نبض اليمن)
+
+## المعمارية
+
+- **Clean Architecture:** `presentation` → `domain` → `data`.
+- **Bloc فقط** (`Bloc<Event, State>`) — لا `Cubit` جديد؛ احذف Cubit القديم عند استبدال الميزة.
+- لا استدعاء API/Firestore من الـ UI.
+- **Use cases** رفيعة؛ **repositories** تنسّق بين `RemoteDataSource` و `LocalDataSource`.
+- أخطاء: `Either<Failure, T>` (`dartz`) ورسائل عربية من `core/error/failures.dart`.
+
+## الشبكة والجلسة
+
+- عميل HTTP واحد (Dio) مع: `Authorization`, `x-device-id`, `Content-Type`.
+- عند **401**: `POST /auth/refresh` مرة → إعادة الطلب؛ فشل → مسح الجلسة والتوجيه لتسجيل الدخول.
+- Base URL عبر `--dart-define` أو flavors — لا hardcode في repositories.
+
+## التخزين المحلي
+
+| النوع | الأداة |
+|-------|--------|
+| access/refresh token، بيانات حساسة | `flutter_secure_storage` |
+| تفضيلات صغيرة (theme، onboarding) | `shared_preferences` |
+| كاش كبير (locations، قوائم) | **Drift** |
+| ممنوع | Hive، Firestore، Firebase Storage |
+
+## Firebase (محدود)
+
+- مسموح: `firebase_core`, `firebase_messaging` للتوكن و `POST /auth/device` فقط.
+- ممنوع: `firebase_auth`, `cloud_firestore`, `firebase_storage`, إرسال FCM عبر HTTP قديم.
+
+## Bloc
+
+- States: `Equatable` أو sealed classes؛ `copyWith` عند الحاجة.
+- أحداث صريحة؛ لا حقول mutable على الـ Bloc للفلاتر (ضعها في State).
+- `BlocProvider` / `MultiBlocProvider` في `main.dart`؛ التسجيل في GetIt.
+
+## UI / Flutter
+
+- فصل widgets عن صفحات؛ تجنّب منطق أعمال في `build`.
+- صور: ضغط → `POST /files/upload` → `fileId` في الملف الشخصي.
+- دعم RTL والعربية في النصوص والأخطاء.
+- استعد لـ iOS/Web: تجنّب `dart:io` في domain/data (استخدم abstractions).
+
+## جودة
+
+- تغييرات مركّزة؛ لا refactor خارج نطاق المهمة.
+- لا أسرار في الكود؛ env للـ API URL.
+- بعد تعديل Dart: تحقق من analyzer.
+
+## مراجع
+
+- `docs/backend_guide/`
+- `docs/restructure/`
