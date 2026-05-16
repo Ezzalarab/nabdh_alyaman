@@ -7,6 +7,8 @@
 | محلي | `http://localhost:3000/api/v1` |
 | إنتاج | `https://api.<your-domain>/api/v1` |
 
+**مثال إنتاج لهذا المشروع (التحقق من الفريق):** `https://nabdh.telqaia.com/api/v1`
+
 جميع المسارات أدناه **نسبية** بعد `/api/v1`.
 
 ## Headers موصى بها
@@ -45,6 +47,7 @@
 - `POST /auth/forgot-password`: 3 / ساعة
 - `POST /blood-requests`: 5 / دقيقة
 - `POST /files/upload`: 5 / 10 دقائق
+- `POST /admin/notifications/send`: 30 / دقيقة (نفس فئة الـ throttler الافتراضية)
 
 ## الأدوار
 

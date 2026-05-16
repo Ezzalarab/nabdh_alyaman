@@ -29,6 +29,10 @@ import 'presentation/pages/sing_up_center_page.dart';
 import 'presentation/pages/splash_screen.dart';
 import 'presentation/resources/theme_manager.dart';
 
+/// App bootstrap. BACKEND migration: keep only `firebase_core` + `firebase_messaging` for
+/// push receipt; session + data via REST (`docs/restructure/README.md`). Hive here is
+/// replaced by secure storage + Drift per migration plan.
+
 String? version;
 
 void main() async {

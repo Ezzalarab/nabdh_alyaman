@@ -4,6 +4,11 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
+// BACKEND: Remove when migrating — push notifications are sent only from the backend
+// (Firebase Admin SDK / `POST /blood-requests`, `POST /admin/notifications/send`, etc.).
+// Never ship server keys or call `fcm.googleapis.com` from the client. See
+// `docs/restructure/متطلبات-الباكإند/01-الإشعارات-وFCM.md`.
+
 import '../../../core/app_constants.dart';
 import '../../../core/error/failures.dart';
 import '../../../core/network/network_info.dart';

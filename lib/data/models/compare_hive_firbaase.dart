@@ -6,6 +6,8 @@ import 'package:hive/hive.dart';
 import '../../domain/entities/donor.dart';
 import '../../presentation/pages/setting_page.dart';
 
+/// Dev-only parity check — delete with Hive/Firestore migration. BACKEND: authoritative
+/// profile is `GET /donors/me` (`docs/backend_guide/api/donors-and-search.md`).
 class CompareHiveAndFireStore {
   void compareHiveAndFirestore() async {
     Donor donor;

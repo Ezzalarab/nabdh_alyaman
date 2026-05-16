@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
+// BACKEND: Session + `ACTIVE` status must come from JWT and `GET .../me` responses,
+// not Firestore reads (`docs/backend_guide/api/authentication.md`, donors/centers docs).
 import '../../domain/entities/blood_center.dart';
 import '../../domain/entities/donor.dart';
 import '../../presentation/pages/setting_page.dart';

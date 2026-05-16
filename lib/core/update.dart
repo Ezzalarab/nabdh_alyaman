@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart' as info;
 import 'package:url_launcher/url_launcher.dart';
 
+// BACKEND: Force-update must use `GET /app-config` (`min_app_version`), not Firestore
+// collection `updating`. See `docs/backend_guide/api/files-and-app-config.md`.
+
 import '../../main.dart';
 import 'urls.dart';
 

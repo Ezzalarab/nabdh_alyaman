@@ -25,6 +25,9 @@ import 'introduction_page.dart';
 import 'search_page.dart';
 import 'setting_page.dart';
 
+// BACKEND: This page still contains legacy Firestore seeding and HTTP FCM sends — must be
+// removed. Content from `GET /app-config`; pushes only from backend (`docs/restructure`
+// phase 4). Do not extend client-side broadcast logic.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
   static const String routeName = "/home";

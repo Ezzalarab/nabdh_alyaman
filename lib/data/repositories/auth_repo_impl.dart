@@ -4,6 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
+// BACKEND (migration): Replace this entire implementation with REST calls documented in
+// `docs/backend_guide/api/authentication.md`. The server must own account creation,
+// role binding, and any post-login profile rows — do not write Firestore from the client.
+// Firebase Auth + Firestore here are legacy only.
+
 import '../../../presentation/pages/setting_page.dart';
 import '../../core/encryption.dart';
 import '../../core/error/exceptions.dart';

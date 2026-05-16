@@ -3,6 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 
+// BACKEND: Donor/center search must come from `GET /donor-search` and
+// `GET /donor-search/manual` (`docs/backend_guide/api/donors-and-search.md`).
+// Do not replicate filtering rules (eligibleUntil, isShown) in Dart — server enforces them.
+
 import '../../../domain/entities/blood_center.dart';
 import '../../core/error/failures.dart';
 import '../../core/network/network_info.dart';

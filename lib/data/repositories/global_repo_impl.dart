@@ -3,6 +3,9 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
+// BACKEND: Replace with `GET /app-config` + `GET /files/:fileId` per
+// `docs/backend_guide/api/files-and-app-config.md`. Remove Firebase Storage URLs.
+
 import '../../../core/error/failures.dart';
 import '../../../core/network/network_info.dart';
 import '../../domain/entities/global_app_data.dart';

@@ -1,4 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_null_comparison
+//
+// BACKEND: Replace with `GET/PATCH /donors/me` and center profile endpoints from
+// `docs/backend_guide/api/donors-and-search.md` and `centers-and-inventory.md`.
+// Avatar uses `POST /files/upload` then fileId in profile — no direct Firestore.
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';

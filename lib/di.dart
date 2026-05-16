@@ -1,6 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
+// Dependency injection (legacy Firebase stack). BACKEND: new registrations must wire
+// ApiClient + REST repositories only — see docs/restructure/المرحلة-0-الأساس/03.
+
 import 'core/network/network_info.dart';
 import 'data/repositories/auth_repo_impl.dart';
 import 'data/repositories/global_repo_impl.dart';

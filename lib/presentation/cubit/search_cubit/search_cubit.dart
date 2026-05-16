@@ -16,6 +16,10 @@ import '../../../presentation/pages/setting_page.dart';
 
 part 'search_state.dart';
 
+/// BACKEND (`docs/backend_guide/api/donors-and-search.md`):
+/// - Replace Firestore queries with `GET /donor-search` / `donor-search/manual`.
+/// - Remove `search_logs` writes — server should record searches (SearchLog / analytics).
+/// - District filtering belongs in query params, not client-side after full-state fetch.
 class SearchCubit extends Cubit<SearchState> {
   final SearchStateDonorsUC searchStateDonorsUseCase;
   final SearchCentersUC searchCentersUseCase;

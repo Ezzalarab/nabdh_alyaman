@@ -17,6 +17,11 @@ import '../../../presentation/pages/setting_page.dart';
 
 part 'signup_state.dart';
 
+/// BACKEND:
+/// - Daily signup caps belong on server (`AppConfig` / rate limits on `POST /auth/register`),
+///   not Firestore `users_per_day`.
+/// - Registration must be `POST /auth/register` with password — not Firebase Phone OTP only.
+///   Phone OTP here is legacy; aligns with `docs/restructure/المرحلة-1-المصادقة/04`.
 class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit({
     required this.signUpDonorAuthUseCase,

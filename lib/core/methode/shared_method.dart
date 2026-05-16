@@ -13,6 +13,9 @@ import 'package:url_launcher_platform_interface/url_launcher_platform_interface.
 
 import '../../domain/entities/donor.dart';
 
+/// Mixed location + legacy Firestore donor updates. BACKEND: donor location visibility and
+/// FCM token storage belong to `PATCH /donors/me` and `POST /auth/device` — remove direct
+/// `donors` doc writes when migrating (`docs/backend_guide/client-integration.md`).
 class SharedMethod {
   bool hasCurrentLocation = false;
   bool servicestatus = false;

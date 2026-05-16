@@ -15,6 +15,9 @@ import '../../../presentation/pages/setting_page.dart';
 
 part 'signin_state.dart';
 
+/// BACKEND: `POST /auth/login` + `POST /auth/device` for FCM token.
+/// Remove Firestore `users_per_day` counters and donor token writes — server owns analytics
+/// and device registration (`docs/backend_guide/client-integration.md`).
 class SignInCubit extends Cubit<SignInState> {
   SignInCubit({
     required this.signInUseCase,

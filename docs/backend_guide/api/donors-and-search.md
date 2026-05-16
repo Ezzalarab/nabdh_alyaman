@@ -55,6 +55,7 @@
 | `lon` | نعم | |
 | `stateId` | لا | فلتر إضافي |
 | `radiusKm` | لا | افتراضي 20، أقصى 100 |
+| `includeCompatible` | لا | `true` يوسّع فصائل المانحين المتوافقة طبياً مع الفصيلة المطلوبة (مستلزم مريض بحاجة لهذه الفصيلة) |
 
 **200:** مصفوفة (حتى 100)، مرتبة بالمسافة:
 
@@ -66,7 +67,7 @@
     "bloodType": "A+",
     "imageUrl": "...",
     "phone": "9677..." ,
-    "distance_km": 1.2
+    "distanceKm": 1.2
   }
 ]
 ```
@@ -79,7 +80,7 @@
 ## GET /donor-search/manual
 
 **Auth:** اختياري  
-**Query:** `bloodType`, `stateId?`, `districtId?`, `cursor?`, `limit?` (افتراضي 20)
+**Query:** `bloodType`, `stateId?`, `districtId?`, `cursor?`, `limit?` (افتراضي 20)، `includeCompatible?` (`true`|`false`)
 
 **200:**
 

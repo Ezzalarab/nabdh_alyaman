@@ -57,6 +57,26 @@
 }
 ```
 
+`totalSearches`: عدد صفوف `SearchLog` (كل عمليات البحث الجغرافية واليدوية التي سجّلها السيرفر للمستخدمِين)، وليس عدّ استعلامات الاستغاثة الداخلية.
+
+---
+
+## POST /admin/notifications/send
+
+**Throttle:** مدمج بالحد الافتراضي (**30**/دقيقة لكل تركيبة `IP + x-device-id` ما لم يُعطَل Throttling بالكامل على البيئة).
+
+```json
+{
+  "userId": 42,
+  "title": "عنوان قصير",
+  "body": "نص الرسالة"
+}
+```
+
+**200:** `{ "success": true, "devicesTargeted": <number> }` — عدد توكنات FCM المستهدفة (قد يكون 0 إن لم توجد أجهزة).
+
+يُنشئ أيضاً صفاً في `GET /notifications` لذلك المستخدم.
+
 ---
 
 ## POST /admin/centers

@@ -11,7 +11,7 @@
 
 ## ما يوفّره الباكإند اليوم (**موجود**)
 
-راجع [`docs/backend_guide/client-integration.md`](../../backend_guide/client-integration.md) و [`blood-requests-and-notifications.md`](../../backend_guide/api/blood-requests-and-notifications.md).
+راجع [client-integration.md](../client-integration.md) و [blood-requests-and-notifications.md](../api/blood-requests-and-notifications.md).
 
 | Endpoint | المسؤولية |
 |----------|-----------|
