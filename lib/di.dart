@@ -16,8 +16,11 @@ import 'data/datasources/local/preferences_local_datasource_impl.dart';
 import 'data/datasources/local/session_local_datasource.dart';
 import 'data/datasources/local/session_local_datasource_impl.dart';
 import 'data/datasources/remote/auth_remote_datasource.dart';
+import 'core/files/file_url_resolver.dart';
 import 'data/datasources/remote/donor_remote_datasource.dart';
+import 'data/datasources/remote/files_remote_datasource.dart';
 import 'data/datasources/remote/locations_remote_datasource.dart';
+import 'data/datasources/remote/search_remote_datasource.dart';
 import 'data/repositories/auth_repo_impl.dart';
 import 'data/repositories/global_repo_impl.dart';
 import 'data/repositories/profile_repository_impl.dart';
@@ -32,15 +35,13 @@ import 'domain/usecases/get_global_data_uc.dart';
 import 'domain/usecases/profile_use_case.dart';
 import 'domain/usecases/search_centers_uc.dart';
 import 'domain/usecases/search_donors_uc.dart';
-import 'domain/usecases/search_state_donors_uc.dart';
 import 'domain/usecases/send_notfication_.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/profile/profile_bloc.dart';
 import 'presentation/cubit/global_cubit/global_cubit.dart';
 import 'presentation/cubit/profile_cubit/profile_cubit.dart';
-import 'presentation/cubit/search_cubit/search_cubit.dart';
 import 'presentation/cubit/send_notfication/send_notfication_cubit.dart';
-import 'presentation/cubit/maps_cubit/maps_cubit.dart';
+import 'presentation/blocs/search/search_bloc.dart';
 
 final gi = GetIt.instance;
 
@@ -88,6 +89,10 @@ Future<void> initApp() async {
   gi.registerLazySingleton<DonorRemoteDataSource>(
     () => DonorRemoteDataSourceImpl(gi()),
   );
+  gi.registerLazySingleton<FilesRemoteDataSource>(
+    () => FilesRemoteDataSourceImpl(gi()),
+  );
+  gi.registerLazySingleton<FileUrlResolver>(() => const FileUrlResolver());
 
   gi.registerLazySingleton<AuthRepo>(
     () => AuthRepositoryImpl(
@@ -104,21 +109,26 @@ Future<void> initApp() async {
     ),
   );
 
-  gi.registerLazySingleton<MapsCubit>(() => MapsCubit());
-
-  gi.registerLazySingleton<SearchRepo>(() => SearchRepoImpl(networkInfo: gi()));
+  gi.registerLazySingleton<SearchRemoteDataSource>(
+    () => SearchRemoteDataSourceImpl(gi()),
+  );
+  gi.registerLazySingleton<SearchRepo>(
+    () => SearchRepoImpl(networkInfo: gi(), remote: gi()),
+  );
   gi.registerLazySingleton(() => SearchDonorsUC(searchRepository: gi()));
-  gi.registerLazySingleton(() => SearchStateDonorsUC(searchRepository: gi()));
   gi.registerLazySingleton(() => SearchCentersUC(searchRepository: gi()));
   gi.registerLazySingleton(
-    () =>
-        SearchCubit(searchCentersUseCase: gi(), searchStateDonorsUseCase: gi()),
+    () => SearchBloc(
+      searchDonorsUC: gi(),
+      searchCentersUC: gi(),
+    ),
   );
 
   gi.registerLazySingleton<ProfileRepository>(
     () => ProfileReopsitoryImpl(
       networkInfo: gi(),
       donorRemote: gi(),
+      filesRemote: gi(),
       sessionLocal: gi(),
     ),
   );

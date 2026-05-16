@@ -31,8 +31,8 @@
 - [x] 04 — مصادقة: `AuthBloc` + REST، توجيه Splash/Logout، `BLOCKED` + 400 تسجيل مكرر، `test/blocs/auth_bloc_test.dart` — إغلاق المرحلة 1 (2026-05-16).
 
 ## المرحلة 2 — المتبرع
-- [x] 05 — ملف المتبرع (أساس): `ProfileBloc` + `DonorRemoteDataSource` + `GET/PATCH /donors/me` للمتبرع؛ Firebase للمركز مؤقتاً — رفع صورة `/files` لاحقاً في نفس المرحلة
-- [ ] 06 — بحث ومواقع: `SearchBloc`، `GET /donor-search` و`/manual`، مراكز على الخريطة، مزامنة Drift مع `/locations`، استبدال تدفق `csc_picker`/`country.json` بالمخطّط في الوثيقة
+- [x] 05 — ملف المتبرع: `ProfileBloc` + `GET/PATCH /donors/me`، picker مواقع API، رفع صورة `/files/upload` + `FileUrlResolver`؛ Firebase للمركز مؤقتاً
+- [x] 06 — بحث ومواقع: `SearchBloc`، `GET /donor-search`/`/manual`، `/centers`، picker مواقع API، خريطة من نتائج البحث؛ حذف `SearchCubit`/`MapsCubit`؛ Drift schema في `lib/data/local/drift/` — شغّل `dart run build_runner build` عند تفعيل SQLite cache
 
 ## المرحلة 3 — المركز
 - [ ] 07 — مركز ومخزون: `CenterBloc`، `GET/PATCH /centers/me`، المخزون وتسجيل التبرع، رسائل `eligibleUntil` حسب العقد (بدون تكرار منطق السيرفر في العميل)

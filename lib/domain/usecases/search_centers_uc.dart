@@ -11,12 +11,12 @@ class SearchCentersUC {
     required this.searchRepository,
   });
   Future<Either<Failure, List<BloodCenter>>> call({
-    required String state,
-    required String district,
+    required int stateId,
+    required int districtId,
   }) async {
-    return await searchRepository.searchCenters(
-      state: state,
-      district: district,
+    return searchRepository.searchCenters(
+      stateId: stateId,
+      districtId: districtId,
     );
   }
 }

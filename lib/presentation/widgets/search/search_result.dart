@@ -10,7 +10,7 @@ import '../../../domain/entities/blood_types.dart';
 import '../../../domain/entities/donor.dart';
 import '../../../presentation/resources/color_manageer.dart';
 import '../../../presentation/widgets/search/result_tabs.dart';
-import '../../cubit/search_cubit/search_cubit.dart';
+import '../../blocs/search/search_bloc.dart';
 import '../../widgets/search/doner_card_details.dart';
 import '../../widgets/search/my_expansion_panel.dart';
 import '../common/loading_widget.dart';
@@ -49,12 +49,11 @@ class _SearchResultState extends State<SearchResult>
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        child: BlocBuilder<SearchCubit, SearchState>(
+        child: BlocBuilder<SearchBloc, SearchState>(
           builder: (context, state) {
             if (state is SearchSuccess) {
-              List<String> compatibleBloodTypes = BloodTypes.canReceiveFrom(
-                  bloodType:
-                      BlocProvider.of<SearchCubit>(context).selectedBloodType!);
+              List<String> compatibleBloodTypes =
+                  BloodTypes.canReceiveFrom(bloodType: state.bloodType);
               List<Donor> compatibleDonors = state.donors
                   .where((donor) =>
                       donor.bloodType ==
@@ -210,6 +209,7 @@ class _SearchResultState extends State<SearchResult>
                                           buildCenterListTile(
                                         context,
                                         state.centers[index],
+                                        state.bloodType,
                                       ),
                                     ),
                                   )
@@ -273,44 +273,34 @@ class _SearchResultState extends State<SearchResult>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(state.error),
-                    if (state.error == 'لا يوجد إنترنت')
+                    if (state.error.contains('إنترنت') ||
+                        state.error.contains('اتصال'))
                       const Padding(
                         padding: EdgeInsets.only(top: 20.0),
                         child: Text('تحقق من اتصال الانترنت ثم حاول مرة أخرى'),
                       ),
                     const SizedBox(height: 20),
-                    MyButton(
-                      title: 'حاول مرة أخرى',
-                      color: ColorManager.primary,
-                      onPressed: () {
-                        BlocProvider.of<SearchCubit>(context)
-                            .searchDonorsAndCenters();
-                      },
-                    ),
+                    if (state.bloodType != null &&
+                        state.stateId != null &&
+                        state.districtId != null)
+                      MyButton(
+                        title: 'حاول مرة أخرى',
+                        color: ColorManager.primary,
+                        onPressed: () {
+                          context.read<SearchBloc>().add(
+                                SearchRequested(
+                                  bloodType: state.bloodType,
+                                  stateId: state.stateId,
+                                  districtId: state.districtId,
+                                ),
+                              );
+                        },
+                      ),
                   ],
                 ),
               );
             } else {
-              if (kDebugMode) {
-                print('search state.runtimeType');
-                print(state.runtimeType);
-              }
-              return SizedBox(
-                height: 400,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    MyButton(
-                      title: 'حاول مرة أخرى',
-                      color: ColorManager.primary,
-                      onPressed: () {
-                        BlocProvider.of<SearchCubit>(context)
-                            .searchDonorsAndCenters();
-                      },
-                    ),
-                  ],
-                ),
-              );
+              return const SizedBox(height: 400);
             }
           },
         ),
@@ -318,7 +308,11 @@ class _SearchResultState extends State<SearchResult>
     );
   }
 
-  Widget buildCenterListTile(BuildContext context, BloodCenter center) {
+  Widget buildCenterListTile(
+    BuildContext context,
+    BloodCenter center,
+    String bloodType,
+  ) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: const BoxDecoration(
@@ -336,8 +330,7 @@ class _SearchResultState extends State<SearchResult>
             child: Text(
               getCompatibleBloodAmount(
                 center: center,
-                bloodType:
-                    BlocProvider.of<SearchCubit>(context).selectedBloodType!,
+                bloodType: bloodType,
               ),
               style: Theme.of(context).textTheme.titleLarge,
             ),

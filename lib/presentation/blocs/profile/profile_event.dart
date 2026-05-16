@@ -13,3 +13,8 @@ class ProfileBasicDataUpdateSubmitted extends ProfileEvent {
   ProfileBasicDataUpdateSubmitted(this.data);
   final ProfileLocalData data;
 }
+
+class ProfileImageUploadRequested extends ProfileEvent {
+  ProfileImageUploadRequested(this.file);
+  final File file;
+}

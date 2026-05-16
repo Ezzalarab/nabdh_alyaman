@@ -1,19 +1,18 @@
 import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
-import '../../domain/entities/blood_center.dart';
-import '../../domain/entities/donor.dart';
+import '../entities/blood_center.dart';
+import '../entities/donor.dart';
 
 abstract class SearchRepo {
   Future<Either<Failure, List<Donor>>> searchDonors({
-    required String state,
-    required String district,
+    required String bloodType,
+    required int stateId,
+    required int districtId,
   });
+
   Future<Either<Failure, List<BloodCenter>>> searchCenters({
-    required String state,
-    required String district,
-  });
-  Future<Either<Failure, List<Donor>>> searchStateDonors({
-    required String state,
+    required int stateId,
+    required int districtId,
   });
 }

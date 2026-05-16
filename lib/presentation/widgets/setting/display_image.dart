@@ -1,72 +1,66 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../../resources/assets_manager.dart';
 import '../../resources/style.dart';
 
-// ignore: must_be_immutable
-class DisplayImage extends StatefulWidget {
-  dynamic imagePath;
-  final VoidCallback onPressed;
-
-  // Constructor
-  DisplayImage({
+class DisplayImage extends StatelessWidget {
+  const DisplayImage({
     super.key,
-    required this.imagePath,
+    this.imageFile,
+    this.imageUrl,
     required this.onPressed,
   });
 
-  @override
-  State<DisplayImage> createState() => _DisplayImageState();
-}
+  final File? imageFile;
+  final String? imageUrl;
+  final VoidCallback onPressed;
 
-class _DisplayImageState extends State<DisplayImage> {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Stack(children: [
-      buildImage(ePrimColor),
-      Positioned(
-        right: 4,
-        top: 10,
-        child: buildEditIcon(ePrimColor),
-      )
-    ]));
-  }
-
-  // Builds Profile Image
-  Widget buildImage(Color color) {
-    return CircleAvatar(
-      radius: 75,
-      backgroundColor: color,
-      child: (widget.imagePath is String)
-          ? const CircleAvatar(
-              backgroundImage: AssetImage("assets/images/boy.png"),
+      child: Stack(
+        children: [
+          CircleAvatar(
+            radius: 75,
+            backgroundColor: ePrimColor,
+            child: CircleAvatar(
               radius: 70,
-            )
-          : CircleAvatar(
-              backgroundImage: FileImage(widget.imagePath),
-              radius: 70,
+              backgroundImage: _imageProvider(),
+              child: _imageProvider() == null
+                  ? const Icon(Icons.person, size: 64, color: Colors.white70)
+                  : null,
             ),
+          ),
+          Positioned(
+            right: 4,
+            top: 10,
+            child: GestureDetector(
+              onTap: onPressed,
+              child: ClipOval(
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  color: Colors.white,
+                  child: Icon(Icons.edit, color: ePrimColor, size: 20),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  // Builds Edit Icon on Profile Picture
-  Widget buildEditIcon(Color color) => buildCircle(
-      all: 8,
-      child: Icon(
-        Icons.edit,
-        color: color,
-        size: 20,
-      ));
-
-  // Builds/Makes Circle for Edit Icon on Profile Picture
-  Widget buildCircle({
-    required Widget child,
-    required double all,
-  }) =>
-      ClipOval(
-          child: Container(
-        padding: EdgeInsets.all(all),
-        color: Colors.white,
-        child: child,
-      ));
+  ImageProvider<Object>? _imageProvider() {
+    if (imageFile != null) {
+      return FileImage(imageFile!);
+    }
+    final url = imageUrl;
+    if (url != null && url.isNotEmpty) {
+      return CachedNetworkImageProvider(url);
+    }
+    return const AssetImage(ImageAssets.profileImage);
+  }
 }

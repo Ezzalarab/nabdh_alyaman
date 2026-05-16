@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/check_active.dart';
@@ -17,6 +19,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileLoadRequested>(_onLoad);
     on<ProfileSectionOneUpdateSubmitted>(_onSectionOne);
     on<ProfileBasicDataUpdateSubmitted>(_onBasicData);
+    on<ProfileImageUploadRequested>(_onImageUpload);
   }
 
   final ProfileUseCase _profileUseCase;
@@ -51,6 +54,25 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       (_) async {
         emit(ProfileSuccess());
         add(ProfileLoadRequested());
+      },
+    );
+  }
+
+  Future<void> _onImageUpload(
+    ProfileImageUploadRequested event,
+    Emitter<ProfileState> emit,
+  ) async {
+    emit(ProfileLoading());
+    final result =
+        await _profileUseCase.uploadDonorProfileImage(file: event.file);
+    await result.fold(
+      (failure) async {
+        emit(ProfileFailure(error: getFailureMessage(failure)));
+      },
+      (donor) async {
+        CheckActive.currentDonor = donor;
+        emit(ProfileGetData(donors: donor));
+        emit(ProfileSuccess());
       },
     );
   }

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 import '../../domain/entities/donor.dart';
-import '../../presentation/pages/setting_page.dart';
+import '../../core/constants/storage_keys.dart';
 
 /// Dev-only parity check — delete with Hive/Firestore migration. BACKEND: authoritative
 /// profile is `GET /donors/me` (`docs/backend_guide/api/donors-and-search.md`).

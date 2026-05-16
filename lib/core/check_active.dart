@@ -4,7 +4,7 @@ import '../data/datasources/local/session_local_datasource.dart';
 import '../domain/entities/blood_center.dart';
 import '../domain/entities/donor.dart';
 import '../di.dart' as di;
-import '../presentation/pages/setting_page.dart';
+import 'constants/storage_keys.dart';
 
 /// Legacy static holder for donor/center payloads (Firestore-backed). Prefer REST
 /// `GET …/me` in later phases — see `docs/backend_guide/api/authentication.md`.

@@ -9,7 +9,7 @@ import '../../presentation/resources/font_manager.dart';
 import '../resources/assets_manager.dart';
 import '../widgets/onboarding/page_view_model.dart';
 import 'home_page.dart';
-import 'setting_page.dart';
+import '../../core/constants/storage_keys.dart';
 
 class IntroductionPage extends StatelessWidget {
   static const String routeName = "onboarding_page";

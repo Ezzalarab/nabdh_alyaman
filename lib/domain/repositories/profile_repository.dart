@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
@@ -16,6 +18,8 @@ abstract class ProfileRepository {
 
   Future<Either<Failure, Unit>> sendBasicDataProfileSectionOne(
       {required ProfileLocalData profileLocalData});
+
+  Future<Either<Failure, Donor>> uploadDonorProfileImage({required File file});
 
   Future<Either<Failure, Unit>> sendBasicCenterDataProfile(
       {required ProfileCenterData profileCenterData});

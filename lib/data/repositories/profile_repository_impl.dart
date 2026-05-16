@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_null_comparison
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +11,8 @@ import '../../core/error/failures.dart';
 import '../../core/network/network_info.dart';
 import '../../data/datasources/local/session_local_datasource.dart';
 import '../../data/datasources/remote/donor_remote_datasource.dart';
+import '../../data/datasources/remote/files_remote_datasource.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../domain/entities/blood_center.dart';
 import '../../domain/entities/donor.dart';
 import '../../domain/repositories/profile_repository.dart';
@@ -18,12 +23,14 @@ class ProfileReopsitoryImpl implements ProfileRepository {
   ProfileReopsitoryImpl({
     required this.networkInfo,
     required this.donorRemote,
+    required this.filesRemote,
     required this.sessionLocal,
     this.donors,
   });
 
   final NetworkInfo networkInfo;
   final DonorRemoteDataSource donorRemote;
+  final FilesRemoteDataSource filesRemote;
   final SessionLocalDataSource sessionLocal;
 
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -104,10 +111,15 @@ class ProfileReopsitoryImpl implements ProfileRepository {
           profileLocalData.bloodType!.trim().isNotEmpty) {
         body['bloodType'] = profileLocalData.bloodType!.trim();
       }
-      final stateId = int.tryParse(profileLocalData.state ?? '');
-      final districtId = int.tryParse(profileLocalData.district ?? '');
-      if (stateId != null) body['stateId'] = stateId;
-      if (districtId != null) body['districtId'] = districtId;
+      if (profileLocalData.stateId != null) {
+        body['stateId'] = profileLocalData.stateId;
+      }
+      if (profileLocalData.districtId != null) {
+        body['districtId'] = profileLocalData.districtId;
+      }
+      if (profileLocalData.locationId != null) {
+        body['locationId'] = profileLocalData.locationId;
+      }
       if (body.isEmpty) {
         return Left(ValidationFailure(message: 'لا توجد بيانات للتحديث'));
       }
@@ -118,6 +130,43 @@ class ProfileReopsitoryImpl implements ProfileRepository {
     } catch (_) {
       return Left(DoesnotSaveData());
     }
+  }
+
+  @override
+  Future<Either<Failure, Donor>> uploadDonorProfileImage({
+    required File file,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return Left(OffLineFailure());
+    }
+    if (!await _isDonorSession()) {
+      return Left(DoesnotSaveData());
+    }
+    try {
+      final compressed = await _compressImage(file);
+      final fileId = await filesRemote.uploadPublicImage(compressed);
+      final dto = await donorRemote.patchMe({'imageUrl': fileId});
+      donors = dto.toDonor();
+      return Right(donors!);
+    } on Failure catch (f) {
+      return Left(f);
+    } catch (_) {
+      return Left(DoesnotSaveData());
+    }
+  }
+
+  Future<File> _compressImage(File file) async {
+    final dir = await getTemporaryDirectory();
+    final target = '${dir.path}/profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      target,
+      quality: 75,
+      minWidth: 1024,
+      minHeight: 1024,
+    );
+    if (result == null) return file;
+    return File(result.path);
   }
 
   // —— Center profile (Firestore until phase 3) ——

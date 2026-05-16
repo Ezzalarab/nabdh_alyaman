@@ -196,19 +196,26 @@ class ProfileLocalData {
   String? isShownPhone;
   String? name;
   String? bloodType;
-  String? district;
-  String? state;
   String? neighborhood;
+  int? stateId;
+  int? districtId;
+  int? locationId;
 
   ProfileLocalData({
     this.name,
     this.bloodType,
-    this.district,
     this.neighborhood,
-    this.state,
+    this.stateId,
+    this.districtId,
+    this.locationId,
     this.isShown,
     this.date,
     this.isGpsOn,
     this.isShownPhone,
   });
+
+  static int? parseId(String? raw) {
+    if (raw == null || raw.trim().isEmpty) return null;
+    return int.tryParse(raw.trim());
+  }
 }

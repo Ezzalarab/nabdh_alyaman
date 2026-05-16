@@ -21,4 +21,12 @@ class ApiEndpoints {
 
   static const donorsMe = '/donors/me';
   static const donorsMeDonations = '/donors/me/donations';
+
+  static const filesUpload = '/files/upload';
+
+  static String fileById(int fileId) => '/files/$fileId';
+
+  static const donorSearch = '/donor-search';
+  static const donorSearchManual = '/donor-search/manual';
+  static const centers = '/centers';
 }

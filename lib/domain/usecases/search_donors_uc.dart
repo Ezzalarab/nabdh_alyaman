@@ -1,22 +1,23 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dartz/dartz.dart';
 
 import '../../core/error/failures.dart';
-import '../../domain/entities/donor.dart';
+import '../entities/donor.dart';
 import '../repositories/search_repo.dart';
 
 class SearchDonorsUC {
+  SearchDonorsUC({required this.searchRepository});
+
   final SearchRepo searchRepository;
-  SearchDonorsUC({
-    required this.searchRepository,
-  });
+
   Future<Either<Failure, List<Donor>>> call({
-    required String state,
-    required String district,
-  }) async {
-    return await searchRepository.searchDonors(
-      state: state,
-      district: district,
+    required String bloodType,
+    required int stateId,
+    required int districtId,
+  }) {
+    return searchRepository.searchDonors(
+      bloodType: bloodType,
+      stateId: stateId,
+      districtId: districtId,
     );
   }
 }

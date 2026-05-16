@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/cached_location_row.dart';
 
-/// Offline cache for locations (temporary JSON-backed store until Drift codegen is enabled).
+/// Offline cache for locations (JSON in prefs; [AppDatabase] ready when codegen runs).
 abstract class LocationsLocalDataSource {
   Future<void> replaceStates(List<CachedLocationState> rows);
 

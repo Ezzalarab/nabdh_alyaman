@@ -7,20 +7,19 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nabdh_alyaman/firebase_options.dart';
 import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart';
 
+import 'core/constants/storage_keys.dart';
 import 'di.dart' as di;
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/auth/auth_state.dart';
-import 'presentation/cubit/maps_cubit/maps_cubit.dart';
 import 'presentation/blocs/profile/profile_bloc.dart';
+import 'presentation/blocs/search/search_bloc.dart';
 import 'presentation/cubit/profile_cubit/profile_cubit.dart';
-import 'presentation/cubit/search_cubit/search_cubit.dart';
 import 'presentation/cubit/send_notfication/send_notfication_cubit.dart';
 import 'presentation/pages/about_page.dart';
 import 'presentation/pages/edit_main_center_data.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/introduction_page.dart';
 import 'presentation/pages/profile_center.dart';
-import 'presentation/pages/search_map_page.dart';
 import 'presentation/pages/search_page.dart';
 import 'presentation/pages/setting_page.dart';
 import 'presentation/pages/sign_in_page.dart';
@@ -51,13 +50,12 @@ void main() async {
       providers: [
         BlocProvider<AuthBloc>(create: (_) => di.gi<AuthBloc>()),
         BlocProvider(create: (_) => di.gi<GlobalCubit>()),
-        BlocProvider(create: (_) => di.gi<SearchCubit>()),
+        BlocProvider(create: (_) => di.gi<SearchBloc>()),
         BlocProvider(create: (_) => di.gi<ProfileCubit>()),
         BlocProvider(create: (_) => di.gi<ProfileBloc>()),
         BlocProvider(
           create: (_) => di.gi<SendNotficationCubit>(),
         ),
-        BlocProvider(create: (_) => di.gi<MapsCubit>()),
       ],
       child: const MyApp(),
     ),
@@ -97,7 +95,6 @@ class MyApp extends StatelessWidget {
         SignUpCenter.routeName: (context) => const SignUpCenter(),
         SearchPage.routeName: (context) => const SearchPage(),
         SettingPage.routeName: (context) => const SettingPage(),
-        SearchMapPage.routeName: (context) => const SearchMapPage(),
         IntroductionPage.routeName: (context) => const IntroductionPage(),
         ProfileCenterPage.routeName: (context) => const ProfileCenterPage(),
         EditMainCenterDataPage.routeName: (context) =>
