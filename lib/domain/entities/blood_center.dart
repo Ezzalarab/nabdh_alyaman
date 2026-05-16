@@ -23,6 +23,9 @@ class BloodCenter {
   int abMinus;
   int oPlus;
   int oMinus;
+  int? stateId;
+  int? districtId;
+  int? locationId;
   bool isExpanded;
   BloodCenter({
     required this.name,
@@ -46,6 +49,9 @@ class BloodCenter {
     required this.abMinus,
     required this.oPlus,
     required this.oMinus,
+    this.stateId,
+    this.districtId,
+    this.locationId,
     this.isExpanded = false,
   });
 

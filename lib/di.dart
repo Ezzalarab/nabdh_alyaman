@@ -20,8 +20,10 @@ import 'core/files/file_url_resolver.dart';
 import 'data/datasources/remote/donor_remote_datasource.dart';
 import 'data/datasources/remote/files_remote_datasource.dart';
 import 'data/datasources/remote/locations_remote_datasource.dart';
+import 'data/datasources/remote/center_remote_datasource.dart';
 import 'data/datasources/remote/search_remote_datasource.dart';
 import 'data/repositories/auth_repo_impl.dart';
+import 'data/repositories/center_repository_impl.dart';
 import 'data/repositories/global_repo_impl.dart';
 import 'data/repositories/profile_repository_impl.dart';
 import 'data/repositories/search_repo_impl.dart';
@@ -30,16 +32,18 @@ import 'domain/repositories/auth_repo.dart';
 import 'domain/repositories/global_repo.dart';
 import 'domain/repositories/notfication_repository.dart';
 import 'domain/repositories/profile_repository.dart';
+import 'domain/repositories/center_repository.dart';
 import 'domain/repositories/search_repo.dart';
+import 'domain/usecases/center/center_use_case.dart';
 import 'domain/usecases/get_global_data_uc.dart';
 import 'domain/usecases/profile_use_case.dart';
 import 'domain/usecases/search_centers_uc.dart';
 import 'domain/usecases/search_donors_uc.dart';
 import 'domain/usecases/send_notfication_.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
+import 'presentation/blocs/center/center_bloc.dart';
 import 'presentation/blocs/profile/profile_bloc.dart';
 import 'presentation/cubit/global_cubit/global_cubit.dart';
-import 'presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'presentation/cubit/send_notfication/send_notfication_cubit.dart';
 import 'presentation/blocs/search/search_bloc.dart';
 
@@ -92,6 +96,9 @@ Future<void> initApp() async {
   gi.registerLazySingleton<FilesRemoteDataSource>(
     () => FilesRemoteDataSourceImpl(gi()),
   );
+  gi.registerLazySingleton<CenterRemoteDataSource>(
+    () => CenterRemoteDataSourceImpl(gi()),
+  );
   gi.registerLazySingleton<FileUrlResolver>(() => const FileUrlResolver());
 
   gi.registerLazySingleton<AuthRepo>(
@@ -133,8 +140,17 @@ Future<void> initApp() async {
     ),
   );
   gi.registerLazySingleton(() => ProfileUseCase(profileRepository: gi()));
-  gi.registerLazySingleton(() => ProfileCubit(profileUseCase: gi()));
   gi.registerLazySingleton(() => ProfileBloc(profileUseCase: gi()));
+
+  gi.registerLazySingleton<CenterRepository>(
+    () => CenterRepositoryImpl(
+      networkInfo: gi(),
+      remote: gi(),
+      sessionLocal: gi(),
+    ),
+  );
+  gi.registerLazySingleton(() => CenterUseCase(centerRepository: gi()));
+  gi.registerLazySingleton(() => CenterBloc(centerUseCase: gi()));
 
   gi.registerLazySingleton<SendNotficationRepository>(
     () => SendNotficationImpl(networkInfo: gi()),

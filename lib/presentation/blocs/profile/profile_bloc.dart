@@ -11,7 +11,7 @@ import '../../widgets/setting/profile_body.dart';
 part 'profile_event.dart';
 part 'profile_state.dart';
 
-/// Donor profile via REST `GET/PATCH /donors/me`. Center flows stay on [ProfileCubit].
+/// Donor profile via REST `GET/PATCH /donors/me`.
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc({required ProfileUseCase profileUseCase})
       : _profileUseCase = profileUseCase,

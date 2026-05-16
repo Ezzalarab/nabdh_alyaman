@@ -3,13 +3,11 @@ import 'dart:io';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nabdh_alyaman/core/error/failures.dart';
-import 'package:nabdh_alyaman/domain/entities/blood_center.dart';
 import 'package:nabdh_alyaman/domain/entities/donor.dart';
 import 'package:nabdh_alyaman/domain/repositories/profile_repository.dart';
+import 'package:nabdh_alyaman/core/error/failures.dart';
 import 'package:nabdh_alyaman/domain/usecases/profile_use_case.dart';
 import 'package:nabdh_alyaman/presentation/blocs/profile/profile_bloc.dart';
-import 'package:nabdh_alyaman/presentation/pages/profile_center.dart';
 import 'package:nabdh_alyaman/presentation/widgets/setting/profile_body.dart';
 
 class FakeProfileRepository implements ProfileRepository {
@@ -38,10 +36,6 @@ class FakeProfileRepository implements ProfileRepository {
   Future<Either<Failure, Donor>> getDataToProfilePage() async => Right(donor);
 
   @override
-  Future<Either<Failure, BloodCenter>> getProfileCenterData() async =>
-      Left(DoesnotSaveData());
-
-  @override
   Future<Either<Failure, Unit>> sendDataProfileSectionOne({
     required ProfileLocalData profileLocalData,
   }) async =>
@@ -54,18 +48,6 @@ class FakeProfileRepository implements ProfileRepository {
     lastBasicPatch = profileLocalData;
     return const Right(unit);
   }
-
-  @override
-  Future<Either<Failure, Unit>> sendBasicCenterDataProfile({
-    required ProfileCenterData profileCenterData,
-  }) async =>
-      const Right(unit);
-
-  @override
-  Future<Either<Failure, Unit>> sendProfileCenterData({
-    required ProfileCenterData profileCenterData,
-  }) async =>
-      const Right(unit);
 
   @override
   Future<Either<Failure, Donor>> uploadDonorProfileImage({

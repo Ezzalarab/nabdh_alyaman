@@ -6,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/utils.dart';
 import '../../domain/entities/blood_center.dart';
-import '../../presentation/cubit/profile_cubit/profile_cubit.dart';
+import '../../domain/models/center_profile_form.dart';
+import '../blocs/center/center_bloc.dart';
 import '../../presentation/pages/home_page.dart';
 import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/strings_manager.dart';
@@ -23,10 +24,39 @@ class ProfileCenterPage extends StatefulWidget {
 }
 
 class _ProfileCenterPageState extends State<ProfileCenterPage> {
-  // ProfileCenterData? profileCenterDataa;
+  Map<String, int> _stockBaseline = {};
 
-  Future<void> getProfileCenterData() async {
-    await BlocProvider.of<ProfileCubit>(context).getProfileCenterData();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<CenterBloc>().add(CenterProfileLoadRequested());
+    });
+  }
+
+  Future<String?> _askStockReason() async {
+    final controller = TextEditingController();
+    return showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('سبب التعديل (اختياري)'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(hintText: 'مثال: تبرع جماعي'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('إلغاء'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+            child: const Text('حفظ'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -37,55 +67,41 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
         elevation: 0,
       ),
       backgroundColor: ColorManager.white,
-      body: BlocConsumer<ProfileCubit, ProfileState>(
+      body: BlocConsumer<CenterBloc, CenterState>(
         listener: (context, state) {
-          if (state is ProfileGetCenterData) {
-            profileCenterData = ProfileCenterData(
-              aPlus: state.bloodCenter.aPlus,
-              aMinus: state.bloodCenter.aMinus,
-              abPlus: state.bloodCenter.abPlus,
-              abMinus: state.bloodCenter.abMinus,
-              oPlus: state.bloodCenter.oPlus,
-              oMinus: state.bloodCenter.oMinus,
-              bPlus: state.bloodCenter.bPlus,
-              bMinus: state.bloodCenter.bMinus,
-            );
-          } else if (state is ProfileFailure) {
+          if (state is CenterProfileLoaded) {
+            profileCenterData = ProfileCenterData.fromBloodCenter(state.center);
+            _stockBaseline = Map<String, int>.from(state.stockBaseline);
+          } else if (state is CenterFailure) {
             Utils.showSnackBar(
               context: context,
-              msg: state.error,
+              msg: state.message,
               color: ColorManager.error,
             );
-          } else if (state is ProfileSuccess) {
+          } else if (state is CenterSuccess) {
             Utils.showSnackBar(
               context: context,
-              msg: AppStrings.profileSuccesMess,
+              msg: state.message ?? AppStrings.profileSuccesMess,
               color: ColorManager.success,
             );
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const HomePage()),
-            );
+            if (state.message == null) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const HomePage()),
+              );
+            }
           }
         },
         builder: (context, state) {
-          if (state is ProfileLoadingBeforFetch) {
+          if (state is CenterLoadingBeforeFetch) {
             return const Center(child: LoadingWidget());
           }
-          if (state is ProfileLoading) {
+          if (state is CenterLoading) {
             return const Center(child: LoadingWidget());
           }
-          if (state is ProfileGetCenterData) {
-            profileCenterData = ProfileCenterData(
-              aPlus: state.bloodCenter.aPlus,
-              aMinus: state.bloodCenter.aMinus,
-              abPlus: state.bloodCenter.abPlus,
-              abMinus: state.bloodCenter.abMinus,
-              oPlus: state.bloodCenter.oPlus,
-              oMinus: state.bloodCenter.oMinus,
-              bPlus: state.bloodCenter.bPlus,
-              bMinus: state.bloodCenter.bMinus,
-            );
+          if (state is CenterProfileLoaded) {
+            profileCenterData = ProfileCenterData.fromBloodCenter(state.center);
+            _stockBaseline = Map<String, int>.from(state.stockBaseline);
 
             return Center(
               child: SingleChildScrollView(
@@ -127,10 +143,17 @@ class _ProfileCenterPageState extends State<ProfileCenterPage> {
                     MyButton(
                       title: AppStrings.profileButtonSave,
                       titleStyle: Theme.of(context).textTheme.titleLarge,
-                      onPressed: () {
-                        BlocProvider.of<ProfileCubit>(
-                          context,
-                        ).sendProfileCenterData(profileCenterData!);
+                      onPressed: () async {
+                        if (profileCenterData == null) return;
+                        final reason = await _askStockReason();
+                        if (!context.mounted || reason == null) return;
+                        context.read<CenterBloc>().add(
+                              CenterStockSaveSubmitted(
+                                current: profileCenterData!,
+                                baseline: _stockBaseline,
+                                reason: reason,
+                              ),
+                            );
                       },
                       minWidth: AppSize.s300,
                       color: ColorManager.secondary,
@@ -413,170 +436,4 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
       ],
     );
   }
-}
-
-class ProfileCenterData {
-  int? aPlus;
-  int? aMinus;
-  int? bPlus;
-  int? bMinus;
-  int? abPlus;
-  int? abMinus;
-  int? oPlus;
-  int? oMinus;
-
-  String? name;
-  String? phone;
-  String? district;
-  String? state;
-  String? neighborhood;
-
-  ProfileCenterData({
-    this.aPlus,
-    this.aMinus,
-    this.bPlus,
-    this.bMinus,
-    this.abPlus,
-    this.abMinus,
-    this.oPlus,
-    this.oMinus,
-    this.name,
-    this.phone,
-    this.district,
-    this.state,
-    this.neighborhood,
-  });
-  static int? getProfileCenterDataBlodTyeb(
-    String bloodType,
-    ProfileCenterData profileCenterData,
-  ) {
-    switch (bloodType) {
-      case BloodCenterFields.aPlus:
-        return profileCenterData.aPlus;
-      case BloodCenterFields.aMinus:
-        return profileCenterData.aMinus;
-      case BloodCenterFields.abPlus:
-        return profileCenterData.abPlus;
-      case BloodCenterFields.abMinus:
-        return profileCenterData.abMinus;
-      case BloodCenterFields.oPlus:
-        return profileCenterData.oPlus;
-      case BloodCenterFields.oMinus:
-        return profileCenterData.oMinus;
-      case BloodCenterFields.bPlus:
-        return profileCenterData.bPlus;
-      case BloodCenterFields.bMinus:
-        return profileCenterData.bMinus;
-    }
-    return null;
-  }
-
-  static int? incressProfileCenterDataBlodTyeb(
-    String bloodType,
-    ProfileCenterData profileCenterData,
-    int value,
-  ) {
-    switch (bloodType) {
-      case BloodCenterFields.aPlus:
-        {
-          profileCenterData.aPlus = value;
-          return profileCenterData.aPlus;
-        }
-      case BloodCenterFields.aMinus:
-        {
-          profileCenterData.aMinus = value;
-          return profileCenterData.aMinus;
-        }
-      case BloodCenterFields.abPlus:
-        {
-          profileCenterData.abPlus = value;
-          return profileCenterData.abPlus;
-        }
-      case BloodCenterFields.abMinus:
-        {
-          profileCenterData.abMinus = value;
-          return profileCenterData.abMinus;
-        }
-      case BloodCenterFields.oPlus:
-        {
-          profileCenterData.oPlus = value;
-          return profileCenterData.oPlus;
-        }
-      case BloodCenterFields.oMinus:
-        {
-          profileCenterData.oMinus = value;
-          return profileCenterData.oMinus;
-        }
-      case BloodCenterFields.bPlus:
-        {
-          profileCenterData.bPlus = value;
-          return profileCenterData.bPlus;
-        }
-      case BloodCenterFields.bMinus:
-        {
-          profileCenterData.bMinus = value;
-          return profileCenterData.bMinus;
-        }
-    }
-    return null;
-  }
-
-  // static IncOrDec(
-  //     String bloodType, ProfileCenterData profileCenterData, String op) {
-  //   print(op);
-  //   switch (bloodType) {
-  //     case BloodCenterField.aPlus:
-  //       {
-  //         // checkOperation(op,profileCenterData.aPlus!);
-  //         print(checkOperation(op, profileCenterData.aPlus!).toString());
-  //         return checkOperation(op, profileCenterData.aPlus!);
-  //       }
-  //     case BloodCenterField.aMinus:
-  //       {
-  //         return checkOperation(op, profileCenterData.aMinus!);
-  //       }
-  //     case BloodCenterField.abPlus:
-  //       {
-  //         return checkOperation(op, profileCenterData.abPlus!);
-  //       }
-  //     case BloodCenterField.abMinus:
-  //       {
-  //         return checkOperation(op, profileCenterData.abMinus!);
-  //       }
-  //     case BloodCenterField.oPlus:
-  //       {
-  //         return checkOperation(op, profileCenterData.oPlus!);
-  //       }
-  //     case BloodCenterField.oMinus:
-  //       {
-  //         print(checkOperation(op, profileCenterData.oMinus!).toString());
-  //         return checkOperation(op, profileCenterData.oMinus!);
-  //       }
-  //     case BloodCenterField.bPlus:
-  //       {
-  //         return checkOperation(op, profileCenterData.bPlus!);
-  //       }
-  //     case BloodCenterField.bMinus:
-  //       {
-  //         return checkOperation(op, profileCenterData.bMinus!);
-  //       }
-  //   }
-  // }
-
-  // static checkOperation(String bloodType, int value) {
-  //   print(value);
-  //   print(";;;;;;;;;;;;;;;;;");
-  //   switch (bloodType) {
-  //     case "plus":
-  //       {
-  //         print((value + 1).toString());
-  //         return (value = value + 1);
-  //       }
-  //     case "minus":
-  //       {
-  //         print((value - 1).toString());
-  //         return value - 1;
-  //       }
-  //   }
-  // }
 }

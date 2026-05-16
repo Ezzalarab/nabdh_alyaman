@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_endpoints.dart';
 import '../../../core/network/api_exception_mapper.dart';
+import '../../models/center_json_mapper.dart';
 import '../../models/donor_search_result.dart';
 import '../../../domain/entities/blood_center.dart';
 
@@ -51,51 +52,6 @@ class SearchRemoteDataSourceImpl implements SearchRemoteDataSource {
       }
     }
     return [];
-  }
-
-  int _readStock(Map<String, dynamic> map, String key) {
-    final v = map[key];
-    if (v is int) return v;
-    if (v is num) return v.toInt();
-    return int.tryParse(v?.toString() ?? '') ?? 0;
-  }
-
-  BloodCenter _centerFromJson(Map<String, dynamic> json) {
-    final stock = json['bloodStock'];
-    final stockMap =
-        stock is Map ? Map<String, dynamic>.from(stock) : <String, dynamic>{};
-
-    final stateObj = json['state'];
-    final districtObj = json['district'];
-    String locationName(dynamic obj) {
-      if (obj is! Map) return '';
-      final m = Map<String, dynamic>.from(obj);
-      return m['nameAr']?.toString() ?? m['name']?.toString() ?? '';
-    }
-
-    return BloodCenter(
-      name: json['name']?.toString() ?? '',
-      email: json['email']?.toString() ?? '',
-      password: '',
-      phone: json['phone']?.toString() ?? '',
-      state: locationName(stateObj),
-      district: locationName(districtObj),
-      neighborhood: json['locationName']?.toString() ?? '',
-      image: json['imageUrl']?.toString() ?? '',
-      lastUpdate: json['updatedAt']?.toString() ?? '',
-      lat: json['lat']?.toString() ?? '',
-      lon: json['lon']?.toString() ?? '',
-      token: '',
-      status: '1',
-      aPlus: _readStock(stockMap, 'A+'),
-      aMinus: _readStock(stockMap, 'A-'),
-      bPlus: _readStock(stockMap, 'B+'),
-      bMinus: _readStock(stockMap, 'B-'),
-      abPlus: _readStock(stockMap, 'AB+'),
-      abMinus: _readStock(stockMap, 'AB-'),
-      oPlus: _readStock(stockMap, 'O+'),
-      oMinus: _readStock(stockMap, 'O-'),
-    );
   }
 
   @override
@@ -167,7 +123,7 @@ class SearchRemoteDataSourceImpl implements SearchRemoteDataSource {
         },
       );
       final list = _extractList(res.data);
-      return list.map(_centerFromJson).toList(growable: false);
+      return list.map(bloodCenterFromApiJson).toList(growable: false);
     } on DioException catch (e) {
       throw mapDioExceptionToFailure(e);
     }

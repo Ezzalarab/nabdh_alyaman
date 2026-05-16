@@ -11,10 +11,12 @@ import 'core/constants/storage_keys.dart';
 import 'di.dart' as di;
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/auth/auth_state.dart';
+import 'presentation/blocs/center/center_bloc.dart';
 import 'presentation/blocs/profile/profile_bloc.dart';
 import 'presentation/blocs/search/search_bloc.dart';
-import 'presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'presentation/cubit/send_notfication/send_notfication_cubit.dart';
+import 'presentation/pages/center/center_donation_page.dart';
+import 'presentation/pages/center/center_stock_history_page.dart';
 import 'presentation/pages/about_page.dart';
 import 'presentation/pages/edit_main_center_data.dart';
 import 'presentation/pages/home_page.dart';
@@ -51,7 +53,7 @@ void main() async {
         BlocProvider<AuthBloc>(create: (_) => di.gi<AuthBloc>()),
         BlocProvider(create: (_) => di.gi<GlobalCubit>()),
         BlocProvider(create: (_) => di.gi<SearchBloc>()),
-        BlocProvider(create: (_) => di.gi<ProfileCubit>()),
+        BlocProvider(create: (_) => di.gi<CenterBloc>()),
         BlocProvider(create: (_) => di.gi<ProfileBloc>()),
         BlocProvider(
           create: (_) => di.gi<SendNotficationCubit>(),
@@ -99,6 +101,9 @@ class MyApp extends StatelessWidget {
         ProfileCenterPage.routeName: (context) => const ProfileCenterPage(),
         EditMainCenterDataPage.routeName: (context) =>
             const EditMainCenterDataPage(),
+        CenterDonationPage.routeName: (context) => const CenterDonationPage(),
+        CenterStockHistoryPage.routeName: (context) =>
+            const CenterStockHistoryPage(),
         AboutPage.routeName: (context) => const AboutPage(),
       },
       ),

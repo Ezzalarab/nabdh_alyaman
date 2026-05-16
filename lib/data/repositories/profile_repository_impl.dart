@@ -1,11 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_null_comparison
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../core/error/failures.dart';
 import '../../core/network/network_info.dart';
@@ -13,10 +10,8 @@ import '../../data/datasources/local/session_local_datasource.dart';
 import '../../data/datasources/remote/donor_remote_datasource.dart';
 import '../../data/datasources/remote/files_remote_datasource.dart';
 import 'package:path_provider/path_provider.dart';
-import '../../domain/entities/blood_center.dart';
 import '../../domain/entities/donor.dart';
 import '../../domain/repositories/profile_repository.dart';
-import '../../presentation/pages/profile_center.dart';
 import '../../presentation/widgets/setting/profile_body.dart';
 
 class ProfileReopsitoryImpl implements ProfileRepository {
@@ -33,11 +28,7 @@ class ProfileReopsitoryImpl implements ProfileRepository {
   final FilesRemoteDataSource filesRemote;
   final SessionLocalDataSource sessionLocal;
 
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
   Donor? donors;
-  BloodCenter? bloodCenter;
 
   Future<bool> _isDonorSession() async {
     final role = await sessionLocal.getRole();
@@ -167,86 +158,5 @@ class ProfileReopsitoryImpl implements ProfileRepository {
     );
     if (result == null) return file;
     return File(result.path);
-  }
-
-  // —— Center profile (Firestore until phase 3) ——
-
-  @override
-  Future<Either<Failure, Unit>> sendBasicCenterDataProfile({
-    required ProfileCenterData profileCenterData,
-  }) async {
-    if (await networkInfo.isConnected) {
-      try {
-        final user = _firebaseAuth.currentUser;
-        if (user != null) {
-          return await _fireStore.collection('centers').doc(user.uid).update({
-            DonorFields.name: profileCenterData.name,
-            DonorFields.phone: profileCenterData.phone,
-            DonorFields.state: profileCenterData.state,
-            DonorFields.district: profileCenterData.district,
-            DonorFields.neighborhood: profileCenterData.neighborhood,
-          }).then((_) async => const Right(unit));
-        }
-        return Left(DoesnotSaveData());
-      } catch (e) {
-        return Left(DoesnotSaveData());
-      }
-    }
-    return Left(OffLineFailure());
-  }
-
-  @override
-  Future<Either<Failure, Unit>> sendProfileCenterData({
-    required ProfileCenterData profileCenterData,
-  }) async {
-    if (await networkInfo.isConnected) {
-      try {
-        final user = _firebaseAuth.currentUser;
-        if (user != null) {
-          return await _fireStore.collection('centers').doc(user.uid).update({
-            BloodCenterFields.aPlus: profileCenterData.aPlus,
-            BloodCenterFields.aMinus: profileCenterData.aMinus,
-            BloodCenterFields.abPlus: profileCenterData.abPlus,
-            BloodCenterFields.abMinus: profileCenterData.abMinus,
-            BloodCenterFields.oPlus: profileCenterData.oPlus,
-            BloodCenterFields.oMinus: profileCenterData.oMinus,
-            BloodCenterFields.bPlus: profileCenterData.bPlus,
-            BloodCenterFields.bMinus: profileCenterData.bMinus,
-            BloodCenterFields.lastUpdate: DateTime.now().toString(),
-          }).then((_) async => const Right(unit));
-        }
-        return Left(DoesnotSaveData());
-      } catch (e) {
-        return Left(DoesnotSaveData());
-      }
-    }
-    return Left(OffLineFailure());
-  }
-
-  @override
-  Future<Either<Failure, BloodCenter>> getProfileCenterData() async {
-    if (await networkInfo.isConnected) {
-      try {
-        final user = _firebaseAuth.currentUser;
-        if (user != null) {
-          return await _fireStore
-              .collection('centers')
-              .doc(user.uid)
-              .get()
-              .then((value) async {
-            bloodCenter = BloodCenter.fromMap(value.data()!);
-            if (kDebugMode) {
-              print(value.id);
-              print(bloodCenter!.name);
-            }
-            return Right(bloodCenter!);
-          });
-        }
-        return Left(DoesnotSaveData());
-      } catch (e) {
-        return Left(DoesnotSaveData());
-      }
-    }
-    return Left(OffLineFailure());
   }
 }

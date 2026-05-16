@@ -29,4 +29,12 @@ class ApiEndpoints {
   static const donorSearch = '/donor-search';
   static const donorSearchManual = '/donor-search/manual';
   static const centers = '/centers';
+  static const centersMe = '/centers/me';
+  static const centersMeStock = '/centers/me/stock';
+  static const centersMeStockHistory = '/centers/me/stock/history';
+  static const centersMeDonations = '/centers/me/donations';
+
+  static String centerById(int id) => '/centers/$id';
+
+  static String centerStockById(int id) => '/centers/$id/stock';
 }

@@ -35,7 +35,7 @@
 - [x] 06 — بحث ومواقع: `SearchBloc`، `GET /donor-search`/`/manual`، `/centers`، picker مواقع API، خريطة من نتائج البحث؛ حذف `SearchCubit`/`MapsCubit`؛ Drift schema في `lib/data/local/drift/` — شغّل `dart run build_runner build` عند تفعيل SQLite cache
 
 ## المرحلة 3 — المركز
-- [ ] 07 — مركز ومخزون: `CenterBloc`، `GET/PATCH /centers/me`، المخزون وتسجيل التبرع، رسائل `eligibleUntil` حسب العقد (بدون تكرار منطق السيرفر في العميل)
+- [x] 07 — مركز ومخزون: `CenterBloc`، `GET/PATCH /centers/me`، stock deltas، `POST /centers/me/donations`، سجل المخزون؛ حذف `ProfileCubit` + Firestore centers (`tasks/center_phase3.md`)
 
 ## المرحلة 4 — المحتوى والإشعارات
 - [ ] 08 — إعدادات التطبيق والملفات: `AppConfigBloc` أو ما يعادله، `GET /app-config`، قوائم السلايدر/الفعاليات حسب الاستجابة الفعلية، استبدال `update.dart`/Firestore للإجبار على التحديث
