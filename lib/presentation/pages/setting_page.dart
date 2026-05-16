@@ -7,7 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/utils.dart';
 import '../../domain/entities/donor.dart';
-import '../cubit/profile_cubit/profile_cubit.dart';
+import '../blocs/profile/profile_bloc.dart';
 import '../resources/color_manageer.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
@@ -112,7 +112,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void initState() {
     super.initState();
-    // getData();
+    context.read<ProfileBloc>().add(ProfileLoadRequested());
     getPermission();
   }
 
@@ -135,7 +135,7 @@ class _SettingPageState extends State<SettingPage> {
       ),
       backgroundColor: ColorManager.white,
       body:
-          BlocConsumer<ProfileCubit, ProfileState>(listener: (context, state) {
+          BlocConsumer<ProfileBloc, ProfileState>(listener: (context, state) {
         if (state is ProfileGetData) {
         } else if (state is ProfileFailure) {
           Utils.showSnackBar(

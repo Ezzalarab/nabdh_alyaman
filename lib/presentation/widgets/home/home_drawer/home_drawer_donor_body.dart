@@ -7,9 +7,8 @@ import '../../../blocs/auth/auth_event.dart';
 import '../../../blocs/auth/auth_state.dart';
 import '../../../../core/urls.dart';
 import '../../../../core/utils.dart';
-import '../../../cubit/profile_cubit/profile_cubit.dart';
+import '../../../blocs/profile/profile_bloc.dart';
 import '../../../pages/about_page.dart';
-import '../../../pages/home_page.dart';
 import '../../../pages/setting_page.dart';
 import '../../../pages/sign_in_page.dart';
 import '../../../resources/strings_manager.dart';
@@ -31,7 +30,7 @@ class HomeDrawerDonorBody extends StatelessWidget {
             onTap: () {
               final authed =
                   context.read<AuthBloc>().state is AuthAuthenticated;
-              BlocProvider.of<ProfileCubit>(context).getDataToProfilePage();
+              context.read<ProfileBloc>().add(ProfileLoadRequested());
               if (authed) {
                 Navigator.of(context).pop();
                 Navigator.push<void>(
@@ -81,7 +80,7 @@ class HomeDrawerDonorBody extends StatelessWidget {
             onTap: () {
               context.read<AuthBloc>().add(AuthLogoutRequested());
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute<void>(builder: (_) => const HomePage()),
+                MaterialPageRoute<void>(builder: (_) => const SignInPage()),
                 (_) => false,
               );
             },

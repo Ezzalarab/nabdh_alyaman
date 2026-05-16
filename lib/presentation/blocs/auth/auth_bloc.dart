@@ -92,6 +92,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(AuthUnauthenticated());
           return;
         }
+        if (failure is ForbiddenFailure && failure.apiCode == 'BLOCKED') {
+          emit(
+            AuthFailure(
+              failure.message ?? 'تم حظر حسابك. يُرجى التواصل مع الدعم.',
+            ),
+          );
+          emit(AuthUnauthenticated());
+          return;
+        }
         emit(AuthFailure(_mapFailureMessage(failure)));
         emit(AuthUnauthenticated());
       },
@@ -111,7 +120,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final res = await _authRepo.registerDonor(event.params);
     await res.fold(
       (failure) async {
-        emit(AuthFailure(_mapFailureMessage(failure)));
+        emit(AuthFailure(_mapRegisterFailureMessage(failure)));
         emit(AuthUnauthenticated());
       },
       (session) async {
@@ -210,7 +219,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   static String _mapFailureMessage(Failure f) => switch (f) {
         UnauthorizedFailure(:final message) =>
           message ?? 'بيانات الدخول غير صحيحة',
-        ForbiddenFailure(:final message) => message ?? 'تم رفض الطلب',
+        ForbiddenFailure(:final apiCode, :final message) =>
+          apiCode == 'BLOCKED'
+              ? (message ?? 'تم حظر حسابك. يُرجى التواصل مع الدعم.')
+              : (message ?? 'تم رفض الطلب'),
         ValidationFailure(:final message) =>
           message ?? 'تأكد من صحة البيانات المدخلة',
         ThrottledFailure(:final message) =>
@@ -219,6 +231,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ServerFailure() => 'خطأ في الخادم، حاول لاحقاً',
         _ => 'حدث خطأ غير متوقع',
       };
+
+  static String _mapRegisterFailureMessage(Failure f) {
+    if (f is ValidationFailure) {
+      return 'هذا الرقم مسجّل مسبقاً. سجّل الدخول أو استخدم «نسيت كلمة المرور».';
+    }
+    return _mapFailureMessage(f);
+  }
 
   @override
   Future<void> close() {

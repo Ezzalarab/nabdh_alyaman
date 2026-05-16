@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/utils.dart';
 import '../../../domain/entities/donor.dart';
-import '../../cubit/profile_cubit/profile_cubit.dart';
+import '../../blocs/profile/profile_bloc.dart';
 import '../../pages/edit_main_data_page.dart';
 import '../../resources/color_manageer.dart';
 import '../../resources/strings_manager.dart';
@@ -144,9 +144,9 @@ class _ProfileBodyState extends State<ProfileBody> {
           minWidth: MediaQuery.of(context).size.width * 0.85,
           onPressed: (() {
             if (profileLocalData != null) {
-              BlocProvider.of<ProfileCubit>(
-                context,
-              ).sendDataProfileSectionOne(profileLocalData!);
+              context.read<ProfileBloc>().add(
+                    ProfileSectionOneUpdateSubmitted(profileLocalData!),
+                  );
             } else {
               Utils.showSnackBar(
                 context: context,
@@ -178,7 +178,7 @@ class EditBasicData extends StatelessWidget {
       ),
       onTap: () {
         // di.initProfile();
-        BlocProvider.of<ProfileCubit>(context).getDataToProfilePage();
+        context.read<ProfileBloc>().add(ProfileLoadRequested());
         Navigator.of(context).push(
           MaterialPageRoute<void>(
             builder: (BuildContext context) => const EditMainDataPage(),

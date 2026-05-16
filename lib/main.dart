@@ -9,7 +9,9 @@ import 'package:nabdh_alyaman/presentation/cubit/global_cubit/global_cubit.dart'
 
 import 'di.dart' as di;
 import 'presentation/blocs/auth/auth_bloc.dart';
+import 'presentation/blocs/auth/auth_state.dart';
 import 'presentation/cubit/maps_cubit/maps_cubit.dart';
+import 'presentation/blocs/profile/profile_bloc.dart';
 import 'presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'presentation/cubit/search_cubit/search_cubit.dart';
 import 'presentation/cubit/send_notfication/send_notfication_cubit.dart';
@@ -51,6 +53,7 @@ void main() async {
         BlocProvider(create: (_) => di.gi<GlobalCubit>()),
         BlocProvider(create: (_) => di.gi<SearchCubit>()),
         BlocProvider(create: (_) => di.gi<ProfileCubit>()),
+        BlocProvider(create: (_) => di.gi<ProfileBloc>()),
         BlocProvider(
           create: (_) => di.gi<SendNotficationCubit>(),
         ),
@@ -66,7 +69,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return BlocListener<AuthBloc, AuthState>(
+      listenWhen: (previous, current) =>
+          current is AuthUnauthenticated && previous is AuthAuthenticated,
+      listener: (context, state) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute<void>(builder: (_) => const SignInPage()),
+          (_) => false,
+        );
+      },
+      child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: getApplicationTheme(),
       locale: const Locale('ar', 'AE'),
@@ -92,6 +104,7 @@ class MyApp extends StatelessWidget {
             const EditMainCenterDataPage(),
         AboutPage.routeName: (context) => const AboutPage(),
       },
+      ),
     );
   }
 }

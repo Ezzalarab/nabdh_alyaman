@@ -16,6 +16,7 @@ import 'data/datasources/local/preferences_local_datasource_impl.dart';
 import 'data/datasources/local/session_local_datasource.dart';
 import 'data/datasources/local/session_local_datasource_impl.dart';
 import 'data/datasources/remote/auth_remote_datasource.dart';
+import 'data/datasources/remote/donor_remote_datasource.dart';
 import 'data/datasources/remote/locations_remote_datasource.dart';
 import 'data/repositories/auth_repo_impl.dart';
 import 'data/repositories/global_repo_impl.dart';
@@ -34,6 +35,7 @@ import 'domain/usecases/search_donors_uc.dart';
 import 'domain/usecases/search_state_donors_uc.dart';
 import 'domain/usecases/send_notfication_.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
+import 'presentation/blocs/profile/profile_bloc.dart';
 import 'presentation/cubit/global_cubit/global_cubit.dart';
 import 'presentation/cubit/profile_cubit/profile_cubit.dart';
 import 'presentation/cubit/search_cubit/search_cubit.dart';
@@ -83,6 +85,9 @@ Future<void> initApp() async {
   gi.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(gi()),
   );
+  gi.registerLazySingleton<DonorRemoteDataSource>(
+    () => DonorRemoteDataSourceImpl(gi()),
+  );
 
   gi.registerLazySingleton<AuthRepo>(
     () => AuthRepositoryImpl(
@@ -111,10 +116,15 @@ Future<void> initApp() async {
   );
 
   gi.registerLazySingleton<ProfileRepository>(
-    () => ProfileReopsitoryImpl(networkInfo: gi()),
+    () => ProfileReopsitoryImpl(
+      networkInfo: gi(),
+      donorRemote: gi(),
+      sessionLocal: gi(),
+    ),
   );
   gi.registerLazySingleton(() => ProfileUseCase(profileRepository: gi()));
   gi.registerLazySingleton(() => ProfileCubit(profileUseCase: gi()));
+  gi.registerLazySingleton(() => ProfileBloc(profileUseCase: gi()));
 
   gi.registerLazySingleton<SendNotficationRepository>(
     () => SendNotficationImpl(networkInfo: gi()),

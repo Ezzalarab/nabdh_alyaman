@@ -63,6 +63,7 @@ flutter_icons:
   image_path: 'assets/images/nabdh square.png'
 
 dev_dependencies:
+  bloc_test: ^10.0.0
   build_runner: ^2.10.5
   flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0

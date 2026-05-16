@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/utils.dart';
 import '../../domain/entities/blood_types.dart';
-import '../../presentation/cubit/profile_cubit/profile_cubit.dart';
+import '../../presentation/blocs/profile/profile_bloc.dart';
 import '../../presentation/resources/color_manageer.dart';
 import '../../presentation/resources/strings_manager.dart';
 import '../../presentation/resources/values_manager.dart';
@@ -36,6 +36,10 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<ProfileBloc>().add(ProfileLoadRequested());
+    });
   }
 
   @override
@@ -45,7 +49,7 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
           title: const Text(AppStrings.profileEditMainDataPageTitle),
         ),
         backgroundColor: ColorManager.white,
-        body: BlocConsumer<ProfileCubit, ProfileState>(
+        body: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {},
           builder: (context, state) {
             if (state is ProfileLoadingBeforFetch) {
@@ -262,9 +266,11 @@ class _EditMainDataPageState extends State<EditMainDataPage> {
                             _formStateBloodType.currentState!.save();
                             if (profileLocalData != null) {
                               profileLocalData!.bloodType = bloodType;
-                              BlocProvider.of<ProfileCubit>(context)
-                                  .sendBasicDataProfileSectionOne(
-                                      profileLocalData!);
+                              context.read<ProfileBloc>().add(
+                                    ProfileBasicDataUpdateSubmitted(
+                                      profileLocalData!,
+                                    ),
+                                  );
                             } else {
                               Utils.showSnackBar(
                                 context: context,

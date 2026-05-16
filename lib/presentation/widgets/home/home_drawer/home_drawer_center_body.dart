@@ -10,7 +10,6 @@ import '../../../../core/utils.dart';
 import '../../../cubit/profile_cubit/profile_cubit.dart';
 import '../../../pages/about_page.dart';
 import '../../../pages/edit_main_center_data.dart';
-import '../../../pages/home_page.dart';
 import '../../../pages/profile_center.dart';
 import '../../../pages/sign_in_page.dart';
 import '../../../resources/strings_manager.dart';
@@ -111,7 +110,7 @@ class HomeDrawerCenterBody extends StatelessWidget {
             onTap: () {
               context.read<AuthBloc>().add(AuthLogoutRequested());
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute<void>(builder: (_) => const HomePage()),
+                MaterialPageRoute<void>(builder: (_) => const SignInPage()),
                 (_) => false,
               );
             },

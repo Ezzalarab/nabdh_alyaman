@@ -22,16 +22,16 @@
 - [x] ملف المهمة الرئيسي (`tasks/migration_master.md`)
 
 ## المرحلة 0 — الأساس
-- [ ] 00 — نظرة عامة والمراحل (قراءة/اتفاق فريقي على الترتيب وعدم Admin)
+- [x] 00 — نظرة عامة والمراحل (قراءة/اتفاق فريقي على الترتيب وعدم Admin)
 - [x] 01 — شبكة وجلسة: Dio، اعتراضات JWT + refresh + `x-device-id`، `ApiClient`/`ApiEndpoints`/`AppConfig(apiBaseUrl)`، توسعة `failures`
 - [x] 02 — تخزين: مصادر جلسة (secure tokens + meta)، `PreferencesLocalDataSource` (device UUID)، كاش مواقع يدويًا عبر SharedPreferences (+ JSON؛ الانتقال لـ Drift عند تشغيل `build_runner`)
 - [x] 03 — DI: ترتيب GetIt؛ `MapsCubit`؛ `AuthBloc lazySingleton`; بلا `initSignIn`/`initSignUp`.
 
 ## المرحلة 1 — المصادقة
-- [x] 04 — مصادقة: `AuthBloc` + `AuthRemoteDataSource` + `AuthRepositoryImpl` (REST)، استبدال صفحات الدخول/التسجيل، مسار نسيت كلمة المرور + OTP، `NEEDS_FIREBASE_PASSWORD`، `POST /auth/device` بعد الدخول/استرداد الجلسة، حذف `signin_cubit`/`signup_cubit`.
+- [x] 04 — مصادقة: `AuthBloc` + REST، توجيه Splash/Logout، `BLOCKED` + 400 تسجيل مكرر، `test/blocs/auth_bloc_test.dart` — إغلاق المرحلة 1 (2026-05-16).
 
 ## المرحلة 2 — المتبرع
-- [ ] 05 — ملف المتبرع: `ProfileBloc` (أو ما يعادله)، `GET/PATCH /donors/me`، رفع صورة عبر `/files`، إزالة اعتماد Hive للملف الشخصي
+- [x] 05 — ملف المتبرع (أساس): `ProfileBloc` + `DonorRemoteDataSource` + `GET/PATCH /donors/me` للمتبرع؛ Firebase للمركز مؤقتاً — رفع صورة `/files` لاحقاً في نفس المرحلة
 - [ ] 06 — بحث ومواقع: `SearchBloc`، `GET /donor-search` و`/manual`، مراكز على الخريطة، مزامنة Drift مع `/locations`، استبدال تدفق `csc_picker`/`country.json` بالمخطّط في الوثيقة
 
 ## المرحلة 3 — المركز

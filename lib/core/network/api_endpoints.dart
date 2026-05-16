@@ -18,4 +18,7 @@ class ApiEndpoints {
 
   /// Public list under `/locations`.
   static const locationsStates = '/locations';
+
+  static const donorsMe = '/donors/me';
+  static const donorsMeDonations = '/donors/me/donations';
 }
