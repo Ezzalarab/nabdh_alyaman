@@ -37,4 +37,14 @@ class ApiEndpoints {
   static String centerById(int id) => '/centers/$id';
 
   static String centerStockById(int id) => '/centers/$id/stock';
+
+  static const appConfig = '/app-config';
+
+  static String appConfigKey(String key) => '/app-config/$key';
+
+  static const notifications = '/notifications';
+
+  static String notificationRead(int id) => '/notifications/$id/read';
+
+  static const notificationsReadAll = '/notifications/read-all';
 }

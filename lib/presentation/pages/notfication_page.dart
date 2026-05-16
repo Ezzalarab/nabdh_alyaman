@@ -1,190 +1,143 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:geolocator/geolocator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-// import '../../core/methode/shared_method.dart';
-// import '../../domain/entities/donor.dart';
-// import '../../domain/entities/get_notfication.dart';
-// import '../../presentation/resources/color_manageer.dart';
-// import '../../presentation/resources/values_manager.dart';
-// import '../widgets/common/loading_widget.dart';
+import '../../domain/entities/app_notification.dart';
+import '../blocs/notifications/notifications_bloc.dart';
+import '../resources/color_manageer.dart';
+import '../widgets/common/loading_widget.dart';
 
-// // ignore: must_be_immutable
-// class NotFicationPage extends StatefulWidget {
-//   NotFicationPage({this.remoteMessage, this.dateTime, super.key});
-//   RemoteNotification? remoteMessage;
-//   DateTime? dateTime;
-//   static const String routeName = "notfication_page";
+class NotificationPage extends StatefulWidget {
+  const NotificationPage({super.key});
 
-//   @override
-//   State<NotFicationPage> createState() => _NotFicationPageState();
-// }
+  static const String routeName = 'notification_page';
 
-// class _NotFicationPageState extends State<NotFicationPage> {
-//   late Position position;
-//   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-//   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  @override
+  State<NotificationPage> createState() => _NotificationPageState();
+}
 
-//   getLocation() async {
-//     await SharedMethod().checkGps();
-//     position = await Geolocator.getCurrentPosition(
-//             desiredAccuracy: LocationAccuracy.high)
-//         .then((value) {
-//       print(value.latitude);
-//       print(value.longitude);
-//       Fluttertoast.showToast(msg: widget.remoteMessage!.body.toString());
-//       return value;
-//     });
-//     if (_firebaseAuth.currentUser != null) {
-//       await FirebaseFirestore.instance
-//           .collection('donors')
-//           .doc(_firebaseAuth.currentUser!.uid)
-//           .update({
-//         DonorFields.lat: position.latitude.toString(),
-//         DonorFields.lon: position.longitude.toString()
-//       }).then((value) async {
-//         print("okkkkkkkkkkkkkkkkkkkkkkkk");
-//       });
-//     }
-//   }
+class _NotificationPageState extends State<NotificationPage> {
+  final ScrollController _scrollController = ScrollController();
 
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     // getLocation();
-//   }
+  @override
+  void initState() {
+    super.initState();
+    context.read<NotificationsBloc>().add(NotificationsLoadRequested());
+    _scrollController.addListener(_onScroll);
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     // final RemoteNotification remoteMessager =
-//     //     ModalRoute.of(context)?.settings.arguments as RemoteNotification;
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final state = context.read<NotificationsBloc>().state;
+    if (state is! NotificationsLoaded) return;
+    if (state.loadingMore || state.nextCursor == null) return;
+    if (_scrollController.position.pixels <
+        _scrollController.position.maxScrollExtent - 200) {
+      return;
+    }
+    context.read<NotificationsBloc>().add(
+          NotificationsLoadRequested(
+            append: true,
+            cursor: state.nextCursor,
+          ),
+        );
+  }
 
-//     // print(widget.remoteMessage!.title);
-//     // print(FirebaseMessaging.instance.getToken().then(
-//     //       (value) => print(value),
-//     //     ));
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text("الإشعارات"),
-//       ),
-//       backgroundColor: ColorManager.white,
-//       body: StreamBuilder<QuerySnapshot>(
-//         stream: _firebaseFirestore
-//             .collection("notifications")
-//             .where('donor_id',
-//                 isEqualTo: _firebaseAuth.currentUser!.uid.toString())
-//             .where('isRead', isEqualTo: "1")
-//             .snapshots(),
-//         builder: (context, snapshot) {
-//           if (!snapshot.hasData) {
-//             return const Center(
-//               child: LoadingWidget(),
-//             );
-//           }
-//           List<GetNotficationData> notfication = snapshot.data!.docs.map((doc) {
-//             return GetNotficationData(
-//                 title: doc.get("title"),
-//                 body: doc.get("body"),
-//                 date: doc.get("createdAt"),
-//                 isRead: doc.get("isRead"),
-//                 donorID: doc.get("donor_id"));
-//           }).toList();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('الإشعارات'),
+        actions: [
+          TextButton(
+            onPressed: () => context
+                .read<NotificationsBloc>()
+                .add(NotificationsMarkAllReadRequested()),
+            child: const Text('قراءة الكل'),
+          ),
+        ],
+      ),
+      backgroundColor: ColorManager.white,
+      body: BlocBuilder<NotificationsBloc, NotificationsState>(
+        builder: (context, state) {
+          if (state is NotificationsLoading) {
+            return const Center(child: LoadingWidget());
+          }
+          if (state is NotificationsFailure) {
+            return Center(child: Text(state.message));
+          }
+          if (state is NotificationsLoaded) {
+            if (state.items.isEmpty) {
+              return const Center(child: Text('لا توجد إشعارات'));
+            }
+            return ListView.builder(
+              controller: _scrollController,
+              itemCount: state.items.length + (state.loadingMore ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index >= state.items.length) {
+                  return const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(child: LoadingWidget()),
+                  );
+                }
+                return _NotificationTile(
+                  item: state.items[index],
+                  onTap: () {
+                    final id = state.items[index].id;
+                    if (id > 0) {
+                      context
+                          .read<NotificationsBloc>()
+                          .add(NotificationMarkReadRequested(id));
+                    }
+                  },
+                );
+              },
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
+    );
+  }
+}
 
-//           if (notfication.isEmpty) {
-//             return const Center(
-//               child: Text("لا يوجد اشعارات"),
-//             );
-//           }
+class _NotificationTile extends StatelessWidget {
+  const _NotificationTile({required this.item, required this.onTap});
 
-//           return AnimationLimiter(
-//             child: ListView.builder(
-//               physics: const BouncingScrollPhysics(
-//                   parent: AlwaysScrollableScrollPhysics()),
-//               padding: EdgeInsets.all(MediaQuery.of(context).size.width / 50),
-//               itemCount: notfication.length,
-//               itemBuilder: (BuildContext context, int index) {
-//                 return AnimationConfiguration.staggeredList(
-//                   position: index,
-//                   delay: const Duration(milliseconds: 100),
-//                   child: SlideAnimation(
-//                     duration: const Duration(milliseconds: 2000),
-//                     curve: Curves.fastLinearToSlowEaseIn,
-//                     horizontalOffset: -20,
-//                     verticalOffset: -100,
-//                     child: Column(
-//                       children: [
-//                         // const SizedBox(height: 50),
-//                         Padding(
-//                           padding: const EdgeInsets.all(12.0),
-//                           child: Stack(
-//                             children: [
-//                               Container(
-//                                 height: 160,
-//                                 decoration: BoxDecoration(
-//                                     color: ColorManager.white,
-//                                     borderRadius:
-//                                         BorderRadius.circular(AppSize.s20)),
-//                               ),
-//                               Positioned(
-//                                   top: 50,
-//                                   right: 10,
-//                                   child: Image.asset(
-//                                     "assets/images/boy.png",
-//                                     height: 80,
-//                                     width: 100,
-//                                   )),
-//                               Positioned(
-//                                   top: 20,
-//                                   left: 70,
-//                                   child: Text(notfication[index]
-//                                       .date
-//                                       .substring(0, 10))),
-//                               Positioned(
-//                                   bottom: 80,
-//                                   right: 130,
-//                                   child: Text(
-//                                     notfication[index].title,
-//                                     style: const TextStyle(
-//                                         fontSize: 20,
-//                                         fontWeight: FontWeight.bold),
-//                                   )),
-//                               Positioned(
-//                                   bottom: 50,
-//                                   right: 130,
-//                                   child: Text(notfication[index].body)),
-//                               const Positioned(
-//                                   top: 20, right: 60, child: Text("تاريخ ")),
-//                               Positioned(
-//                                   top: 5,
-//                                   left: 0,
-//                                   child: IconButton(
-//                                     onPressed: () {
-//                                       _firebaseFirestore
-//                                           .collection("notifications")
-//                                           .doc(snapshot.data!.docs[index].id
-//                                               .toString())
-//                                           .update({'isRead': "0"});
-//                                     },
-//                                     icon: const Icon(Icons.close),
-//                                   )),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 );
-//               },
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+  final AppNotification item;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      tileColor: item.isRead ? null : ColorManager.primary.withOpacity(0.05),
+      title: Text(
+        item.title.isNotEmpty ? item.title : 'إشعار',
+        style: TextStyle(
+          fontWeight: item.isRead ? FontWeight.normal : FontWeight.bold,
+        ),
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (item.body.isNotEmpty) Text(item.body),
+          if (item.createdAt.isNotEmpty)
+            Text(
+              item.createdAt,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+        ],
+      ),
+      leading: Icon(
+        item.isRead ? Icons.notifications_none : Icons.notifications_active,
+        color: ColorManager.primary,
+      ),
+    );
+  }
+}

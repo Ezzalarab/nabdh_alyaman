@@ -1,13 +1,12 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/check_active.dart';
+import '../../core/update.dart';
+import '../blocs/app_config/app_config_bloc.dart';
 import '../blocs/auth/auth_bloc.dart';
 import '../blocs/auth/auth_event.dart';
 import '../blocs/auth/auth_state.dart';
-import '../cubit/global_cubit/global_cubit.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
 import '../widgets/common/dialog_lottie.dart';
@@ -25,13 +24,14 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   static const _minSplashDuration = Duration(milliseconds: 1000);
 
+  final AppUpdateDialog _updateDialog = AppUpdateDialog();
   bool _minElapsed = false;
   bool _navigated = false;
 
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<GlobalCubit>(context, listen: false).getGlobalData();
+    context.read<AppConfigBloc>().add(AppConfigLoadRequested());
     context.read<AuthBloc>().add(AuthCheckRequested());
     Future<void>.delayed(_minSplashDuration, () {
       if (!mounted) return;
@@ -62,8 +62,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     CheckActive.checkActiveUser();
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) => _maybeNavigate(state),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) => _maybeNavigate(state),
+        ),
+        BlocListener<AppConfigBloc, AppConfigState>(
+          listener: (context, state) {
+            if (state is AppUpdateRequired) {
+              _updateDialog.showIfNeeded(context, state.policy);
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         backgroundColor: ColorManager.white,
         body: Center(

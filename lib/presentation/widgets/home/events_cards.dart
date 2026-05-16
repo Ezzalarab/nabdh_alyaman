@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/data_sources/local_data.dart';
 import '../../../domain/entities/event_card_data.dart';
-import '../../cubit/global_cubit/global_cubit.dart';
+import '../../../domain/entities/global_app_data.dart';
+import '../../blocs/app_config/app_config_bloc.dart';
 import '../../resources/color_manageer.dart';
 import '../../resources/values_manager.dart';
 import 'event_card.dart';
@@ -11,19 +12,25 @@ import 'event_card.dart';
 class EventsCards extends StatelessWidget {
   const EventsCards({super.key});
 
+  GlobalAppData _data(AppConfigState state, AppConfigBloc bloc) =>
+      switch (state) {
+        AppConfigLoaded(:final data) => data,
+        AppUpdateRequired(:final data) => data,
+        AppConfigFailure(:final data) => data,
+        _ => bloc.data,
+      };
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GlobalCubit, GlobalState>(
+    return BlocBuilder<AppConfigBloc, AppConfigState>(
       builder: (context, state) {
-        String eventsTitle = LocalData.initialAppData.eventsTitle;
-        if (state is GlobalStateSuccess) {
-          eventsTitle = state.appData.eventsTitle;
-        }
-        List<EventCardData> eventsCardsData =
-            LocalData.initialAppData.eventsCardsData;
-        if (state is GlobalStateSuccess) {
-          eventsCardsData = state.appData.eventsCardsData;
-        }
+        final bloc = context.read<AppConfigBloc>();
+        final appData = _data(state, bloc);
+        final eventsTitle = appData.eventsTitle.isNotEmpty
+            ? appData.eventsTitle
+            : LocalData.initialAppData.eventsTitle;
+        final List<EventCardData> eventsCardsData = appData.eventsCardsData;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

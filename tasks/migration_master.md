@@ -38,8 +38,8 @@
 - [x] 07 — مركز ومخزون: `CenterBloc`، `GET/PATCH /centers/me`، stock deltas، `POST /centers/me/donations`، سجل المخزون؛ حذف `ProfileCubit` + Firestore centers (`tasks/center_phase3.md`)
 
 ## المرحلة 4 — المحتوى والإشعارات
-- [ ] 08 — إعدادات التطبيق والملفات: `AppConfigBloc` أو ما يعادله، `GET /app-config`، قوائم السلايدر/الفعاليات حسب الاستجابة الفعلية، استبدال `update.dart`/Firestore للإجبار على التحديث
-- [ ] 09 — إشعارات FCM: تسجيل الرمز، `GET /notifications`، إزالة مسار إرسال FCM القديم من العميل، تكامل مع السيرفر فقط
+- [x] 08 — إعدادات التطبيق والملفات: `AppConfigBloc`، `GET /app-config`، قوائم السلايدر/الفعاليات، force-update من app-config، حذف `GlobalCubit` (`tasks/phase4_content.md`)
+- [x] 09 — إشعارات FCM: `FcmService` + `onTokenRefresh`، `NotificationsBloc` + `/notifications`، حذف `SendNotficationCubit`/HTTP FCM، تنظيف `home_page`
 
 ## المرحلة 5 — ميزات جديدة
 - [ ] 10 — طلبات الدم: Bloc + مستودع، إنشاء/إلغاء/الحدود (429)، عدم broadcast من العميل
@@ -65,3 +65,4 @@
 - خريطة تعليقات `BACKEND` في الكود: `docs/restructure/نقاط-الربط-مع-الباكإند-في-الكود.md`
 - **تثبيت نطاق (قرار تنفيذي):** مزامنة مواقع كاملة مع **Drift** تؤجَّل إلى **المرحلة 2** (وثيقة 06) — المرحلة 0/1 تبقى كاش JSON/`SharedPreferences` + استدعاء `GET /locations` للتسجيل عند الحاجة.
 - **`GET /app-config` و Force-update:** تأجيل كامل إلى **المرحلة 4** (وثيقة 08) — الإبقاء حالياً على `GlobalCubit`/Firestore حيث لم تُستبدَل بعد.
+- **مفاتيح app-config إنتاج (تحقق 2026-05-16):** `app_name`, `about_app`, `home_header`, `home_slides`, `events_cards_data`, `events_title`, `info_list`, `info_titile`, `report_link`, `updating__*__*` — لا `min_app_version` بعد؛ المهمة: `tasks/phase4_content.md`.

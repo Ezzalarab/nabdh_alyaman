@@ -2,27 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/data_sources/local_data.dart';
-import '../../cubit/global_cubit/global_cubit.dart';
+import '../../../domain/entities/global_app_data.dart';
+import '../../blocs/app_config/app_config_bloc.dart';
 import '../../resources/color_manageer.dart';
 import '../../resources/values_manager.dart';
 
 class HomeInfo extends StatelessWidget {
-  const HomeInfo({
-    super.key,
-  });
+  const HomeInfo({super.key});
+
+  GlobalAppData _data(AppConfigState state, AppConfigBloc bloc) =>
+      switch (state) {
+        AppConfigLoaded(:final data) => data,
+        AppUpdateRequired(:final data) => data,
+        AppConfigFailure(:final data) => data,
+        _ => bloc.data,
+      };
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GlobalCubit, GlobalState>(
+    return BlocBuilder<AppConfigBloc, AppConfigState>(
       builder: (context, state) {
-        String infoTitle = LocalData.initialAppData.infoTitle;
-        if (state is GlobalStateSuccess) {
-          infoTitle = state.appData.infoTitle;
-        }
-        List<String> homeInfoList = LocalData.initialAppData.infoList;
-        if (state is GlobalStateSuccess) {
-          homeInfoList = state.appData.infoList;
-        }
+        final bloc = context.read<AppConfigBloc>();
+        final appData = _data(state, bloc);
+        final infoTitle = appData.infoTitle.isNotEmpty
+            ? appData.infoTitle
+            : LocalData.initialAppData.infoTitle;
+        final homeInfoList = appData.infoList.isNotEmpty
+            ? appData.infoList
+            : LocalData.initialAppData.infoList;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -49,13 +57,11 @@ class HomeInfo extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: homeInfoList.length,
                 itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      "-  ${homeInfoList[index]}",
+                      '-  ${homeInfoList[index]}',
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium!

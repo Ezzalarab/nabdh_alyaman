@@ -3,90 +3,94 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/data_sources/local_data.dart';
-import '../cubit/global_cubit/global_cubit.dart';
+import '../../domain/entities/global_app_data.dart';
+import '../blocs/app_config/app_config_bloc.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
 import '../resources/values_manager.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
-  static const String routeName = "about_page";
+  static const String routeName = 'about_page';
 
   @override
   State<AboutPage> createState() => _AboutPageState();
 }
 
 class _AboutPageState extends State<AboutPage> {
-  String about = '''
-  .هو تطبيق خدمي إنساني لتسهيل عملية الحصول على مصدر للدم بحيث يوفر قاعدة بيانات من المتبرعين والمراكز الطبية بحيث تكون عملية البحث سهلة وذو فائدة أكبر مع إمكانية إنشاء حساب للمتبرعين المتطوعين أصحاب النفوس الطيبة.\n\nتم تقديم هذا التطبيق كمشروع لنيل درجة البكلوريوس في قسم علوم الحاسوب وتقنية المعلومات في جامعة إب عام 2022.\n\nبنشر التطبيق يمكن أن تشارك في عملية الإنقاذ والدال على الخير كفاعله.\nللمساعدة أكثر يمكنك التواصل مع فريق التطوير لدعم نشر التطبيق بطرق الترويج الممول''';
+  GlobalAppData _data(AppConfigState state, AppConfigBloc bloc) =>
+      switch (state) {
+        AppConfigLoaded(:final data) => data,
+        AppUpdateRequired(:final data) => data,
+        AppConfigFailure(:final data) => data,
+        _ => bloc.data,
+      };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorManager.primaryBg,
-        title: const Text("حول التطبيق"),
+        title: const Text('حول التطبيق'),
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: ColorManager.primaryBg,
         ),
       ),
       backgroundColor: ColorManager.primaryBg,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(AppPadding.p30),
-              child: Image.asset(
-                ImageAssets.appLogo,
-                fit: BoxFit.cover,
-                cacheHeight: 100,
-              ),
-            ),
-            const SizedBox(height: AppSize.s20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: BlocBuilder<GlobalCubit, GlobalState>(
-                  builder: (context, state) {
-                    String appName = LocalData.initialAppData.appName;
-                    if (state is GlobalStateSuccess) {
-                      appName = state.appData.appName;
-                    }
-                    String abouteHeader = "تطبيق $appName";
-                    return Text(
-                      abouteHeader,
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    );
-                  },
+      body: BlocBuilder<AppConfigBloc, AppConfigState>(
+        builder: (context, state) {
+          final bloc = context.read<AppConfigBloc>();
+          final appData = _data(state, bloc);
+          final appName = appData.appName.isNotEmpty
+              ? appData.appName
+              : LocalData.initialAppData.appName;
+          final aboutRaw = appData.aboutApp.replaceAll('\\n', '\n');
+          final about = aboutRaw.isEmpty
+              ? LocalData.initialAppData.aboutApp
+              : aboutRaw;
+
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(AppPadding.p30),
+                  child: Image.asset(
+                    ImageAssets.appLogo,
+                    fit: BoxFit.cover,
+                    cacheHeight: 100,
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: AppSize.s20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: BlocBuilder<GlobalCubit, GlobalState>(
-                  builder: (context, state) {
-                    if (state is GlobalStateSuccess) {
-                      about = state.appData.aboutApp;
-                      about = about.replaceAll("\\n", "\n");
-                    }
-                    return Text(
+                const SizedBox(height: AppSize.s20),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      'تطبيق $appName',
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSize.s20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
                       about,
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
                           .copyWith(height: 1.5),
-                    );
-                  },
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: AppSize.s50),
+              ],
             ),
-            const SizedBox(height: AppSize.s50),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
