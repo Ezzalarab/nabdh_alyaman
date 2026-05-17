@@ -116,9 +116,7 @@ class _SettingPageState extends State<SettingPage> {
         },
         builder: (context, state) {
           final donor = state is ProfileGetData ? state.donors : null;
-          final imageUrl = donor != null &&
-                  donor.image != null &&
-                  donor.image!.isNotEmpty
+          final imageUrl = donor != null && donor.image.isNotEmpty
               ? resolver.resolve(donor.image)
               : null;
           return ModalProgressHUD(

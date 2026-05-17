@@ -222,8 +222,6 @@ class _PrfileCenterBloodTypeCardState extends State<PrfileCenterBloodTypeCard> {
           repoSetory,
         );
         _controller.text = repoSetory.toString();
-        // BlocProvider.of<ProfileCubit>(context)
-        //     .sendProfileCenterData(profileCenterData!);
       }
     });
     if (ontap) {

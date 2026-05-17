@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../../data/datasources/local/locations_local_datasource.dart';
-import '../../../data/datasources/remote/locations_remote_datasource.dart';
+import '../../../core/locations/locations_loader.dart';
 import '../../../data/models/cached_location_row.dart';
 import '../../../di.dart' as di;
 import '../../resources/color_manageer.dart';
@@ -51,37 +50,25 @@ class _StateDistrictPickerState extends State<StateDistrictPicker> {
   }
 
   Future<void> _loadStates() async {
-    final local = di.gi<LocationsLocalDataSource>();
-    var rows = await local.getStates();
-    if (rows.isEmpty) {
-      try {
-        final remote = di.gi<LocationsRemoteDataSource>();
-        rows = await remote.fetchStates();
-        await local.replaceStates(rows);
-      } catch (_) {
-        if (mounted) {
-          Fluttertoast.showToast(msg: 'تعذّر تحميل المحافظات');
-        }
-        return;
+    try {
+      final rows = await di.gi<LocationsLoader>().loadStates();
+      if (mounted) setState(() => _states = rows);
+    } catch (_) {
+      if (mounted) {
+        Fluttertoast.showToast(msg: 'تعذّر تحميل المحافظات');
       }
     }
-    if (mounted) setState(() => _states = rows);
   }
 
   Future<void> _loadDistricts(int stateId, {bool notify = true}) async {
-    final local = di.gi<LocationsLocalDataSource>();
-    var list = await local.getDistrictsForState(stateId);
-    if (list.isEmpty) {
-      try {
-        final remote = di.gi<LocationsRemoteDataSource>();
-        list = await remote.fetchDistricts(stateId);
-        await local.replaceDistricts(list);
-      } catch (_) {
-        if (mounted) {
-          Fluttertoast.showToast(msg: 'تعذّر تحميل المديريات');
-        }
-        return;
+    List<CachedLocationDistrict> list;
+    try {
+      list = await di.gi<LocationsLoader>().loadDistricts(stateId);
+    } catch (_) {
+      if (mounted) {
+        Fluttertoast.showToast(msg: 'تعذّر تحميل المديريات');
       }
+      return;
     }
     if (!mounted) return;
     setState(() => _districts = list);

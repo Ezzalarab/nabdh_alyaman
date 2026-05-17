@@ -23,10 +23,10 @@ Get it from <a href="https://play.google.com/store/apps/details?id=com.ezzcode.n
 
 ## 💻 Installation steps
 
-- Updated to `Flutter 3.10.0` Now!
-- Dart SDK `3.0.5` with Sound Null Safety!
+- Flutter SDK compatible with Dart `^3.8.1` (see `pubspec.yaml`)
+- iOS FCM setup: [`docs/ios-firebase-setup.md`](docs/ios-firebase-setup.md)
 
-Open CMD where you want to clone the project & run the following commands
+Open a terminal in the project directory and run:
 
 ```
 git clone https://github.com/Ezzalarab/nabdh_alyaman.git

@@ -3,7 +3,6 @@ import 'package:nabdh_alyaman/core/config/app_config.dart';
 
 void main() {
   test('AppConfig default API base URL includes /api/v1', () {
-    const config = AppConfig();
     expect(AppConfig.apiBaseUrl, contains('/api/v1'));
   });
 }

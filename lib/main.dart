@@ -12,7 +12,6 @@ import 'di.dart' as di;
 import 'presentation/blocs/app_config/app_config_bloc.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/auth/auth_state.dart';
-import 'presentation/blocs/blood_request/blood_request_bloc.dart';
 import 'presentation/blocs/center/center_bloc.dart';
 import 'presentation/blocs/notifications/notifications_bloc.dart';
 import 'presentation/blocs/profile/profile_bloc.dart';
@@ -69,7 +68,6 @@ void main() async {
         BlocProvider(create: (_) => di.gi<CenterBloc>()),
         BlocProvider(create: (_) => di.gi<ProfileBloc>()),
         BlocProvider(create: (_) => di.gi<NotificationsBloc>()),
-        BlocProvider(create: (_) => di.gi<BloodRequestBloc>()),
       ],
       child: const MyApp(),
     ),

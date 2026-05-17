@@ -5,6 +5,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/config/app_config.dart';
+import 'core/locations/locations_loader.dart';
 import 'core/network/api_client.dart';
 import 'core/network/auth_refresh_interceptor.dart';
 import 'core/network/dio_api_client.dart';
@@ -87,6 +88,9 @@ Future<void> initApp() async {
   gi.registerLazySingleton<AppDatabase>(() => AppDatabase());
   gi.registerLazySingleton<LocationsLocalDataSource>(
     () => LocationsLocalDataSourceImpl(gi()),
+  );
+  gi.registerLazySingleton<LocationsLoader>(
+    () => LocationsLoader(local: gi(), remote: gi()),
   );
 
   gi.registerLazySingleton<Dio>(
@@ -188,5 +192,5 @@ Future<void> initApp() async {
     () => BloodRequestRepositoryImpl(networkInfo: gi(), remote: gi()),
   );
   gi.registerLazySingleton(() => BloodRequestUseCase(repository: gi()));
-  gi.registerLazySingleton(() => BloodRequestBloc(useCase: gi()));
+  gi.registerFactory(() => BloodRequestBloc(useCase: gi()));
 }

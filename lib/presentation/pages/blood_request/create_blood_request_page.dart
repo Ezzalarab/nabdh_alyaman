@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import '../../../domain/entities/blood_request.dart';
 import '../../../domain/entities/blood_types.dart';
 import '../../blocs/blood_request/blood_request_bloc.dart';
+import '../../blocs/blood_request/blood_request_scope.dart';
 import '../../resources/color_manageer.dart';
 import '../../widgets/blood_request/hospital_form.dart';
 import '../../widgets/blood_request/urgency_selector.dart';
@@ -15,16 +16,25 @@ import '../../widgets/forms/my_button.dart';
 import '../../widgets/locations/state_district_picker.dart';
 import 'blood_request_detail_page.dart';
 
-class CreateBloodRequestPage extends StatefulWidget {
+class CreateBloodRequestPage extends StatelessWidget {
   const CreateBloodRequestPage({super.key});
 
   static const String routeName = '/blood-request/create';
 
   @override
-  State<CreateBloodRequestPage> createState() => _CreateBloodRequestPageState();
+  Widget build(BuildContext context) {
+    return const BloodRequestScope(child: _CreateBloodRequestView());
+  }
 }
 
-class _CreateBloodRequestPageState extends State<CreateBloodRequestPage> {
+class _CreateBloodRequestView extends StatefulWidget {
+  const _CreateBloodRequestView();
+
+  @override
+  State<_CreateBloodRequestView> createState() => _CreateBloodRequestViewState();
+}
+
+class _CreateBloodRequestViewState extends State<_CreateBloodRequestView> {
   final _formKey = GlobalKey<FormState>();
   final _hospitalController = TextEditingController();
   final _patientController = TextEditingController();

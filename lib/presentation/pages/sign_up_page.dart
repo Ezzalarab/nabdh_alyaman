@@ -12,8 +12,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../../core/auth/auth_identifier.dart';
 import '../../core/utils.dart';
-import '../../data/datasources/local/locations_local_datasource.dart';
-import '../../data/datasources/remote/locations_remote_datasource.dart';
+import '../../core/locations/locations_loader.dart';
 import '../../data/models/cached_location_row.dart';
 import '../../di.dart' as di;
 import '../../domain/entities/blood_types.dart';
@@ -78,9 +77,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<void> _loadStates() async {
     try {
-      final ds = di.gi<LocationsRemoteDataSource>();
-      final rows = await ds.fetchStates();
-      await di.gi<LocationsLocalDataSource>().replaceStates(rows);
+      final rows = await di.gi<LocationsLoader>().loadStates();
       if (mounted) setState(() => _states = rows);
     } catch (_) {
       Fluttertoast.showToast(msg: 'تعذّر تحميل المحافظات');
@@ -95,8 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
     });
     if (id == null) return;
     try {
-      final list = await di.gi<LocationsRemoteDataSource>().fetchDistricts(id);
-      await di.gi<LocationsLocalDataSource>().replaceDistricts(list);
+      final list = await di.gi<LocationsLoader>().loadDistricts(id);
       if (mounted) setState(() => _districts = list);
     } catch (_) {
       Fluttertoast.showToast(msg: 'تعذّر تحميل المديريات');

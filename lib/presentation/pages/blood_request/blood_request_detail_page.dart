@@ -6,12 +6,13 @@ import '../../../domain/entities/blood_request.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../blocs/blood_request/blood_request_bloc.dart';
+import '../../blocs/blood_request/blood_request_scope.dart';
 import '../../resources/color_manageer.dart';
 import '../../widgets/blood_request/urgency_selector.dart';
 import '../../widgets/common/loading_widget.dart';
 import '../../widgets/forms/my_button.dart';
 
-class BloodRequestDetailPage extends StatefulWidget {
+class BloodRequestDetailPage extends StatelessWidget {
   const BloodRequestDetailPage({super.key, required this.requestId});
 
   final String requestId;
@@ -19,10 +20,23 @@ class BloodRequestDetailPage extends StatefulWidget {
   static const String routeName = '/blood-request/detail';
 
   @override
-  State<BloodRequestDetailPage> createState() => _BloodRequestDetailPageState();
+  Widget build(BuildContext context) {
+    return BloodRequestScope(
+      child: _BloodRequestDetailView(requestId: requestId),
+    );
+  }
 }
 
-class _BloodRequestDetailPageState extends State<BloodRequestDetailPage> {
+class _BloodRequestDetailView extends StatefulWidget {
+  const _BloodRequestDetailView({required this.requestId});
+
+  final String requestId;
+
+  @override
+  State<_BloodRequestDetailView> createState() => _BloodRequestDetailViewState();
+}
+
+class _BloodRequestDetailViewState extends State<_BloodRequestDetailView> {
   @override
   void initState() {
     super.initState();

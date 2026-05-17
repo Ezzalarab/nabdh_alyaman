@@ -12,7 +12,6 @@ dependencies:
   awesome_dialog: ^3.2.1
   cached_network_image: ^3.4.1
   carousel_slider: ^5.1.1
-  csc_picker: ^0.2.7
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
   dio: ^5.9.0
@@ -37,7 +36,6 @@ dependencies:
   geolocator: ^14.0.2
   get_it: ^9.2.1
   google_maps_flutter: ^2.13.1
-  http: ^1.5.0
   image_picker: ^1.2.0
   internet_connection_checker: ^3.0.1
   introduction_screen: ^4.0.0

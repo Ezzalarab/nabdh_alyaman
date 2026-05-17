@@ -12,11 +12,12 @@ import '../../domain/entities/blood_types.dart';
 import '../../domain/entities/donor.dart';
 import '../../domain/entities/donor_point.dart';
 import '../blocs/blood_request/blood_request_bloc.dart';
+import '../blocs/blood_request/blood_request_scope.dart';
 import '../resources/color_manageer.dart';
 import '../widgets/common/loading_widget.dart';
 import 'blood_request/blood_request_detail_page.dart';
 
-class SearchMapPage extends StatefulWidget {
+class SearchMapPage extends StatelessWidget {
   const SearchMapPage({
     super.key,
     required this.stateDonors,
@@ -31,10 +32,33 @@ class SearchMapPage extends StatefulWidget {
   static const String routeName = 'search_map';
 
   @override
-  State<SearchMapPage> createState() => _SearchMapPageState();
+  Widget build(BuildContext context) {
+    return BloodRequestScope(
+      child: _SearchMapView(
+        stateDonors: stateDonors,
+        selectedBloodType: selectedBloodType,
+        stateId: stateId,
+      ),
+    );
+  }
 }
 
-class _SearchMapPageState extends State<SearchMapPage> {
+class _SearchMapView extends StatefulWidget {
+  const _SearchMapView({
+    required this.stateDonors,
+    required this.selectedBloodType,
+    this.stateId,
+  });
+
+  final List<Donor> stateDonors;
+  final String selectedBloodType;
+  final int? stateId;
+
+  @override
+  State<_SearchMapView> createState() => _SearchMapViewState();
+}
+
+class _SearchMapViewState extends State<_SearchMapView> {
   final UrlLauncherPlatform _launcher = UrlLauncherPlatform.instance;
   Position? _position;
   List<DonorPoint> _nearbyDonors = [];
