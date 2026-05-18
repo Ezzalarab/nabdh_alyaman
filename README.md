@@ -6,6 +6,8 @@ Data is fetched from the REST API (`https://nabdh.telqaia.com/api/v1`). Internet
 
 Migration plans: [`docs/restructure/README.md`](docs/restructure/README.md)
 
+**For developers:** [`docs/developer-guide.md`](docs/developer-guide.md) — local vs production API, debug logging, run commands.
+
 <img src="https://github.com/Ezzalarab/nabdh_alyaman/blob/master/screenshots/main_view.png">
 
 <div align="center">
@@ -33,6 +35,12 @@ git clone https://github.com/Ezzalarab/nabdh_alyaman.git
 cd nabdh_alyaman
 flutter packages get
 flutter run
+```
+
+Local backend (Android emulator):
+
+```
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:3000/api/v1
 ```
 
 ## 📱 Screen Shots

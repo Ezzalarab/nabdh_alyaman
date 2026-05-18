@@ -63,6 +63,8 @@
 - استبدال Cubit: **فوري** مع كل مرحلة — المرحلة 11 تدقيق فقط
 - تقليل منطق العميل (`عميل رفيع`): `docs/restructure/المرحلة-0-الأساس/عميل-رفيع-ومصدر-الحقيقة.md`
 - خريطة تعليقات `BACKEND` في الكود: `docs/restructure/نقاط-الربط-مع-الباكإند-في-الكود.md`
-- **تثبيت نطاق (قرار تنفيذي):** مزامنة مواقع كاملة مع **Drift** تؤجَّل إلى **المرحلة 2** (وثيقة 06) — المرحلة 0/1 تبقى كاش JSON/`SharedPreferences` + استدعاء `GET /locations` للتسجيل عند الحاجة.
-- **`GET /app-config` و Force-update:** تأجيل كامل إلى **المرحلة 4** (وثيقة 08) — الإبقاء حالياً على `GlobalCubit`/Firestore حيث لم تُستبدَل بعد.
-- **مفاتيح app-config إنتاج (تحقق 2026-05-16):** `app_name`, `about_app`, `home_header`, `home_slides`, `events_cards_data`, `events_title`, `info_list`, `info_titile`, `report_link`, `updating__*__*` — لا `min_app_version` بعد؛ المهمة: `tasks/phase4_content.md`.
+- **دليل المطور (تشغيل، بيئة، تشخيص):** `docs/developer-guide.md`
+- **Drift للمواقع:** مُنفَّذ (`lib/data/local/drift/`, `LocationsLocalDataSource`) — المرحلة 2.
+- **`AppConfigBloc` + `GET /app-config`:** مُنفَّذ — المرحلة 4؛ لا `GlobalCubit`/Firestore.
+- **مفاتيح app-config:** يدعم الكود `min_app_version` و`updating__*`؛ الإنتاج قد يعيد `updating__*` فقط — انظر `app_config_mapper.dart`.
+- **iOS + FCM:** `GoogleService-Info.plist` + `firebase_options.dart` — انظر `docs/ios-firebase-setup.md`.

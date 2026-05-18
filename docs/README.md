@@ -4,6 +4,7 @@
 
 | المجلد | الجمهور | الغرض |
 |--------|---------|--------|
+| [**developer-guide.md**](developer-guide.md) | مطوّرو Flutter | **تشغيل يومي**: بيئة API (محلي/إنتاج)، تشخيص، DI، FCM/iOS، نتيجة تدقيق التوافق. |
 | [**backend_guide/**](backend_guide/README.md) | مطوّرو موبايل وعقد API | **عقد REST**: مسارات، طلبات، أخطاء، throttling — مصدر الحقيقة للواجهة. |
 | [**restructure/**](restructure/README.md) | مطوّرو Flutter + من يخطط الهجرة | **خطة تنفيذ** تحويل التطبيق من Firebase إلى الـ API (مراحل، Bloc، تخزين). |
 | [**backend_docs/**](backend_docs/overview.md) | منتج + باكإند | **سياق السيرفر** (أدوار، قرارات، حالة تنفيذ تقريبية). قد تشير لملفات خارج هذا الريبو. |
@@ -18,6 +19,7 @@
 
 ## للنماذج اللغوية (Cursor / فريق)
 
+- اسأل عن **كيف أشغّل المشروع أو أبدّل البيئة؟** → [`developer-guide.md`](developer-guide.md).
 - اسأل عن **ماذا تنفّذ في الكود؟** → `restructure/` + `tasks/migration_master.md`.
 - اسأل عن **ماذا يرسل الطلب؟** → `backend_guide/`.
 - اسأل عن **هل السيرفر ينفّذ X؟** → `backend_docs/implementation-status` ثم تأكيد على الخادم.

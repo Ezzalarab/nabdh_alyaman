@@ -72,6 +72,10 @@ POST /auth/logout
 
 → نفس استجابة login (`accessToken`, `refreshToken`, `role`, `user`).
 
+### سياسة عميل Flutter (نبض اليمن)
+
+تطبيق Flutter **لا** يستدعي `POST /auth/migration/complete` ولا يضمّن Firebase Auth SDK. عند `NEEDS_FIREBASE_PASSWORD` يوجّه المستخدم إلى **OTP / نسيت كلمة المرور** فقط. راجع [`04-المصادقة-والهجرة.md`](../restructure/المرحلة-1-المصادقة/04-المصادقة-والهجرة.md) و[`docs/developer-guide.md`](../developer-guide.md).
+
 ## 5. التوجيه حسب الدور
 
 بعد login اقرأ `role`:

@@ -1,6 +1,6 @@
 # خطط إعادة هيكلة نبض اليمن (Firebase → API)
 
-هذا المجلد يوثّق **كيفية** تحويل التطبيق من Firebase إلى الباكإند الجديد. التنفيذ البرمجي يتم لاحقاً حسب الترتيب أدناه.
+هذا المجلد يوثّق **كيفية** تحويل التطبيق من Firebase إلى الباكإند الجديد. **التنفيذ البرمجي للمراحل 0–6 مكتمل** — راجع [`tasks/migration_master.md`](../../tasks/migration_master.md) و[`docs/developer-guide.md`](../developer-guide.md) للوضع الحالي والتشغيل اليومي. بعض أقسام «الحالة الحالية» داخل ملفات المراحل تاريخية (ما قبل الهجرة).
 
 ## المراجع
 
@@ -10,6 +10,7 @@
 | **منطق يُنقل للباكإند** | [`متطلبات-الباكإند/`](متطلبات-الباكإند/README.md) |
 | دمج العميل | [`client-integration.md`](../backend_guide/client-integration.md) |
 | تتبع التقدم | [`tasks/migration_master.md`](../../tasks/migration_master.md) |
+| دليل المطور (تشغيل، بيئة) | [`developer-guide.md`](../developer-guide.md) |
 | قواعد Cursor | [`.cursor/rules/`](../../.cursor/rules/) |
 
 ## عناوين API
