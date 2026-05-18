@@ -11,7 +11,6 @@ import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
 import '../widgets/common/dialog_lottie.dart';
 import 'home_page.dart';
-import 'sign_in_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -43,11 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _maybeNavigate(AuthState state) {
     if (_navigated || !_minElapsed || !mounted) return;
 
-    final Widget? next = switch (state) {
-      AuthAuthenticated() => const HomePage(),
-      AuthUnauthenticated() => const SignInPage(),
-      _ => null,
-    };
+    final Widget? next = splashNavigationTarget(state);
     if (next == null) return;
 
     _navigated = true;
@@ -87,4 +82,13 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
+}
+
+/// Destination after splash auth check (guest and authenticated → home).
+@visibleForTesting
+Widget? splashNavigationTarget(AuthState state) {
+  return switch (state) {
+    AuthAuthenticated() || AuthUnauthenticated() => const HomePage(),
+    _ => null,
+  };
 }

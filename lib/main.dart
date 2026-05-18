@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
           current is AuthUnauthenticated && previous is AuthAuthenticated,
       listener: (context, state) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute<void>(builder: (_) => const SignInPage()),
+          MaterialPageRoute<void>(builder: (_) => const HomePage()),
           (_) => false,
         );
       },

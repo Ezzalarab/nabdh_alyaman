@@ -108,27 +108,34 @@ class _HomePageState extends State<HomePage> {
                 ),
                 leadingWidth: 90,
                 actions: [
-                  IconButton(
-                    onPressed: () {
-                      final authed =
-                          context.read<AuthBloc>().state is AuthAuthenticated;
-                      if (!authed) {
-                        Navigator.push<void>(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (_) => const SignInPage(),
-                          ),
-                        );
-                        return;
-                      }
-                      Navigator.push<void>(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (_) => const NotificationPage(),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, auth) {
+                      final authed = auth is AuthAuthenticated;
+                      return IconButton(
+                        onPressed: () {
+                          if (!authed) {
+                            Navigator.push<void>(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (_) => const SignInPage(),
+                              ),
+                            );
+                            return;
+                          }
+                          Navigator.push<void>(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (_) => const NotificationPage(),
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          authed
+                              ? Icons.notifications_outlined
+                              : Icons.person_outline,
                         ),
                       );
                     },
-                    icon: const Icon(Icons.notifications_outlined),
                   ),
                   IconButton(
                     onPressed: () async {

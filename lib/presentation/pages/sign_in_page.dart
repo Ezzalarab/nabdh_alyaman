@@ -68,6 +68,16 @@ class _SignInPageState extends State<SignInPage> {
     setState(() => isPasswordVisible = !isPasswordVisible);
   }
 
+  void _leaveSignIn(BuildContext context) {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+      return;
+    }
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(builder: (_) => const HomePage()),
+    );
+  }
+
   void _submitLogin() {
     FocusScope.of(context).unfocus();
     if ((_idFormState.currentState?.validate() ?? false) &&
@@ -254,6 +264,10 @@ class _SignInPageState extends State<SignInPage> {
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: ColorManager.primaryBg,
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => _leaveSignIn(context),
+        ),
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -361,6 +375,10 @@ class _SignInPageState extends State<SignInPage> {
                               fontFamily: FontConstants.fontFamily,
                               fontWeight: FontWeight.bold,
                             ),
+                          ),
+                          TextButton(
+                            onPressed: () => _leaveSignIn(context),
+                            child: const Text('متابعة بدون تسجيل'),
                           ),
                           const SizedBox(height: 20),
                         ],

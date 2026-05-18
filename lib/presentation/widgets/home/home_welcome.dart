@@ -8,15 +8,42 @@ import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../pages/blood_request/create_blood_request_page.dart';
 import '../../pages/search_page.dart';
+import '../../pages/sign_in_page.dart';
 import '../../pages/sign_up_page.dart';
 import '../../resources/color_manageer.dart';
-import '../../resources/style.dart';
 import '../../resources/values_manager.dart';
 import '../forms/my_button.dart';
-import '../forms/my_text_form_field.dart';
 
 class HomeWelcome extends StatelessWidget {
   const HomeWelcome({super.key});
+
+  Future<void> _promptSignInForBloodRequest(BuildContext context) async {
+    final proceed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('طلب استغاثة'),
+        content: const Text(
+          'لإرسال طلب استغاثة يلزم تسجيل الدخول. يمكنك البحث عن متبرعين فوراً بدون حساب.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('لاحقاً'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('تسجيل الدخول'),
+          ),
+        ],
+      ),
+    );
+    if (proceed == true && context.mounted) {
+      await Navigator.push<void>(
+        context,
+        MaterialPageRoute<void>(builder: (_) => const SignInPage()),
+      );
+    }
+  }
 
   GlobalAppData _data(AppConfigState state, AppConfigBloc bloc) =>
       switch (state) {
@@ -62,75 +89,108 @@ class HomeWelcome extends StatelessWidget {
                       .copyWith(height: 1.5),
                 ),
                 const SizedBox(height: AppSize.s60),
-                Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: ColorManager.grey1,
-                        blurRadius: 5,
-                        offset: Offset(0, 2),
-                        spreadRadius: 3,
-                      ),
-                    ],
-                  ),
-                  child: MyTextFormField(
-                    hint: 'البحث عن متبرع',
-                    icon: Icon(
-                      Icons.search_rounded,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    suffixIcon: false,
-                    fillColor: ColorManager.white,
-                    blurrBorderColor: eSecondColor.withOpacity(0),
-                    focusBorderColor: eSecondColor.withOpacity(0),
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: ColorManager.grey),
-                    readOnly: true,
-                    onTap: () {
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, session) {
+                    final primaryStyle =
+                        Theme.of(context).textTheme.titleLarge;
+
+                    void openSearch() {
                       Navigator.push<void>(
                         context,
                         MaterialPageRoute<void>(
                           builder: (_) => const SearchPage(),
                         ),
                       );
-                    },
-                  ),
-                ),
-                const SizedBox(height: AppSize.s10),
-                BlocBuilder<AuthBloc, AuthState>(
-                  builder: (context, session) {
+                    }
+
                     if (session is AuthAuthenticated) {
-                      return MyButton(
-                        title: 'طلب استغاثة',
-                        color: ColorManager.secondary,
-                        height: AppSize.s45,
-                        titleStyle: Theme.of(context).textTheme.titleLarge,
-                        onPressed: () {
-                          Navigator.push<void>(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (_) => const CreateBloodRequestPage(),
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          MyButton(
+                            title: 'البحث عن متبرع',
+                            color: Theme.of(context).primaryColor,
+                            height: AppSize.s50,
+                            minWidth: double.infinity,
+                            titleStyle: primaryStyle,
+                            isPrefexIcon: true,
+                            icon: const Icon(
+                              Icons.search_rounded,
+                              color: ColorManager.white,
                             ),
-                          );
-                        },
+                            onPressed: openSearch,
+                          ),
+                          MyButton(
+                            title: 'طلب استغاثة',
+                            color: ColorManager.secondary,
+                            height: AppSize.s45,
+                            titleStyle: primaryStyle,
+                            onPressed: () {
+                              Navigator.push<void>(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (_) =>
+                                      const CreateBloodRequestPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       );
                     }
-                    return MyButton(
-                      title: 'إنشاء حساب متبرع',
-                      color: Theme.of(context).primaryColor,
-                      height: AppSize.s45,
-                      titleStyle: Theme.of(context).textTheme.titleLarge,
-                      onPressed: () {
-                        Navigator.push<void>(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (_) => const SignUpPage(),
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        MyButton(
+                          title: 'البحث عن متبرع',
+                          color: Theme.of(context).primaryColor,
+                          height: AppSize.s50,
+                          minWidth: double.infinity,
+                          titleStyle: primaryStyle,
+                          isPrefexIcon: true,
+                          icon: const Icon(
+                            Icons.search_rounded,
+                            color: ColorManager.white,
                           ),
-                        );
-                      },
+                          onPressed: openSearch,
+                        ),
+                        MyButton(
+                          title: 'تسجيل كمتبرع',
+                          color: ColorManager.secondary,
+                          height: AppSize.s45,
+                          titleStyle: primaryStyle,
+                          onPressed: () {
+                            Navigator.push<void>(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (_) => const SignUpPage(),
+                              ),
+                            );
+                          },
+                        ),
+                        MyButton(
+                          title: 'تسجيل الدخول',
+                          color: ColorManager.white,
+                          height: AppSize.s45,
+                          titleStyle: primaryStyle?.copyWith(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onPressed: () {
+                            Navigator.push<void>(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (_) => const SignInPage(),
+                              ),
+                            );
+                          },
+                        ),
+                        TextButton(
+                          onPressed: () =>
+                              _promptSignInForBloodRequest(context),
+                          child: const Text('طلب استغاثة'),
+                        ),
+                      ],
                     );
                   },
                 ),
