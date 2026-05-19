@@ -2,18 +2,17 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "nabdh_alyaman (mobile — pick device)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart"
+    },
+    {
       "name": "nabdh_alyaman (iOS Simulator)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "deviceId": "ios"
-    },
-    {
-      "name": "nabdh_alyaman (Android — running emulator)",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-      "deviceId": "android"
+      "deviceId": "A90B8F92-6EC0-4CEC-859F-BD0E51CA147A"
     }
   ]
 }

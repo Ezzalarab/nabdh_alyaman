@@ -155,11 +155,18 @@ flowchart TD
 
 ## 5. تشغيل المشروع
 
+**مهم:** `flutter run -d ios` و `"deviceId": "ios"` في Cursor **لا يعملان** — استخدم المعرّف من `flutter devices` (مثل `A90B8F92-…`) أو اسم المحاكي (`iPhone 17 Pro`).
+
+```bash
+flutter devices                    # قائمة الأجهزة
+./scripts/print_device_id.sh       # معرّف الجهاز المناسب لـ launch.json
+./scripts/run_mobile.sh            # تشغيل: iOS أولاً، ثم Android إن كان يعمل
+```
+
 ### Android
 
 ```bash
-flutter devices          # اختيار الجهاز
-flutter run              # إنتاج API افتراضياً
+# شغّل المحاكي يدوياً من Android Studio، ثم:
 flutter run -d <deviceId>
 ```
 
@@ -168,8 +175,14 @@ flutter run -d <deviceId>
 ```bash
 flutter pub get
 cd ios && pod install && cd ..
-flutter run -d <ios-device-id>
+open -a Simulator                  # إن لم يكن المحاكي مفتوحاً
+flutter run -d <deviceId>          # من عمود id في flutter devices
 ```
+
+### Cursor / VS Code
+
+- **nabdh_alyaman (mobile — pick device):** يطلب اختيار الجهاز (تجنّب macOS).
+- **nabdh_alyaman (iOS Simulator):** يستخدم `deviceId` ثابتاً — حدّثه من `./scripts/print_device_id.sh` إن تغيّر المحاكي.
 
 **Capabilities في Xcode:** Push Notifications، Background Modes → Remote notifications.
 
