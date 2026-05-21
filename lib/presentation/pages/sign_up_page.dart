@@ -308,15 +308,33 @@ class _SignUpPageState extends State<SignUpPage> {
                           ],
                         ),
                         if (_step == 0) ...[
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute<void>(builder: (_) => const SignInPage()),
-                              ),
-                              child: Text(AppStrings.signUpGoToSignIn,
-                                  style: TextStyle(color: ColorManager.link)),
+                          Center(
+                            child: Wrap(
+                              alignment: WrapAlignment.center,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(
+                                  AppStrings.signUpAlreadyHaveAccount,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: Size.zero,
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (_) => const SignInPage(),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    AppStrings.signUpSignInLink,
+                                    style: const TextStyle(color: ColorManager.link),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Align(
