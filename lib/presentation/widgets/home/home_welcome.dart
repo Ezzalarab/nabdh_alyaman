@@ -40,9 +40,7 @@ class HomeWelcome extends StatelessWidget {
         void openSearch() {
           Navigator.push<void>(
             context,
-            MaterialPageRoute<void>(
-              builder: (_) => const SearchPage(),
-            ),
+            MaterialPageRoute<void>(builder: (_) => const SearchPage()),
           );
         }
 
@@ -56,18 +54,16 @@ class HomeWelcome extends StatelessWidget {
             children: [
               Text(
                 appName,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge!
-                    .copyWith(height: 1.5),
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineLarge!.copyWith(height: 1.5),
               ),
               const SizedBox(height: AppSize.s30),
               Text(
                 welcomeStatement,
-                style: Theme.of(context)
-                    .textTheme
-                    .displayLarge!
-                    .copyWith(height: 1.5),
+                style: Theme.of(
+                  context,
+                ).textTheme.displayLarge!.copyWith(height: 1.5),
               ),
               const SizedBox(height: AppSize.s40),
               HomeSearchEntry(onTap: openSearch),
@@ -77,27 +73,20 @@ class HomeWelcome extends StatelessWidget {
                     return const SizedBox.shrink();
                   }
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: AppSize.s16),
-                      MyButton(
-                        title: 'تسجيل كمتبرع',
-                        color: Theme.of(context).primaryColor,
-                        height: AppSize.s40,
-                        minWidth: double.infinity,
-                        radius: AppRadius.r10,
-                        titleStyle: Theme.of(context).textTheme.titleMedium,
-                        onPressed: () {
-                          Navigator.push<void>(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (_) => const SignUpPage(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                  return Container(
+                    margin: const EdgeInsets.only(top: AppSize.s16),
+                    child: MyButton(
+                      title: 'تسجيل كمــتبـرع',
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () {
+                        Navigator.push<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (_) => const SignUpPage(),
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),

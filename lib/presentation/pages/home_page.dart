@@ -84,9 +84,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (!_onboardingChecked) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return BlocListener<AppConfigBloc, AppConfigState>(
       listener: (context, state) {
@@ -129,11 +127,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                         },
-                        icon: Icon(
-                          authed
-                              ? Icons.notifications_outlined
-                              : Icons.person_outline,
-                        ),
+                        icon: Icon(Icons.notifications_outlined),
                       );
                     },
                   ),
@@ -168,9 +162,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   Navigator.push<void>(
                     context,
-                    MaterialPageRoute<void>(
-                      builder: (_) => const SearchPage(),
-                    ),
+                    MaterialPageRoute<void>(builder: (_) => const SearchPage()),
                   );
                 },
                 child: const Icon(Icons.search_rounded),
