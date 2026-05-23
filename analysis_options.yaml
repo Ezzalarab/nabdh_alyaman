@@ -5,6 +5,12 @@
 # IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
 # invoked from the command line by running `flutter analyze`.
 
+# Exclude build directory from analysis
+# This is to avoid the analysis errors when building the app
+analyzer:
+  exclude:
+    - "build/**"
+
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml

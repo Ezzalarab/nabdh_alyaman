@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,6 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    unawaited(CheckActive.checkActiveUser());
     context.read<AppConfigBloc>().add(AppConfigLoadRequested());
     context.read<AuthBloc>().add(AuthCheckRequested());
     Future<void>.delayed(_minSplashDuration, () {
@@ -56,7 +59,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    CheckActive.checkActiveUser();
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthBloc, AuthState>(

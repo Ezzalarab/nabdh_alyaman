@@ -86,6 +86,29 @@ void main() {
   );
 
   blocTest<AppConfigBloc, AppConfigState>(
+    'AppConfigLoadRequested uses fallback when version provider throws',
+    build: () => AppConfigBloc(
+      loadAppConfig: useCase,
+      currentVersionProvider: () async => throw StateError('native'),
+    ),
+    setUp: () {
+      repository.next = Right(
+        AppConfigBundle(
+          data: loadedData,
+          updatePolicy: AppUpdatePolicy.empty,
+          raw: const {},
+        ),
+      );
+    },
+    act: (bloc) => bloc.add(AppConfigLoadRequested()),
+    verify: (bloc) {
+      expect(bloc.state, isA<AppConfigLoaded>());
+      final loaded = bloc.state as AppConfigLoaded;
+      expect(loaded.usedFallback, isTrue);
+    },
+  );
+
+  blocTest<AppConfigBloc, AppConfigState>(
     'AppConfigLoadRequested emits AppUpdateRequired when policy demands',
     build: buildBloc,
     setUp: () {
