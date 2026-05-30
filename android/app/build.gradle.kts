@@ -7,6 +7,43 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
+fun resolveGoogleMapsApiKey(): String {
+    System.getenv("GOOGLE_MAPS_API_KEY")?.trim()?.takeIf { it.isNotEmpty() }?.let { return it }
+
+    val secretsFile = rootProject.file("secrets.properties")
+    if (!secretsFile.exists()) {
+        error(
+            """
+            |
+            |GOOGLE_MAPS_API_KEY is not configured.
+            |
+            |  1. cp android/secrets.properties.example android/secrets.properties
+            |  2. Set GOOGLE_MAPS_API_KEY in android/secrets.properties
+            |
+            |Or export GOOGLE_MAPS_API_KEY (for CI).
+            |
+            """.trimMargin(),
+        )
+    }
+
+    val secretsProperties = Properties()
+    secretsFile.inputStream().use { secretsProperties.load(it) }
+    val key = secretsProperties.getProperty("GOOGLE_MAPS_API_KEY")?.trim().orEmpty()
+    if (key.isEmpty() || key == "YOUR_GOOGLE_MAPS_API_KEY_HERE") {
+        error(
+            """
+            |
+            |GOOGLE_MAPS_API_KEY is missing or still set to the placeholder.
+            |Edit android/secrets.properties with your Maps SDK for Android key.
+            |
+            """.trimMargin(),
+        )
+    }
+    return key
+}
+
+val googleMapsApiKey = resolveGoogleMapsApiKey()
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -44,6 +81,7 @@ android {
         multiDexEnabled = true
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["googleMapsApiKey"] = googleMapsApiKey
     }
 
     buildTypes {

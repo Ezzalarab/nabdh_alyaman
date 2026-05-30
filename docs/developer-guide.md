@@ -81,6 +81,22 @@ cd nabdh_alyaman
 flutter pub get
 ```
 
+### مفتاح Google Maps (Android — إلزامي)
+
+المفتاح **لا يُخزَّن** في `AndroidManifest.xml`. يُقرأ عند البناء من:
+
+1. متغير البيئة `GOOGLE_MAPS_API_KEY` (مفيد لـ CI)، أو
+2. الملف المحلي `android/secrets.properties` (غير مُتتبَّع في Git).
+
+```bash
+cp android/secrets.properties.example android/secrets.properties
+# عدّل GOOGLE_MAPS_API_KEY في secrets.properties
+```
+
+إذا نُسي المفتاح، **يفشل البناء فوراً** برسالة توضح الخطوات — وليس وقت التشغيل.
+
+> **أمان:** قيّد المفتاح في Google Cloud Console (package `com.ezzcode.nabdh_alyaman` + SHA-1). إذا ظهر مفتاح قديم في Git، **أبطله/دوّره** من لوحة Google.
+
 ---
 
 ## 4. التحكم بالبيئة (محلي ↔ إنتاج)
