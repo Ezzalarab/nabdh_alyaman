@@ -137,6 +137,7 @@ Future<void> initApp() async {
     () => AuthBloc(
       authRepo: gi(),
       sessionLifecycle: gi(),
+      preferences: gi(),
     ),
   );
 

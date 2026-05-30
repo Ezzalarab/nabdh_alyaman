@@ -12,6 +12,9 @@ class ApiEndpoints {
   static const authForgotPassword = '/auth/forgot-password';
   static const authVerifyOtp = '/auth/verify-otp';
   static const authResetPassword = '/auth/reset-password';
+  static const authProfileEmail = '/auth/profile/email';
+  static const authEmailSendVerification = '/auth/email/send-verification';
+  static const authEmailVerify = '/auth/email/verify';
 
   static String locationsDistricts(int stateId) =>
       '/locations/$stateId/districts';

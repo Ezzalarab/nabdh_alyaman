@@ -9,6 +9,7 @@ import 'package:nabdh_alyaman/firebase_options.dart';
 import 'core/bloc/app_bloc_observer.dart';
 import 'core/notifications/fcm_service.dart';
 import 'di.dart' as di;
+import 'domain/entities/auth_session.dart';
 import 'presentation/blocs/app_config/app_config_bloc.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/auth/auth_state.dart';
@@ -26,6 +27,8 @@ import 'presentation/pages/notfication_page.dart';
 import 'presentation/pages/profile_center.dart';
 import 'presentation/pages/search_page.dart';
 import 'presentation/pages/setting_page.dart';
+import 'presentation/pages/complete_email_page.dart';
+import 'presentation/pages/forgot_password_page.dart';
 import 'presentation/pages/sign_in_page.dart';
 import 'presentation/pages/sign_up_page.dart';
 import 'presentation/pages/sing_up_center_page.dart';
@@ -104,6 +107,14 @@ class MyApp extends StatelessWidget {
           HomePage.routeName: (context) => const HomePage(),
           SignUpPage.routeName: (context) => const SignUpPage(),
           SignInPage.routeName: (context) => const SignInPage(),
+          ForgotPasswordPage.routeName: (context) => const ForgotPasswordPage(),
+          CompleteEmailPage.routeName: (context) {
+            final args = ModalRoute.of(context)?.settings.arguments;
+            if (args is AuthenticatedSession) {
+              return CompleteEmailPage(session: args);
+            }
+            return const SignInPage();
+          },
           SignUpCenter.routeName: (context) => const SignUpCenter(),
           SearchPage.routeName: (context) => const SearchPage(),
           SettingPage.routeName: (context) => const SettingPage(),

@@ -9,19 +9,23 @@ import 'package:nabdh_alyaman/presentation/blocs/auth/auth_bloc.dart';
 import 'package:nabdh_alyaman/presentation/blocs/auth/auth_event.dart';
 import 'package:nabdh_alyaman/presentation/blocs/auth/auth_state.dart';
 import '../helpers/fake_auth_repo.dart';
+import '../helpers/fake_preferences.dart';
 
 void main() {
   late FakeAuthRepo authRepo;
   late SessionLifecycle sessionLifecycle;
+  late FakePreferences preferences;
 
   setUp(() {
     authRepo = FakeAuthRepo();
     sessionLifecycle = SessionLifecycle();
+    preferences = FakePreferences();
   });
 
   AuthBloc buildBloc() => AuthBloc(
         authRepo: authRepo,
         sessionLifecycle: sessionLifecycle,
+        preferences: preferences,
       );
 
   const session = AuthenticatedSession(
@@ -56,6 +60,20 @@ void main() {
   );
 
   blocTest<AuthBloc, AuthState>(
+    'AuthCheckRequested with emailMissing shows completion prompt',
+    build: buildBloc,
+    act: (bloc) => bloc.add(AuthCheckRequested()),
+    wait: const Duration(milliseconds: 100),
+    expect: () => [
+      AuthLoading(),
+      isA<AuthNeedsEmailCompletion>(),
+    ],
+    setUp: () {
+      authRepo.persistedSession = session.copyWith(emailMissing: true);
+    },
+  );
+
+  blocTest<AuthBloc, AuthState>(
     'login BLOCKED shows Arabic message',
     build: buildBloc,
     act: (bloc) => bloc.add(
@@ -85,9 +103,10 @@ void main() {
     build: buildBloc,
     act: (bloc) => bloc.add(
       AuthRegisterDonorSubmitted(
-        DonorRegistrationParams(
+        const DonorRegistrationParams(
           fullName: 'Test',
           phone: '967771234567',
+          email: 'test@example.com',
           password: 'secret12',
           bloodType: 'O+',
           gender: 'MALE',
@@ -131,5 +150,17 @@ void main() {
         ForbiddenFailure(apiCode: 'NEEDS_FIREBASE_PASSWORD'),
       );
     },
+  );
+
+  blocTest<AuthBloc, AuthState>(
+    'forgot password accepts email identifier',
+    build: buildBloc,
+    act: (bloc) => bloc.add(
+      AuthForgotPasswordSubmitted('user@example.com'),
+    ),
+    expect: () => [
+      AuthLoading(),
+      AuthForgotOtpSentNotice(),
+    ],
   );
 }

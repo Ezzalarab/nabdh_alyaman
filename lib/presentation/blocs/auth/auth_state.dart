@@ -19,6 +19,15 @@ class AuthAuthenticated extends AuthState {
   List<Object?> get props => [session];
 }
 
+/// Legacy account without email — optional completion prompt.
+class AuthNeedsEmailCompletion extends AuthState {
+  AuthNeedsEmailCompletion(this.session);
+  final AuthenticatedSession session;
+
+  @override
+  List<Object?> get props => [session];
+}
+
 class AuthUnauthenticated extends AuthState {}
 
 class AuthFailure extends AuthState {
@@ -30,8 +39,8 @@ class AuthFailure extends AuthState {
   List<Object?> get props => [message, needsForgotPasswordRedirect];
 }
 
-/// Forgot-password SMS request accepted — show UX hint only.
-class AuthForgotSmsSentNotice extends AuthState {}
+/// Forgot-password OTP request accepted — show OTP step.
+class AuthForgotOtpSentNotice extends AuthState {}
 
 /// OTP verified — UI prompts for new password (uses [resetToken]).
 class AuthReadyToChooseNewPassword extends AuthState {
@@ -44,3 +53,9 @@ class AuthReadyToChooseNewPassword extends AuthState {
 
 /// Password reset succeeded — navigate to sign-in.
 class AuthPasswordResetFinishedNotice extends AuthState {}
+
+/// Email verification OTP sent to registered address.
+class AuthEmailVerificationSent extends AuthState {}
+
+/// Email address verified successfully.
+class AuthEmailVerifiedSuccess extends AuthState {}

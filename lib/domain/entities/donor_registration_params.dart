@@ -1,12 +1,13 @@
 import 'package:equatable/equatable.dart';
+
 class DonorRegistrationParams extends Equatable {
   const DonorRegistrationParams({
     required this.fullName,
     required this.phone,
+    required this.email,
     required this.password,
     required this.bloodType,
     required this.gender,
-    this.email,
     required this.stateId,
     required this.districtId,
     required this.locationId,
@@ -16,10 +17,10 @@ class DonorRegistrationParams extends Equatable {
 
   final String fullName;
   final String phone;
+  final String email;
   final String password;
   final String bloodType;
   final String gender;
-  final String? email;
   final int stateId;
   final int districtId;
   final int locationId;
@@ -30,10 +31,10 @@ class DonorRegistrationParams extends Equatable {
   List<Object?> get props => [
         fullName,
         phone,
+        email,
         password,
         bloodType,
         gender,
-        email,
         stateId,
         districtId,
         locationId,

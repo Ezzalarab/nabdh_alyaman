@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../domain/entities/auth_session.dart';
 import '../../../domain/entities/donor_registration_params.dart';
 
 sealed class AuthEvent extends Equatable {
@@ -29,20 +30,20 @@ class AuthRegisterDonorSubmitted extends AuthEvent {
 class AuthLogoutRequested extends AuthEvent {}
 
 class AuthForgotPasswordSubmitted extends AuthEvent {
-  AuthForgotPasswordSubmitted(this.phone);
-  final String phone;
+  AuthForgotPasswordSubmitted(this.identifier);
+  final String identifier;
 
   @override
-  List<Object?> get props => [phone];
+  List<Object?> get props => [identifier];
 }
 
 class AuthOtpVerified extends AuthEvent {
-  AuthOtpVerified({required this.phone, required this.code});
-  final String phone;
+  AuthOtpVerified({required this.identifier, required this.code});
+  final String identifier;
   final String code;
 
   @override
-  List<Object?> get props => [phone, code];
+  List<Object?> get props => [identifier, code];
 }
 
 class AuthPasswordResetSubmitted extends AuthEvent {
@@ -55,6 +56,36 @@ class AuthPasswordResetSubmitted extends AuthEvent {
 
   @override
   List<Object?> get props => [resetToken, newPassword];
+}
+
+class AuthCompleteEmailSubmitted extends AuthEvent {
+  AuthCompleteEmailSubmitted({
+    required this.email,
+    required this.session,
+  });
+  final String email;
+  final AuthenticatedSession session;
+
+  @override
+  List<Object?> get props => [email, session];
+}
+
+class AuthCompleteEmailSkipped extends AuthEvent {
+  AuthCompleteEmailSkipped(this.session);
+  final AuthenticatedSession session;
+
+  @override
+  List<Object?> get props => [session];
+}
+
+class AuthSendEmailVerificationRequested extends AuthEvent {}
+
+class AuthVerifyEmailSubmitted extends AuthEvent {
+  AuthVerifyEmailSubmitted(this.code);
+  final String code;
+
+  @override
+  List<Object?> get props => [code];
 }
 
 /// From [SessionLifecycle] when refresh fails after 401.

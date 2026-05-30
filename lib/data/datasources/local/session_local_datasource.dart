@@ -5,7 +5,14 @@ abstract class SessionLocalDataSource {
     required String refreshToken,
   });
 
-  Future<void> saveUserMeta({required String userId, required String role});
+  Future<void> saveUserMeta({
+    required String userId,
+    required String role,
+    String? phone,
+    String? email,
+    bool emailMissing = false,
+    bool emailVerified = false,
+  });
 
   Future<String?> getAccessToken();
 
@@ -14,6 +21,14 @@ abstract class SessionLocalDataSource {
   Future<String?> getUserId();
 
   Future<String?> getRole();
+
+  Future<String?> getPhone();
+
+  Future<String?> getEmail();
+
+  Future<bool> getEmailMissing();
+
+  Future<bool> getEmailVerified();
 
   Future<void> clearSession();
 }

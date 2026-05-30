@@ -16,13 +16,21 @@ void main() {
       'lat': 15.37,
       'lon': 44.19,
       'imageUrl': '99',
-      'user': {'phone': '967771234567', 'email': 'a@b.com'},
+      'user': {
+        'phone': '967771234567',
+        'email': 'a@b.com',
+        'emailMissing': false,
+        'emailVerified': true,
+      },
     });
 
     final donor = dto.toDonor();
     expect(donor.id, '42');
     expect(donor.name, 'أحمد');
     expect(donor.phone, '967771234567');
+    expect(donor.email, 'a@b.com');
+    expect(donor.emailMissing, false);
+    expect(donor.emailVerified, true);
     expect(donor.bloodType, 'O+');
     expect(donor.isShown, '1');
     expect(donor.isShownPhone, '0');

@@ -43,9 +43,34 @@ class AuthRepositoryImpl implements AuthRepo {
       accessToken: r.accessToken,
       refreshToken: r.refreshToken,
     );
+    await _persistSessionMeta(r.session);
+  }
+
+  Future<void> _persistSessionMeta(AuthenticatedSession session) async {
     await _sessionLocal.saveUserMeta(
-      userId: r.session.userId,
-      role: r.session.role,
+      userId: session.userId,
+      role: session.role,
+      phone: session.phone,
+      email: session.email,
+      emailMissing: session.emailMissing,
+      emailVerified: session.emailVerified,
+    );
+  }
+
+  Future<AuthenticatedSession?> _readSessionMeta() async {
+    if (!await hasPersistedSession()) return null;
+    final id = await _sessionLocal.getUserId();
+    final role = await _sessionLocal.getRole();
+    if (id == null || id.isEmpty || role == null || role.isEmpty) {
+      return null;
+    }
+    return AuthenticatedSession(
+      userId: id,
+      role: role,
+      phone: await _sessionLocal.getPhone(),
+      email: await _sessionLocal.getEmail(),
+      emailMissing: await _sessionLocal.getEmailMissing(),
+      emailVerified: await _sessionLocal.getEmailVerified(),
     );
   }
 
@@ -99,20 +124,22 @@ class AuthRepositoryImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, Unit>> forgotPassword({required String phone}) async {
+  Future<Either<Failure, Unit>> forgotPassword({
+    required String identifier,
+  }) async {
     return _online(() async {
-      await _remote.forgotPassword(phone: phone);
+      await _remote.forgotPassword(identifier: identifier);
       return unit;
     });
   }
 
   @override
   Future<Either<Failure, String>> verifyOtpForReset({
-    required String phone,
+    required String identifier,
     required String code,
   }) async {
     return _online(() async {
-      return await _remote.verifyOtp(phone: phone, code: code);
+      return await _remote.verifyOtp(identifier: identifier, code: code);
     });
   }
 
@@ -127,6 +154,45 @@ class AuthRepositoryImpl implements AuthRepo {
         newPassword: newPassword,
       );
       return unit;
+    });
+  }
+
+  @override
+  Future<Either<Failure, AuthenticatedSession>> completeProfileEmail({
+    required String email,
+  }) async {
+    return _online(() async {
+      await _remote.completeProfileEmail(email: email);
+      final current = await _readSessionMeta();
+      if (current == null) throw WrongDataFailure();
+      final updated = current.copyWith(
+        email: email.trim(),
+        emailMissing: false,
+      );
+      await _persistSessionMeta(updated);
+      return updated;
+    });
+  }
+
+  @override
+  Future<Either<Failure, Unit>> sendEmailVerification() async {
+    return _online(() async {
+      await _remote.sendEmailVerification();
+      return unit;
+    });
+  }
+
+  @override
+  Future<Either<Failure, AuthenticatedSession>> verifyEmail({
+    required String code,
+  }) async {
+    return _online(() async {
+      await _remote.verifyEmail(code: code);
+      final current = await _readSessionMeta();
+      if (current == null) throw WrongDataFailure();
+      final updated = current.copyWith(emailVerified: true);
+      await _persistSessionMeta(updated);
+      return updated;
     });
   }
 
@@ -162,13 +228,7 @@ class AuthRepositoryImpl implements AuthRepo {
 
   @override
   Future<AuthenticatedSession?> readPersistedSessionMeta() async {
-    if (!await hasPersistedSession()) return null;
-    final id = await _sessionLocal.getUserId();
-    final role = await _sessionLocal.getRole();
-    if (id == null || id.isEmpty || role == null || role.isEmpty) {
-      return null;
-    }
-    return AuthenticatedSession(userId: id, role: role);
+    return _readSessionMeta();
   }
 
   @override

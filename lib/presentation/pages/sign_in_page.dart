@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-import '../../core/auth/auth_identifier.dart';
 import '../../core/extensions/extension.dart';
 import '../../core/utils.dart';
+import '../auth/auth_navigation.dart';
 import '../blocs/auth/auth_bloc.dart';
 import '../blocs/auth/auth_event.dart';
 import '../blocs/auth/auth_state.dart';
@@ -20,6 +20,7 @@ import '../resources/values_manager.dart';
 import '../widgets/common/loading_widget.dart';
 import '../widgets/forms/my_button.dart';
 import '../widgets/forms/my_text_form_field.dart';
+import 'forgot_password_page.dart';
 import 'home_page.dart';
 import 'sign_up_page.dart';
 
@@ -38,7 +39,6 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController passwordController = TextEditingController();
 
   bool isPasswordVisible = true;
-  String? _pendingForgotPhone;
 
   @override
   void dispose() {
@@ -91,159 +91,10 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
-  void _promptForgotPhone() {
-    final key = GlobalKey<FormState>();
-    final ctrl = TextEditingController();
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.noHeader,
-      btnOkText: 'متابعة',
-      btnCancelText: 'إلغاء',
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Form(
-          key: key,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'أدخل رقم هاتفك اليمني',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 12),
-              MyTextFormField(
-                controller: ctrl,
-                hint: 'مثال: 771234567',
-                keyBoardType: TextInputType.phone,
-                blurrBorderColor: ColorManager.lightGrey,
-                focusBorderColor: ColorManager.lightSecondary,
-                fillColor: ColorManager.white,
-                validator: (v) {
-                  final n = normalizeAuthIdentifier(v ?? '');
-                  if (n == null || n.contains('@')) {
-                    return 'رقم هاتف يمني غير صالح';
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-      btnOkOnPress: () async {
-        if (key.currentState?.validate() != true) return;
-        final phone = normalizeAuthIdentifier(ctrl.text);
-        if (phone == null) return;
-        _pendingForgotPhone = phone;
-        if (!context.mounted) return;
-        context.read<AuthBloc>().add(AuthForgotPasswordSubmitted(phone));
-      },
-      btnCancelOnPress: () {},
-    ).show();
-  }
-
-  void _promptOtp() {
-    if (_pendingForgotPhone == null) return;
-    final key = GlobalKey<FormState>();
-    String? code;
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.noHeader,
-      btnOkText: 'تأكيد',
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Form(
-          key: key,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'أدخل رمز التحقق الذي وصل لهاتفك (إن وُجد)',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 12),
-              MyTextFormField(
-                onChange: (v) => code = v,
-                hint: 'رمز من 6 أرقام',
-                keyBoardType: TextInputType.number,
-                autofocus: true,
-                blurrBorderColor: ColorManager.lightGrey,
-                focusBorderColor: ColorManager.lightSecondary,
-                fillColor: ColorManager.white,
-                validator: (v) =>
-                    (v != null && v.length >= 6) ? null : 'رمز غير صالح',
-              ),
-            ],
-          ),
-        ),
-      ),
-      btnOkOnPress: () {
-        if (key.currentState?.validate() != true || code == null) return;
-        context.read<AuthBloc>().add(
-              AuthOtpVerified(
-                phone: _pendingForgotPhone!,
-                code: code!,
-              ),
-            );
-      },
-    ).show();
-  }
-
-  void _promptNewPassword(String resetToken) {
-    final key = GlobalKey<FormState>();
-    final pass1 = TextEditingController();
-    final pass2 = TextEditingController();
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.noHeader,
-      dismissOnTouchOutside: false,
-      btnOkText: 'حفظ',
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Form(
-          key: key,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'اختر كلمة مرور جديدة',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 12),
-              MyTextFormField(
-                controller: pass1,
-                hint: 'كلمة المرور',
-                isPassword: true,
-                blurrBorderColor: ColorManager.lightGrey,
-                focusBorderColor: ColorManager.lightSecondary,
-                fillColor: ColorManager.white,
-                validator: passwordValidator,
-              ),
-              const SizedBox(height: 8),
-              MyTextFormField(
-                controller: pass2,
-                hint: 'تأكيد كلمة المرور',
-                isPassword: true,
-                blurrBorderColor: ColorManager.lightGrey,
-                focusBorderColor: ColorManager.lightSecondary,
-                fillColor: ColorManager.white,
-                validator: (v) =>
-                    v == pass1.text ? null : 'غير متطابقة',
-              ),
-            ],
-          ),
-        ),
-      ),
-      btnOkOnPress: () {
-        if (key.currentState?.validate() != true) return;
-        context.read<AuthBloc>().add(
-              AuthPasswordResetSubmitted(
-                resetToken: resetToken,
-                newPassword: pass1.text,
-              ),
-            );
-      },
-    ).show();
+  void _openForgotPassword() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const ForgotPasswordPage()),
+    );
   }
 
   void _moveToSignUp() {
@@ -273,15 +124,12 @@ class _SignInPageState extends State<SignInPage> {
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
-            if (state is AuthAuthenticated) {
+            if (state is AuthAuthenticated || state is AuthNeedsEmailCompletion) {
               Utils.showSuccessSnackBar(
                 context: context,
                 msg: AppStrings.signInSuccessMessage,
               );
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute<void>(builder: (_) => const HomePage()),
-                (_) => false,
-              );
+              listenForAuthNavigation(context, state);
             } else if (state is AuthFailure) {
               if (state.needsForgotPasswordRedirect) {
                 AwesomeDialog(
@@ -291,7 +139,7 @@ class _SignInPageState extends State<SignInPage> {
                   desc: state.message,
                   btnOkText: 'نسيت كلمة المرور',
                   btnCancelOnPress: () {},
-                  btnOkOnPress: _promptForgotPhone,
+                  btnOkOnPress: _openForgotPassword,
                 ).show();
               } else {
                 Utils.showSnackBar(
@@ -300,20 +148,6 @@ class _SignInPageState extends State<SignInPage> {
                   color: ColorManager.error,
                 );
               }
-            } else if (state is AuthForgotSmsSentNotice) {
-              Utils.showSnackBar(
-                context: context,
-                msg: 'تم قبول الطلب.',
-                color: ColorManager.secondary,
-              );
-              _promptOtp();
-            } else if (state is AuthReadyToChooseNewPassword) {
-              _promptNewPassword(state.resetToken);
-            } else if (state is AuthPasswordResetFinishedNotice) {
-              Utils.showSuccessSnackBar(
-                context: context,
-                msg: 'تم تعيين كلمة المرور. يمكنك تسجيل الدخول.',
-              );
             }
           },
           builder: (context, state) {
@@ -467,7 +301,7 @@ class _SignInPageState extends State<SignInPage> {
       ),
       alignment: Alignment.centerRight,
       child: GestureDetector(
-        onTap: _promptForgotPhone,
+        onTap: _openForgotPassword,
         child: Text(
           AppStrings.signInForgetPasswordTextButton,
           style: Theme.of(context)

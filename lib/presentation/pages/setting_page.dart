@@ -16,6 +16,7 @@ import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 import '../widgets/common/loading_widget.dart';
 import '../widgets/setting/display_image.dart';
+import '../widgets/setting/email_verification_section.dart';
 import '../widgets/setting/profile_body.dart';
 import '../widgets/setting/select_photo_options_screen.dart';
 
@@ -135,7 +136,10 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                   ),
                   const SizedBox(height: AppSize.s10),
-                  if (state is ProfileGetData) ProfileBody(donor: state.donors),
+                  if (state is ProfileGetData) ...[
+                    EmailVerificationSection(donor: state.donors),
+                    ProfileBody(donor: state.donors),
+                  ],
                   if (state is ProfileFailure)
                     const Center(child: Text('خطأ غير معروف')),
                 ],

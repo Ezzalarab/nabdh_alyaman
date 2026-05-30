@@ -13,6 +13,7 @@ import '../resources/assets_manager.dart';
 import '../resources/color_manageer.dart';
 import '../widgets/common/dialog_lottie.dart';
 import 'home_page.dart';
+import 'complete_email_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -90,6 +91,8 @@ class _SplashScreenState extends State<SplashScreen> {
 @visibleForTesting
 Widget? splashNavigationTarget(AuthState state) {
   return switch (state) {
+    AuthNeedsEmailCompletion(:final session) =>
+      CompleteEmailPage(session: session),
     AuthAuthenticated() || AuthUnauthenticated() => const HomePage(),
     _ => null,
   };

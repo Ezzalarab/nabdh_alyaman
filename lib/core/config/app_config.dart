@@ -8,7 +8,7 @@ class AppConfig {
   /// Base URL including `/api/v1` path (no trailing slash).
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'https://localhost:3000/api/v1',
+    defaultValue: 'http://localhost:3000/api/v1',
     // defaultValue: 'https://nabdh.telqaia.com/api/v1',
   );
 }

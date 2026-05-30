@@ -8,6 +8,8 @@ class DonorProfileDto {
     required this.phone,
     required this.bloodType,
     this.email = '',
+    this.emailMissing = false,
+    this.emailVerified = false,
     this.birthDate = '',
     this.isShown = true,
     this.isPhoneShown = true,
@@ -27,6 +29,8 @@ class DonorProfileDto {
   final String fullName;
   final String phone;
   final String email;
+  final bool emailMissing;
+  final bool emailVerified;
   final String bloodType;
   final String birthDate;
   final bool isShown;
@@ -59,6 +63,9 @@ class DonorProfileDto {
           : (userMap?['fullName']?.toString() ?? ''),
       phone: userMap?['phone']?.toString() ?? readString('phone'),
       email: userMap?['email']?.toString() ?? readString('email'),
+      emailMissing: _readBool(userMap?['emailMissing'], defaultValue: false),
+      emailVerified:
+          _readBool(userMap?['emailVerified'], defaultValue: false),
       bloodType: readString('bloodType'),
       birthDate: readString('birthDate'),
       isShown: _readBool(json['isShown'], defaultValue: true),
@@ -86,6 +93,8 @@ class DonorProfileDto {
     return Donor(
       id: userId,
       email: email,
+      emailMissing: emailMissing,
+      emailVerified: emailVerified,
       name: fullName,
       phone: phone,
       bloodType: bloodType,

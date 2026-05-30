@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 
+import '../../../core/auth/auth_response_parser.dart';
 import '../../../core/error/failures.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_endpoints.dart';
 import '../../../core/network/api_exception_mapper.dart';
-import '../../../domain/entities/auth_session.dart';
 import '../../../domain/entities/donor_registration_params.dart';
 import '../../models/auth_tokens_result.dart';
 
@@ -26,15 +26,20 @@ abstract class AuthRemoteDataSource {
     required String platform,
   });
 
-  /// Always 200 server-side — no-op body.
-  Future<void> forgotPassword({required String phone});
+  Future<void> forgotPassword({required String identifier});
 
-  Future<String> verifyOtp({required String phone, required String code});
+  Future<String> verifyOtp({required String identifier, required String code});
 
   Future<void> resetPassword({
     required String resetToken,
     required String newPassword,
   });
+
+  Future<void> completeProfileEmail({required String email});
+
+  Future<void> sendEmailVerification();
+
+  Future<void> verifyEmail({required String code});
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -43,39 +48,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final ApiClient _api;
 
   int _normStatus(Response<dynamic>? r) => r?.statusCode ?? 0;
-
-  AuthTokensResult _tokensFrom(Map<String, dynamic> data) {
-    final accessToken = data['accessToken'] as String?;
-    final refreshToken = data['refreshToken'] as String?;
-    if (accessToken == null ||
-        refreshToken == null ||
-        accessToken.isEmpty ||
-        refreshToken.isEmpty) {
-      throw WrongDataFailure();
-    }
-    final role = data['role'] as String?;
-    final userMap = data['user'];
-    final userRole = userMap is Map ? userMap['role'] as String? : null;
-    final userIdDyn = userMap is Map ? userMap['id'] : null;
-    final phone = userMap is Map ? userMap['phone'] as String? : null;
-    final mappedRole = role ?? userRole;
-    final userId =
-        userIdDyn == null ? '' : userIdDyn.toString();
-    if (mappedRole == null ||
-        mappedRole.isEmpty ||
-        userId.isEmpty) {
-      throw WrongDataFailure();
-    }
-    return AuthTokensResult(
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      session: AuthenticatedSession(
-        userId: userId,
-        role: mappedRole,
-        phone: phone,
-      ),
-    );
-  }
 
   @override
   Future<AuthTokensResult> login({
@@ -92,7 +64,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (s != 201 && s != 200 || data == null) {
         throw WrongDataFailure();
       }
-      return _tokensFrom(data);
+      return parseAuthTokensResult(data);
     } on DioException catch (e) {
       throw mapDioExceptionToFailure(e);
     }
@@ -103,6 +75,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final body = <String, dynamic>{
       'fullName': p.fullName,
       'phone': p.phone,
+      'email': p.email.trim(),
       'password': p.password,
       'bloodType': p.bloodType,
       'gender': p.gender,
@@ -126,7 +99,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (s != 201 && s != 200 || data == null) {
         throw WrongDataFailure();
       }
-      return _tokensFrom(data);
+      return parseAuthTokensResult(data);
     } on DioException catch (e) {
       throw mapDioExceptionToFailure(e);
     }
@@ -140,10 +113,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       await _api.post<Map<String, dynamic>>(
         ApiEndpoints.authLogout,
-        data: {
-          'refreshToken': refreshToken,
-          'deviceToken': deviceToken,
-        },
+        data: {'refreshToken': refreshToken, 'deviceToken': deviceToken},
       );
     } on DioException catch (e) {
       throw mapDioExceptionToFailure(e);
@@ -166,11 +136,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> forgotPassword({required String phone}) async {
+  Future<void> forgotPassword({required String identifier}) async {
     try {
       await _api.post<Map<String, dynamic>>(
         ApiEndpoints.authForgotPassword,
-        data: {'phone': phone},
+        data: {'identifier': identifier},
       );
     } on DioException catch (e) {
       throw mapDioExceptionToFailure(e);
@@ -179,13 +149,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<String> verifyOtp({
-    required String phone,
+    required String identifier,
     required String code,
   }) async {
     try {
       final res = await _api.post<Map<String, dynamic>>(
         ApiEndpoints.authVerifyOtp,
-        data: {'phone': phone, 'code': code},
+        data: {'identifier': identifier, 'code': code},
       );
       final data = res.data;
       final rt = data?['resetToken'] as String?;
@@ -205,6 +175,41 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       await _api.post<Map<String, dynamic>>(
         ApiEndpoints.authResetPassword,
         data: {'resetToken': resetToken, 'newPassword': newPassword},
+      );
+    } on DioException catch (e) {
+      throw mapDioExceptionToFailure(e);
+    }
+  }
+
+  @override
+  Future<void> completeProfileEmail({required String email}) async {
+    try {
+      await _api.post<Map<String, dynamic>>(
+        ApiEndpoints.authProfileEmail,
+        data: {'email': email.trim()},
+      );
+    } on DioException catch (e) {
+      throw mapDioExceptionToFailure(e);
+    }
+  }
+
+  @override
+  Future<void> sendEmailVerification() async {
+    try {
+      await _api.post<Map<String, dynamic>>(
+        ApiEndpoints.authEmailSendVerification,
+      );
+    } on DioException catch (e) {
+      throw mapDioExceptionToFailure(e);
+    }
+  }
+
+  @override
+  Future<void> verifyEmail({required String code}) async {
+    try {
+      await _api.post<Map<String, dynamic>>(
+        ApiEndpoints.authEmailVerify,
+        data: {'code': code.trim()},
       );
     } on DioException catch (e) {
       throw mapDioExceptionToFailure(e);

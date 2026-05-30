@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
+import '../auth/auth_response_parser.dart';
 import '../config/app_config.dart';
 import '../session/session_lifecycle.dart';
 import '../../data/datasources/local/preferences_local_datasource.dart';
@@ -98,15 +99,28 @@ class AuthRefreshInterceptor extends Interceptor {
         return null;
       }
       final data = res.data;
-      final access = data?['accessToken'] as String?;
-      if (access == null || access.isEmpty) {
+      if (data == null) {
         return null;
       }
+      final parsed = parseAuthTokensResult(data);
+      final refreshFromResponse = data['refreshToken'] as String?;
+      final refreshToStore = (refreshFromResponse != null &&
+              refreshFromResponse.isNotEmpty)
+          ? refreshFromResponse
+          : refresh;
       await _session.saveTokens(
-        accessToken: access,
-        refreshToken: refresh,
+        accessToken: parsed.accessToken,
+        refreshToken: refreshToStore,
       );
-      return access;
+      await _session.saveUserMeta(
+        userId: parsed.session.userId,
+        role: parsed.session.role,
+        phone: parsed.session.phone,
+        email: parsed.session.email,
+        emailMissing: parsed.session.emailMissing,
+        emailVerified: parsed.session.emailVerified,
+      );
+      return parsed.accessToken;
     } catch (_) {
       return null;
     }

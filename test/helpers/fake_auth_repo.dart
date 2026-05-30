@@ -10,13 +10,17 @@ class FakeAuthRepo implements AuthRepo {
   AuthenticatedSession? persistedSession;
   Either<Failure, AuthenticatedSession>? loginResult;
   Either<Failure, AuthenticatedSession>? registerResult;
+  Either<Failure, AuthenticatedSession>? completeEmailResult;
+  Either<Failure, Unit>? sendVerificationResult;
+  Either<Failure, AuthenticatedSession>? verifyEmailResult;
 
   @override
   Future<Either<Failure, AuthenticatedSession>> login({
     required String identifier,
     required String password,
   }) async {
-    return loginResult ?? const Right(
+    return loginResult ??
+        const Right(
           AuthenticatedSession(userId: '1', role: 'DONOR'),
         );
   }
@@ -25,7 +29,8 @@ class FakeAuthRepo implements AuthRepo {
   Future<Either<Failure, AuthenticatedSession>> registerDonor(
     DonorRegistrationParams params,
   ) async {
-    return registerResult ?? const Right(
+    return registerResult ??
+        const Right(
           AuthenticatedSession(userId: '2', role: 'DONOR'),
         );
   }
@@ -34,12 +39,14 @@ class FakeAuthRepo implements AuthRepo {
   Future<Either<Failure, Unit>> logout() async => const Right(unit);
 
   @override
-  Future<Either<Failure, Unit>> forgotPassword({required String phone}) async =>
+  Future<Either<Failure, Unit>> forgotPassword({
+    required String identifier,
+  }) async =>
       const Right(unit);
 
   @override
   Future<Either<Failure, String>> verifyOtpForReset({
-    required String phone,
+    required String identifier,
     required String code,
   }) async =>
       const Right('reset-token');
@@ -50,6 +57,40 @@ class FakeAuthRepo implements AuthRepo {
     required String newPassword,
   }) async =>
       const Right(unit);
+
+  @override
+  Future<Either<Failure, AuthenticatedSession>> completeProfileEmail({
+    required String email,
+  }) async {
+    return completeEmailResult ??
+        Right(
+          AuthenticatedSession(
+            userId: '1',
+            role: 'DONOR',
+            email: email,
+            emailMissing: false,
+          ),
+        );
+  }
+
+  @override
+  Future<Either<Failure, Unit>> sendEmailVerification() async {
+    return sendVerificationResult ?? const Right(unit);
+  }
+
+  @override
+  Future<Either<Failure, AuthenticatedSession>> verifyEmail({
+    required String code,
+  }) async {
+    return verifyEmailResult ??
+        const Right(
+          AuthenticatedSession(
+            userId: '1',
+            role: 'DONOR',
+            emailVerified: true,
+          ),
+        );
+  }
 
   @override
   Future<Either<Failure, Unit>> registerDeviceIfPossible() async =>

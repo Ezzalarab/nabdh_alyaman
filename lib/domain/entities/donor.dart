@@ -5,6 +5,8 @@ import 'dart:convert';
 class Donor {
   String id;
   String email;
+  bool emailMissing;
+  bool emailVerified;
   String password;
   String name;
   String phone;
@@ -26,6 +28,8 @@ class Donor {
   Donor({
     this.id = '',
     required this.email,
+    this.emailMissing = false,
+    this.emailVerified = false,
     this.password = '',
     required this.name,
     required this.phone,

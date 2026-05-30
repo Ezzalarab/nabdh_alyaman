@@ -17,6 +17,7 @@ import '../../data/models/cached_location_row.dart';
 import '../../di.dart' as di;
 import '../../domain/entities/blood_types.dart';
 import '../../domain/entities/donor_registration_params.dart';
+import '../auth/auth_navigation.dart';
 import '../blocs/auth/auth_bloc.dart';
 import '../blocs/auth/auth_event.dart';
 import '../blocs/auth/auth_state.dart';
@@ -31,7 +32,6 @@ import '../widgets/common/my_stepper.dart' as my_stepper;
 import '../widgets/forms/my_button.dart';
 import '../widgets/forms/my_dropdown_button_form_field.dart';
 import '../widgets/forms/my_text_form_field.dart';
-import 'home_page.dart';
 import 'sign_in_page.dart';
 import 'sing_up_center_page.dart';
 
@@ -206,6 +206,10 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
     final emailTrim = emailController.text.trim();
+    if (emailTrim.isEmpty || !EmailValidator.validate(emailTrim)) {
+      Fluttertoast.showToast(msg: AppStrings.signUpEmailValidator);
+      return;
+    }
     context.read<AuthBloc>().add(
           AuthRegisterDonorSubmitted(
             DonorRegistrationParams(
@@ -214,7 +218,7 @@ class _SignUpPageState extends State<SignUpPage> {
               password: passwordController.text,
               bloodType: bloodType!,
               gender: genderCode!,
-              email: emailTrim.isEmpty ? null : emailTrim,
+              email: emailTrim,
               stateId: _stateId!,
               districtId: _districtId!,
               locationId: _districtId!,
@@ -248,12 +252,12 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthAuthenticated) {
-            Utils.showSuccessSnackBar(context: context, msg: AppStrings.signUpSuccessMessage);
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute<void>(builder: (_) => const HomePage()),
-              (_) => false,
+          if (state is AuthAuthenticated || state is AuthNeedsEmailCompletion) {
+            Utils.showSuccessSnackBar(
+              context: context,
+              msg: AppStrings.signUpSuccessMessage,
             );
+            listenForRegisterSuccess(context, state);
           } else if (state is AuthFailure) {
             Utils.showFalureSnackBar(context: context, msg: state.message);
           }
@@ -399,11 +403,14 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: signUpSpaceBetweenFields),
               MyTextFormField(
-                hint: 'البريد (اختياري)',
+                hint: 'البريد الإلكتروني',
                 controller: emailController,
                 validator: (v) {
-                  if (v == null || v.trim().isEmpty) return null;
-                  return EmailValidator.validate(v.trim()) ? null : AppStrings.signUpEmailValidator;
+                  final trimmed = v?.trim() ?? '';
+                  if (trimmed.isEmpty) return 'أدخل البريد الإلكتروني';
+                  return EmailValidator.validate(trimmed)
+                      ? null
+                      : AppStrings.signUpEmailValidator;
                 },
                 keyBoardType: TextInputType.emailAddress,
                 suffixIcon: true,

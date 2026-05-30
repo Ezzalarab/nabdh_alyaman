@@ -29,4 +29,18 @@ class PreferencesLocalDataSourceImpl implements PreferencesLocalDataSource {
   @override
   Future<void> setOnboardingDone(bool value) =>
       _prefs.setBool(StorageKeys.onboardingDone, value);
+
+  String _emailCompletionDismissKey(String userId) =>
+      'email_completion_prompt_dismissed_$userId';
+
+  @override
+  Future<bool> isEmailCompletionPromptDismissed(String userId) async =>
+      _prefs.getBool(_emailCompletionDismissKey(userId)) ?? false;
+
+  @override
+  Future<void> setEmailCompletionPromptDismissed(
+    String userId,
+    bool value,
+  ) async =>
+      _prefs.setBool(_emailCompletionDismissKey(userId), value);
 }

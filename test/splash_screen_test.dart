@@ -21,6 +21,19 @@ void main() {
       expect(target, isA<HomePage>());
     });
 
+    test('AuthNeedsEmailCompletion navigates to CompleteEmailPage', () {
+      final target = splashNavigationTarget(
+        AuthNeedsEmailCompletion(
+          const AuthenticatedSession(
+            userId: '1',
+            role: 'DONOR',
+            emailMissing: true,
+          ),
+        ),
+      );
+      expect(target.runtimeType.toString(), contains('CompleteEmailPage'));
+    });
+
     test('AuthLoading returns null', () {
       expect(splashNavigationTarget(AuthLoading()), isNull);
     });

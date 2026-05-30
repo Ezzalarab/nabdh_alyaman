@@ -6,4 +6,8 @@ abstract class PreferencesLocalDataSource {
   Future<bool> isOnboardingDone();
 
   Future<void> setOnboardingDone(bool value);
+
+  Future<bool> isEmailCompletionPromptDismissed(String userId);
+
+  Future<void> setEmailCompletionPromptDismissed(String userId, bool value);
 }

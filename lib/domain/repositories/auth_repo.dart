@@ -17,16 +17,26 @@ abstract class AuthRepo {
 
   Future<Either<Failure, Unit>> logout();
 
-  Future<Either<Failure, Unit>> forgotPassword({required String phone});
+  Future<Either<Failure, Unit>> forgotPassword({required String identifier});
 
   Future<Either<Failure, String>> verifyOtpForReset({
-    required String phone,
+    required String identifier,
     required String code,
   });
 
   Future<Either<Failure, Unit>> resetPasswordWithToken({
     required String resetToken,
     required String newPassword,
+  });
+
+  Future<Either<Failure, AuthenticatedSession>> completeProfileEmail({
+    required String email,
+  });
+
+  Future<Either<Failure, Unit>> sendEmailVerification();
+
+  Future<Either<Failure, AuthenticatedSession>> verifyEmail({
+    required String code,
   });
 
   Future<Either<Failure, Unit>> registerDeviceIfPossible();
