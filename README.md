@@ -58,14 +58,6 @@ flutter run
 [![GitHub Follow](https://img.shields.io/badge/Connect-Ezzalarab-blue.svg?logo=Github&longCache=true&style=social&label=Follow)](https://github.com/Ezzalarab)
 
 ---
-
-### TayebAlameri
-[![LinkedIn Link](https://img.shields.io/badge/Connect-TayebAlameri-blue.svg?logo=linkedin&longCache=true&style=social&label=Connect
-)](https://www.linkedin.com/in/altayeb-alameri)
-
-[![GitHub Follow](https://img.shields.io/badge/Connect-TayebAlameri-blue.svg?logo=Github&longCache=true&style=social&label=Follow)](https://github.com/TayebAlameri)
-
----
 If you liked the repo then kindly support it by giving it a star ⭐!
 
 Copyright (c) 2023 ezzcode.com
